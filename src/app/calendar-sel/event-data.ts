@@ -4,5 +4,6 @@ export interface EventData {
   title: string ;
   start: string;
   end?: string;
-  color: EventColor ;
+  color: EventColor;
+  meta?: any;
 };

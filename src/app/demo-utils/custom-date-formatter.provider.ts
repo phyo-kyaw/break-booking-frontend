@@ -24,6 +24,7 @@ export class CustomDateFormatter extends CalendarDateFormatter {
 
 
   public weekViewHour({ date, locale }: DateFormatterParams): string {
+    //return formatDate(date, 'HH:mm', locale);
     return formatDate(date, 'HH:mm', locale);
   }
 

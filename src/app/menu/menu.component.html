@@ -1,0 +1,18 @@
+<header>
+  <nav class="navbar navbar-expand-md navbar-custom bg-grey">
+    <ul class="navbar-nav">
+      <li>
+        <a routerLink="/select" class="nav-link"></a>
+      </li>
+    </ul>
+    <ul class="navbar-nav navbar-collapse justify-content-end">
+      <li *ngIf="!isLoggedIn">
+        <a class='nav-link' (click)="doLogin()" class="nav-link">Login</a>
+      </li>
+      <li *ngIf="isLoggedIn">
+        <a rclass='nav-link' (click)="doLogout()" class="nav-link">Logout</a>
+      </li>
+    </ul>
+
+  </nav>
+</header>

@@ -24,11 +24,11 @@ export class BookingDataService {
   }
 
   createBooking(booking){
-    return this.http.post(`http://${this.apiUrl}/bookings`, booking)
+    return this.http.post(`http://${this.apiUrl}/bookings`, booking);
   }
 
   deleteBooking(id){
-    return this.http.delete(`http://${this.apiUrl}/bookings/${id}`)
+    return this.http.delete(`http://${this.apiUrl}/bookings/${id}`);
   }
 
 }

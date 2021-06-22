@@ -1,0 +1,18 @@
+server {
+  listen 80;
+  server_name break-booking.online;
+  #return 301 https://$server_name$request_uri;
+}
+server {
+  listen 443 ssl;
+  server_name break-booking.online www.break-booking.online;
+
+  ssl_certificate     /etc/nginx/ssl/break-booking_online.chained.crt;
+  ssl_certificate_key  /etc/nginx/ssl/break-booking_online.key;
+
+  location / {
+    root /usr/share/nginx/html;
+    index index.html index.htm;
+    try_files $uri $uri/ /index.html =404;
+  }
+}

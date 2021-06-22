@@ -1,5 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
+import  FormControl  from '@material-ui/core/FormControl';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
@@ -14,32 +17,29 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CalendarDisplayComponent } from './calendar-display/calendar-display.component';
 import { CalendarSelComponent } from './calendar-sel/calendar-sel.component';
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 
-import {
-  AuthServiceConfig,
-  SocialLoginModule,
-  GoogleLoginProvider,
-} from 'angular-6-social-login'
+import { initializeKeycloak } from './demo-utils/app.init';
+
 
 //import { environment } from '../environments/environment.prod';
 import { environment } from '../environments/environment';
+import { MenuComponent } from './menu/menu.component';
+import { FooterComponent } from './footer/footer.component';
+import { BookingEntityComponent } from './booking-entity/booking-entity.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-const config = new AuthServiceConfig([
-  {
-    id: GoogleLoginProvider.PROVIDER_ID,
-    provider: new GoogleLoginProvider('359433450921-rlo86s4pvjah2s8rti4k4ma2mcpm7f8j.apps.googleusercontent.com')
-  }
-]);
 
-export function provideConfig() {
-  return config;
-}
+
 
 @NgModule({
   declarations: [
     AppComponent,
     CalendarDisplayComponent,
-    CalendarSelComponent
+    CalendarSelComponent,
+    MenuComponent,
+    FooterComponent,
+    BookingEntityComponent
   ],
   imports: [
     CommonModule,
@@ -52,11 +52,21 @@ export function provideConfig() {
     //SchedulerModule.forRoot({ locale: 'en', headerDateFormat: 'daysRange' }),
     AppRoutingModule,
     HttpClientModule,
-    SocialLoginModule
+    FormsModule,
+    ReactiveFormsModule,
+    KeycloakAngularModule,
+    BrowserAnimationsModule,
+    NgxMaterialTimepickerModule,
+    NgbModule
   ],
   providers: [
    // {provide: HTTP_INTERCEPTORS, useClass: HttpIntercepterService, multi: true}
-   { provide: AuthServiceConfig , useFactory: provideConfig },
+   {
+    provide: APP_INITIALIZER,
+    useFactory: initializeKeycloak,
+    multi: true,
+    deps: [KeycloakService],
+  },
    { provide: 'BACKEND_API_URL', useValue: environment.backendApiUrl }
   ],
   bootstrap: [AppComponent]

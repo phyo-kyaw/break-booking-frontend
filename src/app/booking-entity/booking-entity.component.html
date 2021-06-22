@@ -1,0 +1,260 @@
+<div class="container">
+  <!-- <div class="alert-warning" *ngIf="todoForm.invalid">Enter valid value</div> -->
+
+  <form (ngSubmit)="!todoForm.invalid " #todoForm="ngForm">
+
+    <fieldset>
+      <legend>Booking Entity</legend>
+
+      <div class="form-group">
+        <label for="title_1" class="col-sm-2 control-label">Title 1:</label>
+          <div class="col-sm-6">
+            <input type ="text"
+            [(ngModel)]="bookingEntity.title_1"
+            class="form-control"
+            name="title_1"
+            required="required"
+            minlength="5">
+          </div>
+      </div>
+
+    <div class="form-group">
+      <label for="title_2" class="col-sm-2 control-label">Title 2:</label>
+        <div class="col-sm-6">
+          <input type ="text"
+          [(ngModel)]="bookingEntity.title_2"
+          class="form-control"
+          name="title_2"
+          required="required"
+          minlength="5">
+        </div>
+    </div>
+
+    <div class="form-group">
+      <label for="email" class="col-sm-2 control-label">email:</label>
+        <div class="col-sm-6">
+          <input type ="email"
+          [(ngModel)]="bookingEntity.email"
+          class="form-control"
+          name="email"
+          required="required"
+          minlength="5">
+        </div>
+    </div>
+
+    <div class="form-group">
+      <label for="phone" class="col-sm-2 control-label">phone:</label>
+        <div class="col-sm-6">
+          <input type ="phone"
+          [(ngModel)]="bookingEntity.phone"
+          class="form-control"
+          name="phone"
+          required="required"
+          minlength="5">
+        </div>
+    </div>
+
+    <div class="form-group">
+      <label for="startDate" class="col-sm-2 control-label">Start Date:</label>
+        <div class="col-sm-6">
+          <input type="date"
+          [ngModel]="bookingEntity.startDate | date:'yyyy-MM-dd' "
+          (ngModelChange)="bookingEntity.startDate = $event"
+          class="form-control"
+          name="startDate"
+          required="required">
+        </div>
+    </div>
+
+    <div class="form-group">
+      <label for="minAdvanceBooking" class="col-sm-2 control-label">minAdvanceBooking:</label>
+      <br>
+      <label for="minAdvanceBookingUnit" class="col-sm-2 control-label">
+        <input type="radio" name="minAdvanceBookingUnit" [(ngModel)]="bookingEntity.minAdvanceBookingUnit" [value]="'day'">
+        Day
+      </label> 
+      <label  for="minAdvanceBookingUnit" class="col-sm-2 control-label">
+        <input type="radio" name="minAdvanceBookingUnit" [(ngModel)]="bookingEntity.minAdvanceBookingUnit" [value]="'hour'">
+        Hour
+      </label>
+        <div class="col-sm-6">
+          <input type="number"
+          [(ngModel)]="bookingEntity.minAdvanceBooking"
+          class="form-control"
+          name="minAdvanceBooking"
+          required="required">
+        </div>
+    </div>
+
+
+    <div class="form-group">
+      <label for="maxAdvanceBookingInDay" class="col-sm-2 control-label">maxAdvanceBookingInDay:</label>
+        <div class="col-sm-6">
+          <input type ="number"
+          [(ngModel)]="bookingEntity.maxAdvanceBookingInDay"
+          class="form-control"
+          name="maxAdvanceBookingInDay"
+          required="required">
+        </div>
+    </div>
+
+    <hr>
+    <div class="form-group">
+      <label for="sessionM" class="col-sm-2 control-label">Session Duration:</label>
+        <div class="col-sm-6">
+          <ngb-timepicker [(ngModel)]="bookingEntity.sessionM"  [ngModelOptions]="{standalone: true}" >           
+          </ngb-timepicker>
+        </div>
+    </div>
+
+    <hr>
+    <div class="form-group">
+      <label for="dayStartM" class="col-sm-2 control-label">Start Time:</label>
+        <div class="col-sm-6">
+          <ngb-timepicker [(ngModel)]="bookingEntity.dayStartM" [meridian]="true" [ngModelOptions]="{standalone: true}" >           
+          </ngb-timepicker>
+        </div>
+    </div>
+
+    <div class="form-group">
+      <label for="dayEndM" class="col-sm-2 control-label">End Time:</label>
+        <div class="col-sm-6">
+          <ngb-timepicker [(ngModel)]="bookingEntity.dayEndM" [meridian]="true" [ngModelOptions]="{standalone: true}" >           
+          </ngb-timepicker>
+        </div>
+    </div>
+
+    <hr>
+    <div class="form-group">
+      <label for="lunchBreakStartM" class="col-sm-2 control-label">Break Time:</label>
+        <div class="col-sm-6">
+          <ngb-timepicker [(ngModel)]="bookingEntity.breakStartM" [meridian]="true" [ngModelOptions]="{standalone: true}" >           
+          </ngb-timepicker>
+        </div>
+    </div>
+ 
+    <div class="form-group">
+      <label for="lunchBreakDurationM" class="col-sm-2 control-label">Break Duration:</label>
+        <div class="col-sm-6">
+          <ngb-timepicker [(ngModel)]="bookingEntity.breakDurationM" [ngModelOptions]="{standalone: true}" >           
+          </ngb-timepicker>
+        </div>
+    </div>
+
+    <hr>
+    <div class="form-group">
+      <label for="workingDays" class="col-sm-2 control-label">Working Days:</label>
+        <div class="col-sm-6">
+          <div *ngFor="let object of objects">
+            <input type="checkbox" name="{{object.name}}" [value]="object.id" (change)="getDayId($event, object.id)"> {{object.name}}
+          </div>
+        </div>
+    </div>
+
+  </fieldset>
+
+  <button class="btn btn-success" (click)="createEntityBooking()">Save</button>
+  <hr>
+
+  <br>
+  <br>
+  <br>
+</form>
+
+
+</div>
+    <!-- <fieldset class="form-group">
+
+      <label>Title 1</label>
+
+      <input type ="text"
+      [(ngModel)]="title_1"
+      class="form-control"
+      name="title_1"
+      required="required"
+      minlength="5">
+
+    </fieldset> -->
+
+    <!-- <fieldset class="form-group">
+      <label>Title 2</label>
+      <input type ="text"
+      [(ngModel)]="title_2"
+      class="form-control"
+      name="title_2"
+      required="required"
+      minlength="5">
+    </fieldset>
+    <hr> -->
+
+    <!-- <fieldset>
+      <label>Start Date</label>
+      <input type="date"
+      [ngModel]="startDate"
+      (ngModelChange)="startDate = $event"
+      class="form-control"
+      name="startDate"
+      required="required">
+    </fieldset>
+    <hr> -->
+
+    <!-- <fieldset class="form-group">
+      <label>minAdvanceBooking</label>
+      <hr>
+      <label class="radio">
+        <input type="radio" name="answer">
+        Day
+      </label> &nbsp;
+      <label class="radio">
+        <input type="radio" name="answer" checked>
+        Hour
+      </label>
+      <input type="number"
+      [(ngModel)]="minAdvanceBooking"
+      class="form-control"
+      name="minAdvanceBooking"
+      required="required">
+    </fieldset>
+    <hr> -->
+
+    <!-- <fieldset class="form-group">
+      <label>maxAdvanceBookingInDay</label>
+      <input type ="number"
+      [(ngModel)]="maxAdvanceBookingInDay"
+      class="form-control"
+      name="maxAdvanceBookingInDay"
+      required="required">
+    </fieldset>
+    <hr> -->
+
+    <!-- <label>Start Time</label>
+    <ngb-timepicker [(ngModel)]="dayStartM" [meridian]="true" [ngModelOptions]="{standalone: true}" ></ngb-timepicker>
+    <hr> -->
+
+
+    <!-- <label>End Time</label>
+    <ngb-timepicker [(ngModel)]="dayEndM" [meridian]="true" [ngModelOptions]="{standalone: true}" ></ngb-timepicker>
+    <hr> -->
+
+
+    <!-- <label>Break Time</label>
+    <ngb-timepicker [(ngModel)]="lunchBreakStartM" [meridian]="true" [ngModelOptions]="{standalone: true}" ></ngb-timepicker>
+    <hr> -->
+
+
+    <!-- <label>Break Duration</label>
+    <ngb-timepicker [(ngModel)]="lunchBreakDurationM" [ngModelOptions]="{standalone: true}" ></ngb-timepicker>
+    <hr>
+    <!-- <pre>Selected time: {{lunchBreakEndM | json}}</pre> -->
+    <!-- <hr> --> -->
+
+    <!-- <label>Working Days</label>
+    <div *ngFor="let object of objects">
+      <input type="checkbox" name="{{object.name}}" [value]="object.id" (change)="getDayId($event, object.id)"> {{object.name}}
+    </div>
+    <!-- <pre>Selected days: {{workingDays | json}}</pre> -->
+    <!-- <hr>
+
+    <br> --> -->
+    <!-- <button type="submit" class="btn btn-success" (click)="saveTodo()" >Save</button> -->
+

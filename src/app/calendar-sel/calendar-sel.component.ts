@@ -17,6 +17,7 @@ import {
   CalendarDateFormatter,
   CalendarEvent,
 } from 'angular-calendar';
+import {  KeycloakService } from 'keycloak-angular';
 import { WeekDay, WeekViewHourSegment, WeekViewHourColumn, EventAction, EventColor } from 'calendar-utils';
 import { CalendarHeaderComponent } from '../demo-utils/calendar-header.component';
 import { CustomEventTitleFormatter } from '../demo-utils/custom-event-title-formatter.provider';
@@ -31,6 +32,7 @@ import {
   startOfDay,
   endOfDay,
   subDays,
+  addMinutes,
   addDays,
   addMonths,
   startOfMonth,
@@ -47,6 +49,10 @@ import {
 } from 'date-fns';
 import { BookingDataService } from '../service/data/booking-data.service';
 import { EventData } from './event-data';
+import { KeycloakProfile } from 'keycloak-js';
+import { createElementCssSelector } from '@angular/compiler';
+import { BookingEntityDataService } from 'app/service/data/booking-entity-data.service';
+
 
 @Component({
   selector: 'app-calendar-sel',
@@ -85,20 +91,20 @@ import { EventData } from './event-data';
       }
 
       .cal-month-view .cal-day-cell {
-        min-height: 75px;
+        min-height: 60px;
       }
       .cal-month-view .cal-day-cell.cal-today {
         background-color: #e8fde7;
       }
       .cal-month-view .cal-cell-top {
-        min-height: 50px;
+        min-height: 45px;
         -webkit-box-flex: 1;
         -ms-flex: 1;
         flex: 1;
       }
 
       .cal-month-view .cal-cell-foot {
-        min-height: 25px;
+        min-height: 15px;
         -webkit-box-flex: 1;
         -ms-flex: 1;
         flex: 1;
@@ -134,12 +140,7 @@ import { EventData } from './event-data';
   encapsulation: ViewEncapsulation.None,
 })
 export class CalendarSelComponent  implements OnInit, OnDestroy {
-  // ngOnInit(): void {
-  //   throw new Error('Method not implemented.');
-  // }
-  // ngOnDestroy(): void {
-  //   throw new Error('Method not implemented.');
-  // }
+
   view: CalendarView = CalendarView.Month;
 
   viewDate: Date = new Date();
@@ -154,55 +155,40 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
 
   hourColumns: WeekViewHourColumn[];
 
-  hourSegmentHeight: number = 50;
+  hourSegmentHeight: number = 10;
 
-  hourSegments: number = 1;
+  hourSegments: number = 4;
 
   dayStartHour: number = 9;
+  dayStartMinute: number = 30;
+  dayStart = this.dayStartHour * 60 + this.dayStartMinute;
 
   dayEndHour: number = 17;
-  lunchBreakHourStart: number = 13;
+  dayEndMinute: number = 30;
+  dayEnd = this.dayEndHour * 60 + this.dayEndMinute;
 
-  LastSessionHour: number = this.dayEndHour - 1;
-  refresh: Subject<any> = new Subject();
+  lunchBreakStartHr: number = 13;
+  lunchBreakStartMin: number = 30;
+  lunchBreakStart = this.lunchBreakStartHr * 60 + this.lunchBreakStartMin;
+
+  lunchBreakDurationHr: number = 1;
+  lunchBreakDurationMin: number = 0;
+  lunchBreakEnd = this.lunchBreakStart + this.lunchBreakDurationHr * 60 + this.lunchBreakDurationMin;
+
+  sessionTakenHr: number = 0;
+  sessionTakenMin: number = 45;
+  sessionTaken = this.sessionTakenHr * 60 + this.sessionTakenMin;
+  //LastSessionHour: number = this.dayEndHour - 1;
+
 
   events: CalendarEvent[] = [];
   eventDataArry: EventData[] = [];
-  // events: CalendarEvent[] = [
-  //   {
-  //     title: '',
-  //     start: addHours(startOfDay(new Date()), 10),//new Date("2021-05-21T09:00:00"),
-  //     end: addHours(startOfDay(new Date()), 11),//new Date("2021-05-21T09:00:00"),
-  //     //color: colors.red,
-  //     color:{primary: "#ad2121", secondary: "#FAE3E3"},
-  //   },
-  // ];
 
-  //eventBs: EventB[] = [];
   eventBook: BookingEvent;
-  //   {
-  //     _id: '',
-  //     title: '',
-  //     start: addHours(startOfDay(new Date()), 12),//new Date("2021-05-21T09:00:00"),
-  //     end: addHours(startOfDay(new Date()), 13),//new Date("2021-05-21T09:00:00"),
-  //     color: colors.red,
-  //     //color: { primary: "#ad2121", secondary: "#FAE3E3" },
-  //   };
 
   eventBs: BookingEvent[];
 
-  //eveA: CalendarEvent[] = [];
-  eveA: CalendarEvent[] = [
-    // {
-    //   title: '',
-    //   start: addHours(startOfDay(new Date()), 10),//new Date("2021-05-21T09:00:00"),
-    //   end: addHours(startOfDay(new Date()), 11),//new Date("2021-05-21T09:00:00"),
-    //   color: colors.red,
-    //   //color:{primary: "#ad2121", secondary: "#FAE3E3"},
-    // },
-    // //this.eventB,
-  ];
-
+  eveA: CalendarEvent[] = [];
 
   selectedDays: any = [];
 
@@ -210,17 +196,49 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
 
   viewDateDec: number;
 
+  isLoggedIn: Boolean = false;
+
+  randomNumberChangeDetect: number = 0;
+
+  minAdvanceBookingHr = 0;
+  minAdvanceBookingDay = 2;
+  maxAdvanceBookingDay = 100;
+
+  bookAllowFromHr: number = 0;
+  bookAllowFromMin: number = 0;
+  bookAllowFrom: number = 0;
+
+  breaks: any[] = [{ name: "lunch break", time : { hour:1, minute:0 }, duration : { hour:1, minute:0 } }]
+
+  public userProfile: KeycloakProfile | null = null;
+
   private destroy$ = new Subject();
 
   constructor(
     private breakpointObserver: BreakpointObserver,
     private cd: ChangeDetectorRef,
-    private bookingService:BookingDataService
+    private bookingService: BookingDataService,
+    private bookingEntityDataService: BookingEntityDataService,
+    protected readonly keycloakService: KeycloakService,
   ) {}
 
-  ngOnInit() {
-
-
+  async ngOnInit() {
+    console.log("start1 " + this.userProfile);
+    this.isLoggedIn = await this.keycloakService.isLoggedIn();
+    if (this.isLoggedIn) {
+      this.userProfile = await this.keycloakService.loadUserProfile();
+      console.log(this.userProfile);
+    }
+    let gid = "363ff2e2-28f3-ae54-b3de-010b319ff658";
+    this.bookingEntityDataService.getBookingEntity(gid).subscribe(
+      response => {
+        console.log(response);
+        console.log('select');
+      },
+      error => {
+        console.log(error);
+      }
+    );
     this.prepareFrontEndData();
     this.updateWithBackEndData();
 
@@ -242,14 +260,6 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
       },
     };
 
-    console.log(startOfMonth(new Date()));
-    console.log(endOfMonth(new Date()));
-    console.log(addMonths(startOfMonth(new Date()), 1));
-
-
-
-
-
     this.breakpointObserver
       .observe(
         Object.values(CALENDAR_RESPONSIVE).map(({ breakpoint }) => breakpoint)
@@ -268,16 +278,13 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
         }
         this.cd.markForCheck();
       });
-
-    //console.log(this.eveA);
-    //new Promise( resolve => setTimeout(resolve, 5000) );
-
   }
 
 
   ngOnDestroy() {
     this.destroy$.next();
   }
+
 
   updateWithBackEndData() {
     console.log("start");
@@ -296,92 +303,104 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
                 iEvent.color = event.color;
                 iEvent.id = event.id;
                 iEvent.meta.incrementsBadgeTotal = false;
+                if (event.meta != null) {
+                  if (event.meta.email != null) {
+                    iEvent.meta.email = event.meta.email;
+                  }
+                }
               }
               return iEvent;
             });
           }
-          //
         }
+        this.randomNumberChangeDetect = Math.random();
+        this.cd.markForCheck();
+        console.log("backend update " + this.randomNumberChangeDetect);
+
       },
       error => {
         console.log(error);
       }
     );
-    this.refresh.next();
   }
 
-  prepareFrontEndData(){
-
-    let i = startOfToday();
-    console.log(i.getDay() !== 0);
-    console.log(i.getDay());
-    if (i.getDay() !== 0 && i.getDay() !== 6){
-      let bookAllowFrom : number = startOfHour(new Date()).getHours() + 2;
-      for (let j = this.dayStartHour > bookAllowFrom ? this.dayStartHour : bookAllowFrom ;
-              j < this.dayEndHour ;
-              j++) {
-        if (j != this.lunchBreakHourStart) {
-          this.events.push({
-            title: '',
-            start: addHours(i, j),
-            end: addHours(i, j+1),
-            color: colors.green,
-            meta: {
-              incrementsBadgeTotal: true,
-            },
-          }
-          );
-        }
-      }
+  prepareFrontEndData() {
+    console.log('prepareFrontEndData');
+    let start = startOfDay(new Date());
+    if (this.minAdvanceBookingDay > 0) {
+      start = addDays(start, this.minAdvanceBookingDay);
+      this.bookAllowFrom = 0;
     }
-
-    //if (i.getDay() !== 0 && i.getDay() !== 6) {
-    for (let i = startOfTomorrow();
-      isBefore(i, endOfMonth(addMonths(new Date(), 1)));
+ 
+    for (let i = start;
+        isBefore(i, endOfMonth(addMonths(new Date(), 1)));
       i = addDays(i, 1)) {
-        if (i.getDay() !== 0 && i.getDay() !== 6) {
-          for (let j = this.dayStartHour; j < this.dayEndHour; j++) {
-            if (j != this.lunchBreakHourStart) {
-              this.events.push({
-                title: '',
-                start: addHours(i, j),
-                end: addHours(i, j + 1),
-                color: colors.green,
-                meta: {
-                  incrementsBadgeTotal: true,
-                },
-              }
-              );
-            }
-          }
+      
+      if (startOfDay(new Date()) === startOfToday() && this.minAdvanceBookingDay == 0) {
+        let bookAllowFromHour: number = startOfHour(new Date()).getHours() - this.minAdvanceBookingHr;
+        let bookAllowFromMinute: number = startOfHour(new Date()).getMinutes();
+        this.bookAllowFrom = bookAllowFromHour * 60 + bookAllowFromMinute;
+      }
+      else {
+        this.bookAllowFrom = 0
+      }
+    //if (i.getDay() !== 0 && i.getDay() !== 6) 
+
+
+    if (!this.weekendDays.includes(i.getDay())) {       
+      for (let j = this.dayStart > this.bookAllowFrom ? this.dayStart : this.bookAllowFrom;
+        j + this.sessionTaken <= this.lunchBreakStart;
+        j = j + this.sessionTaken) {
+        console.log(j);
+        this.events.push({
+          title: '',
+          start: addMinutes(i, j),
+          end: addMinutes(i, j + this.sessionTaken),
+          color: colors.green,
+          meta: {
+            incrementsBadgeTotal: true,
+          },
+        });
+      }
+
+      for (let j = this.lunchBreakEnd > this.bookAllowFrom ? this.lunchBreakEnd : this.bookAllowFrom;
+        j + this.sessionTaken <= this.dayEnd;
+        j = j + this.sessionTaken) {
+        this.events.push({
+          title: '',
+          start: addMinutes(i, j),
+          end: addMinutes(i, j + this.sessionTaken),
+          color: colors.green,
+          meta: {
+            incrementsBadgeTotal: true,
+          },
+        });
       }
     }
+    // for (let i = startOfTomorrow();
+    //   isBefore(i, endOfMonth(addMonths(new Date(), 1)));
+    //   i = addDays(i, 1)) {
+    //     if (! this.weekendDays.includes(i.getDay()) ) {
+    //       for (let j = this.dayStartHour; j < this.dayEndHour; j++) {
+    //         if (j != this.lunchBreakStart) {
+    //           this.events.push({
+    //             title: '',
+    //             start: addHours(i, j),
+    //             end: addHours(i, j + 1),
+    //             color: colors.green,
+    //             meta: {
+    //               incrementsBadgeTotal: true,
+    //             },
+    //           }
+    //           );
+    //         }
+    //       }
+    //   }
+    // }
 
-
+    }
   }
 
-  //dayClicked(day: CalendarMonthViewDay, view : CalendarView): void{
-    //new EventEmitter<CalendarView>().emit(CalendarView.Week);
-    //console.log(view);
-    //view = CalendarView.Week;
-    //console.log(view);
-    //console.log(WeekDay[]);
-
-
-    // this.selectedMonthViewDay = day;
-    // const selectedDateTime = this.selectedMonthViewDay.date.getTime();
-    // const dateIndex = this.selectedDays.findIndex(
-    //   (selectedDay) => selectedDay.date.getTime() === selectedDateTime
-    // );
-    // if (dateIndex > -1) {
-    //   delete this.selectedMonthViewDay.cssClass;
-    //   this.selectedDays.splice(dateIndex, 1);
-    // } else {
-    //   this.selectedDays.push(this.selectedMonthViewDay);
-    //   day.cssClass = 'cal-day-selected';
-    //   this.selectedMonthViewDay = day;
-    // }
-  //}
 
   changeDay(date: Date) {
     if ( !isBefore(  date, startOfToday()) ){
@@ -392,96 +411,99 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
       console.log(this.viewDateDec);
       this.view = CalendarView.Week;
     }
-    //console.log(this.events[0].end);
-    // this.events.push({
-    //   title: this.eventBs[0].title,
-    //   start: new Date(this.eventBs[0].start),
-    //   end: new Date(this.eventBs[0].end),
-    //   color: this.eventBs[0].color,
-    // });
-
-    //for(let eventB in this.eventBs)
-      //this.events.map((iEvent) => iEvent.start.getTime() === Date.parse(eventB.start).getTime());
   }
 
   eventClicked({ event }: { event: CalendarEvent }): void {
-    console.log('Event clicked', event);
-    console.log(event.color);
-    console.log(colors.green);
-    console.log(colors.red );
-    console.log(event.color == colors.green );
-    console.log(event.color == colors.red );
-    if ( JSON.stringify(event.color) === JSON.stringify(colors.green) ) {
-      if (confirm("Confirm booking?")) {
-        var eventCopy = event;
-        eventCopy.end = addHours(event.start, 1);
-        eventCopy.color = colors.red;
-        this.bookingService.createBooking(eventCopy).subscribe(
-          response => {
+    console.log("1 " + this.isLoggedIn);
+    //this.keycloakService.isLoggedIn().then(status => { this.isLoggedIn = status; console.log("2 " +this.isLoggedIn); });
+    console.log("3 " + this.isLoggedIn);
 
-            this.events = this.events.map((iEvent) => {
-              //console.log(iEvent);
-              if (iEvent.start.getTime() === Date.parse(eventCopy.start + ".000Z")) {
-                console.log("iii " + iEvent.start.getTime() + " - " + Date.parse(eventCopy.start + ".000Z"));
-                iEvent.color = eventCopy.color;
-                iEvent.meta.incrementsBadgeTotal = false;
+    var loginPromise =  this.keycloakService.isLoggedIn();
+    loginPromise.then((value) => {
+      if (value) {
+        ///console.log('Event clicked ' + value);
+        //console.log(event.color);
+        if (JSON.stringify(event.color) === JSON.stringify(colors.green)) {
+          if (confirm("Confirm booking?")) {
+            var eventCopy = event;
+            eventCopy.color = colors.red;
+            eventCopy.meta.email = this.userProfile.email;
+            console.log(eventCopy.meta.email);
+            console.log(this.userProfile.email);
+            console.log(eventCopy);
+            this.bookingService.createBooking(eventCopy).subscribe(
+              response => {
+                this.events = this.events.map((iEvent) => {
+                  //console.log(iEvent);
+                  if (iEvent.start.getTime() === Date.parse(eventCopy.start + ".000Z")) {
+                    console.log("iii " + iEvent.start.getTime() + " - " + Date.parse(eventCopy.start + ".000Z"));
+                    iEvent.color = eventCopy.color;
+                    iEvent.meta.incrementsBadgeTotal = false;
+                    iEvent.meta.email = eventCopy.meta.email;
+                  }
+                  console.log('iEvent ' );
+                  console.log(iEvent);
+                  return iEvent;
+                });
+                console.log(response);
+                this.updateWithBackEndData();
+              },
+              error => {
+                console.log(error);
               }
-              return iEvent;
-            });
-
-            console.log(response);
-            this.updateWithBackEndData();
-          },
-          error => {
-            console.log(error);
+            );
+            console.log('Event clicked', event);
           }
-        );
-        console.log('Event clicked', event);
-      }
-    }
-    else if ( JSON.stringify(event.color) === JSON.stringify(colors.red) ) {
-      if (confirm("Cancel booking?")) {
-        var eventCopy = event;
-        eventCopy.end = event.end;
-        eventCopy.color = colors.green;
-        eventCopy.id = event.id;
-        this.bookingService.deleteBooking(event.id).subscribe(
-          response => {
+          return value;
+        }
+        else if ( ( JSON.stringify(event.color) === JSON.stringify(colors.red ) ) &&
+                  ( event.meta.email != null || "" ) &&
+                  ( event.meta.email === this.userProfile.email ) ) {
+          if (confirm("Cancel booking?")) {
+            var eventCopy = event;
+            eventCopy.color = colors.green;
+            eventCopy.id = event.id;
+            this.bookingService.deleteBooking(event.id).subscribe(
+              response => {
+                this.events = this.events.map((iEvent) => {
+                  if (iEvent.start.getTime() === Date.parse(eventCopy.start + ".000Z")) {
+                    console.log("iii " + iEvent.start.getTime() + " - " + Date.parse(eventCopy.start + ".000Z"));
+                    iEvent.color = eventCopy.color;
+                    iEvent.id = null;
+                    iEvent.meta.incrementsBadgeTotal = true;
+                    iEvent.meta.email = null;
+                  }
+                  return iEvent;
+                });
 
-            this.events = this.events.map((iEvent) => {
-              //console.log(iEvent);
-              if (iEvent.start.getTime() === Date.parse(eventCopy.start + ".000Z")) {
-                console.log("iii " + iEvent.start.getTime() + " - " + Date.parse(eventCopy.start + ".000Z"));
-                iEvent.color = eventCopy.color;
-                iEvent.id = null;
-                iEvent.meta.incrementsBadgeTotal = true;
+                console.log(response);
+                this.updateWithBackEndData();
+              },
+              error => {
+                console.log(error);
               }
-              return iEvent;
-            });
-
-            console.log(response);
-            this.updateWithBackEndData();
-          },
-          error => {
-            console.log(error);
+            );
+            console.log('Event clicked', event);
           }
-        );
-        console.log('Event clicked', event);
+          return value;
+        }
       }
-    }
+      else {
+        console.log("4 " + this.isLoggedIn);
+        this.keycloakService.login(
+          {redirectUri: "http://localhost:4200/select",}
+        );
+        return value;
+      }
+    }).catch( (error) => {
+      console.log("4 " + this.isLoggedIn + " " + error);
+
+    });
 
   }
 
   beforeMonthViewRender({ body }: { body: CalendarMonthViewDay[] }): void {
-    this.updateWithBackEndData();
     body.forEach((day) => {
-      // if (
-      //   this.selectedDays.some(
-      //     (selectedDay) => selectedDay.date.getTime() === day.date.getTime()
-      //   )
-      // ) {
-      //   day.cssClass = 'cal-day-selected';
-      // }
       day.badgeTotal = day.events.filter(
         (event) => event.meta.incrementsBadgeTotal
       ).length;
@@ -489,38 +511,15 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
         day.cssClass = 'cal-weekends';
       }
     });
+    console.log('beforeRender');
   }
 
   hourSegmentClicked(date: Date) {
     this.selectedDayViewDate = date;
-    //this.addSelectedDayViewClass();
   }
 
   beforeWeekOrDayViewRender(event: CalendarWeekViewBeforeRenderEvent) {
     this.hourColumns = event.hourColumns;
-    //this.addSelectedDayViewClass();
   }
-
-  // private addSelectedDayViewClass() {
-  //   this.hourColumns.forEach((column) => {
-  //     column.hours.forEach((hourSegment) => {
-  //       hourSegment.segments.forEach((segment) => {
-  //         delete segment.cssClass;
-  //         if (
-  //           this.selectedDayViewDate &&
-  //           segment.date.getTime() === this.selectedDayViewDate.getTime()
-  //         ) {
-  //           segment.cssClass = 'cal-day-selected';
-  //           console.log(segment.date.getTime());
-  //           console.log(segment.date);
-  //           console.log(segment);
-  //           //segment.isTimeLabel = true;
-  //           //this.Calen
-  //           console.log(hourSegment);
-  //         }
-  //       });
-  //     });
-  //   });
-  // }
 
 }
