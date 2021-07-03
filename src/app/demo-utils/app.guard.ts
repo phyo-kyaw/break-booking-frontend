@@ -27,7 +27,8 @@ export class AuthGuard extends KeycloakAuthGuard {
                 redirectUri: window.location.origin + state.url,
             });
         }
-
+        console.log('role restriction given at app-routing.module for this route', route.data.roles);
+        console.log('User roles coming after login from keycloak :', this.roles);
         // Get the roles required from the route.
         const requiredRoles = route.data.roles;
 

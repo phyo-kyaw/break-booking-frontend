@@ -30,6 +30,7 @@ export interface _BookingEntity {
    maxAdvanceBookingInDay: number;
    
    sessionM: DurationM;
+   intervalBreakM: DurationM;
  
    dayStartM: TimeM ;
    dayEndM: TimeM;

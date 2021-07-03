@@ -27,7 +27,7 @@ import { BookingEvent } from '../demo-utils/event-b';
 import { Subject, timer } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { UrlSegment } from '@angular/router';
+import { ActivatedRoute, UrlSegment } from '@angular/router';
 import {
   startOfDay,
   endOfDay,
@@ -52,6 +52,7 @@ import { EventData } from './event-data';
 import { KeycloakProfile } from 'keycloak-js';
 import { createElementCssSelector } from '@angular/compiler';
 import { BookingEntityDataService } from 'app/service/data/booking-entity-data.service';
+import { _BookingEntity } from 'app/booking-entity/models';
 
 
 @Component({
@@ -155,33 +156,53 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
 
   hourColumns: WeekViewHourColumn[];
 
+  bookingEntity: _BookingEntity;
+
   hourSegmentHeight: number = 10;
 
-  hourSegments: number = 4;
+  hourSegments: number = 6;
 
-  dayStartHour: number = 9;
-  dayStartMinute: number = 30;
-  dayStart = this.dayStartHour * 60 + this.dayStartMinute;
+  gid: string;
 
-  dayEndHour: number = 17;
-  dayEndMinute: number = 30;
-  dayEnd = this.dayEndHour * 60 + this.dayEndMinute;
+  dayStartHour: number;
+  dayStartMinute: number;
+  dayStart: number; // = this.dayStartHour * 60 + this.dayStartMinute;
 
-  lunchBreakStartHr: number = 13;
-  lunchBreakStartMin: number = 30;
-  lunchBreakStart = this.lunchBreakStartHr * 60 + this.lunchBreakStartMin;
+  dayEndHour: number;
+  dayEndMinute: number;
+  dayEnd: number; // = this.dayEndHour * 60 + this.dayEndMinute;
 
-  lunchBreakDurationHr: number = 1;
-  lunchBreakDurationMin: number = 0;
-  lunchBreakEnd = this.lunchBreakStart + this.lunchBreakDurationHr * 60 + this.lunchBreakDurationMin;
+  lunchBreakStartHr: number;
+  lunchBreakStartMin: number;
+  lunchBreakStart : number; //= this.lunchBreakStartHr * 60 + this.lunchBreakStartMin;
 
-  sessionTakenHr: number = 0;
-  sessionTakenMin: number = 45;
-  sessionTaken = this.sessionTakenHr * 60 + this.sessionTakenMin;
+  // lunchBreakDurationHr: number = 1;
+  // lunchBreakDurationMin: number = 0;
+  lunchBreakEnd : number; //= this.lunchBreakStart + this.lunchBreakDurationHr * 60 + this.lunchBreakDurationMin;
+
+  // sessionTakenHr: number = 0;
+  // sessionTakenMin: number = 45;
+  sessionTaken : number; //= this.sessionTakenHr * 60 + this.sessionTakenMin;
+
+  // intervalBreakHr: number = 0;
+  // intervalBreakMin: number = 5;
+  intervalBreak : number; //= this.intervalBreakHr * 60 + this.intervalBreakMin;
   //LastSessionHour: number = this.dayEndHour - 1;
 
+  //minAdvanceBookingHr = 0;
+  //minAdvanceBookingDay = 2;
+  //maxAdvanceBookingDay = 100;
 
-  events: CalendarEvent[] = [];
+  minAdvanceBookingUnit: string ;
+  minAdvanceBooking: number;
+  maxAdvanceBookingInDay: number;
+
+  bookAllowFromHr: number = 0;
+  bookAllowFromMin: number = 0;
+  bookAllowFrom: number = 0;
+
+
+  events: EventData[] = []; //CalendarEvent[] = [];
   eventDataArry: EventData[] = [];
 
   eventBook: BookingEvent;
@@ -190,7 +211,7 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
 
   eveA: CalendarEvent[] = [];
 
-  selectedDays: any = [];
+  workingDays: number[] = [];
 
   daysInWeek = 7;
 
@@ -200,13 +221,7 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
 
   randomNumberChangeDetect: number = 0;
 
-  minAdvanceBookingHr = 0;
-  minAdvanceBookingDay = 2;
-  maxAdvanceBookingDay = 100;
 
-  bookAllowFromHr: number = 0;
-  bookAllowFromMin: number = 0;
-  bookAllowFrom: number = 0;
 
   breaks: any[] = [{ name: "lunch break", time : { hour:1, minute:0 }, duration : { hour:1, minute:0 } }]
 
@@ -220,6 +235,7 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
     private bookingService: BookingDataService,
     private bookingEntityDataService: BookingEntityDataService,
     protected readonly keycloakService: KeycloakService,
+    private route: ActivatedRoute
   ) {}
 
   async ngOnInit() {
@@ -229,18 +245,39 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
       this.userProfile = await this.keycloakService.loadUserProfile();
       console.log(this.userProfile);
     }
-    let gid = "363ff2e2-28f3-ae54-b3de-010b319ff658";
-    this.bookingEntityDataService.getBookingEntity(gid).subscribe(
+    this.gid = this.route.snapshot.paramMap.get('gid');
+      //"818ad340-f62b-f309-6553-be72bf0ec302";
+      console.log(this.gid);
+    this.bookingEntityDataService.getBookingEntity(this.gid).subscribe(
       response => {
-        console.log(response);
-        console.log('select');
+
+        this.bookingEntity = response as _BookingEntity;
+        this.dayStartHour = this.bookingEntity.dayStartM.hour;
+        this.dayStartMinute = this.bookingEntity.dayStartM.minute;
+        this.dayStart = this.bookingEntity.dayStartM.hour * 60 + this.bookingEntity.dayStartM.minute;
+
+        this.dayEndHour = this.bookingEntity.dayEndM.hour;
+        this.dayEndMinute = this.bookingEntity.dayEndM.minute;
+        this.dayEnd = this.bookingEntity.dayEndM.hour * 60 + this.bookingEntity.dayEndM.minute;
+
+        this.lunchBreakStart = this.bookingEntity.breakStartM.hour * 60 + this.bookingEntity.breakStartM.minute;
+        this.lunchBreakEnd = this.lunchBreakStart + this.bookingEntity.breakDurationM.hour * 60 + this.bookingEntity.breakDurationM.minute;
+        this.sessionTaken = this.bookingEntity.sessionM.hour * 60 + this.bookingEntity.sessionM.minute;
+        this.intervalBreak = this.bookingEntity.intervalBreakM.hour * 60 + this.bookingEntity.intervalBreakM.minute;
+        this.minAdvanceBookingUnit = this.bookingEntity.minAdvanceBookingUnit;
+        this.minAdvanceBooking = this.bookingEntity.minAdvanceBooking;
+        this.maxAdvanceBookingInDay = this.bookingEntity.maxAdvanceBookingInDay;
+        this.workingDays = this.bookingEntity.workingDays;
+
+        console.log(this.bookingEntity.minAdvanceBookingUnit);
+        this.prepareFrontEndData();
+        this.updateWithBackEndData();
       },
       error => {
         console.log(error);
       }
     );
-    this.prepareFrontEndData();
-    this.updateWithBackEndData();
+
 
     const CALENDAR_RESPONSIVE = {
       small: {
@@ -288,7 +325,8 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
 
   updateWithBackEndData() {
     console.log("start");
-    this.bookingService.retrieveAllBookings().subscribe(
+    console.log(this.gid);
+    this.bookingService.getBookingsByGid(this.gid).subscribe(
       response => {
         console.log(response);
         this.eventDataArry = response;
@@ -297,10 +335,23 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
         if (this.eventDataArry.length > 0) {
           for (let event of this.eventDataArry) {
             this.events = this.events.map((iEvent) => {
-              //console.log(iEvent);
-              if (iEvent.start.getTime() === Date.parse(event.start + ".000Z")) {
+
+              if (iEvent.start.getTime() === Date.parse(event.start + ".000Z") &&
+              iEvent.end.getTime() === Date.parse(event.end + ".000Z") ) {
                 console.log("iii " + iEvent.start.getTime() + " - " + Date.parse(event.start + ".000Z"));
-                iEvent.color = event.color;
+                //console.log(iEvent.bookerEmail === this.userProfile.email);
+                
+                //console.log(this.userProfile.email);
+                iEvent.color = colors.red;
+                console.log(event.bookerEmail);
+                console.log(this.userProfile);
+                if ((event.bookerEmail != null || "") && (this.userProfile != null || "") ) {
+                  if (( event.bookerEmail === this.userProfile.email )) {
+                    iEvent.color = colors.yellow; //event.color;
+                    console.log(event.bookerEmail);
+                  }
+                }
+                               
                 iEvent.id = event.id;
                 iEvent.meta.incrementsBadgeTotal = false;
                 if (event.meta != null) {
@@ -308,6 +359,12 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
                     iEvent.meta.email = event.meta.email;
                   }
                 }
+                if (event.bookerEmail != null) {
+                    iEvent.bookerEmail = event.bookerEmail;
+                }
+
+                iEvent.bookingEntityGid = this.bookingEntity.gid;
+                iEvent.bookingEntityName = this.bookingEntity.title_1;
               }
               return iEvent;
             });
@@ -327,36 +384,38 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
   prepareFrontEndData() {
     console.log('prepareFrontEndData');
     let start = startOfDay(new Date());
-    if (this.minAdvanceBookingDay > 0) {
-      start = addDays(start, this.minAdvanceBookingDay);
+    if (this.minAdvanceBookingUnit == "day") {
+      start = addDays(start, this.minAdvanceBooking);
       this.bookAllowFrom = 0;
     }
- 
+
     for (let i = start;
         isBefore(i, endOfMonth(addMonths(new Date(), 1)));
       i = addDays(i, 1)) {
       
-      if (startOfDay(new Date()) === startOfToday() && this.minAdvanceBookingDay == 0) {
-        let bookAllowFromHour: number = startOfHour(new Date()).getHours() - this.minAdvanceBookingHr;
+      console.log('allow from ', startOfDay(i).getTime() === startOfToday().getTime() && this.minAdvanceBookingUnit == "hour");
+
+      if (startOfDay(i).getTime() === startOfToday().getTime() && this.minAdvanceBookingUnit == "hour") {
+        let bookAllowFromHour: number = startOfHour(new Date()).getHours() + this.minAdvanceBooking;
         let bookAllowFromMinute: number = startOfHour(new Date()).getMinutes();
         this.bookAllowFrom = bookAllowFromHour * 60 + bookAllowFromMinute;
       }
       else {
         this.bookAllowFrom = 0
       }
-    //if (i.getDay() !== 0 && i.getDay() !== 6) 
 
 
-    if (!this.weekendDays.includes(i.getDay())) {       
+    if (this.workingDays.includes(i.getDay())) {       
       for (let j = this.dayStart > this.bookAllowFrom ? this.dayStart : this.bookAllowFrom;
         j + this.sessionTaken <= this.lunchBreakStart;
-        j = j + this.sessionTaken) {
+        j = j + this.sessionTaken + this.intervalBreak) {
         console.log(j);
         this.events.push({
           title: '',
           start: addMinutes(i, j),
           end: addMinutes(i, j + this.sessionTaken),
           color: colors.green,
+          bookingEntityGid: this.bookingEntity.gid,
           meta: {
             incrementsBadgeTotal: true,
           },
@@ -365,12 +424,13 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
 
       for (let j = this.lunchBreakEnd > this.bookAllowFrom ? this.lunchBreakEnd : this.bookAllowFrom;
         j + this.sessionTaken <= this.dayEnd;
-        j = j + this.sessionTaken) {
+        j = j + this.sessionTaken + this.intervalBreak) {
         this.events.push({
           title: '',
           start: addMinutes(i, j),
           end: addMinutes(i, j + this.sessionTaken),
           color: colors.green,
+          bookingEntityGid: this.bookingEntity.gid,
           meta: {
             incrementsBadgeTotal: true,
           },
@@ -406,14 +466,16 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
     if ( !isBefore(  date, startOfToday()) ){
       this.viewDate = date;
       console.log(this.viewDate);
-      this.viewDate.setDate(this.viewDate.getDate() - this.viewDateDec);
+      if (this.viewDate.getDay() > this.viewDateDec) {
+        this.viewDate.setDate(this.viewDate.getDate() - this.viewDateDec);
+      }   
       console.log(this.viewDate);
       console.log(this.viewDateDec);
       this.view = CalendarView.Week;
     }
   }
 
-  eventClicked({ event }: { event: CalendarEvent }): void {
+  eventClicked({ event }: { event: EventData }): void { //{ event: CalendarEvent }): void {
     console.log("1 " + this.isLoggedIn);
     //this.keycloakService.isLoggedIn().then(status => { this.isLoggedIn = status; console.log("2 " +this.isLoggedIn); });
     console.log("3 " + this.isLoggedIn);
@@ -427,19 +489,24 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
           if (confirm("Confirm booking?")) {
             var eventCopy = event;
             eventCopy.color = colors.red;
-            eventCopy.meta.email = this.userProfile.email;
-            console.log(eventCopy.meta.email);
-            console.log(this.userProfile.email);
-            console.log(eventCopy);
+            eventCopy.bookerEmail = this.userProfile.email;
+            eventCopy.bookingEntityName = this.bookingEntity.title_1;
+            eventCopy.bookingEntityGid = this.bookingEntity.gid;
+
             this.bookingService.createBooking(eventCopy).subscribe(
               response => {
                 this.events = this.events.map((iEvent) => {
                   //console.log(iEvent);
-                  if (iEvent.start.getTime() === Date.parse(eventCopy.start + ".000Z")) {
-                    console.log("iii " + iEvent.start.getTime() + " - " + Date.parse(eventCopy.start + ".000Z"));
+                  if (iEvent.start.getTime() === Date.parse(eventCopy.start + ".000Z") &&
+                  iEvent.end.getTime() === Date.parse(eventCopy.end + ".000Z")) {
+                    //console.log("iii " + iEvent.start.getTime() + " - " + Date.parse(eventCopy.start + ".000Z"));
                     iEvent.color = eventCopy.color;
                     iEvent.meta.incrementsBadgeTotal = false;
-                    iEvent.meta.email = eventCopy.meta.email;
+
+                    iEvent.bookerEmail = this.userProfile.email;
+                    iEvent.bookingEntityGid = this.bookingEntity.gid;
+                    iEvent.bookingEntityName = this.bookingEntity.title_1;
+
                   }
                   console.log('iEvent ' );
                   console.log(iEvent);
@@ -456,9 +523,9 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
           }
           return value;
         }
-        else if ( ( JSON.stringify(event.color) === JSON.stringify(colors.red ) ) &&
-                  ( event.meta.email != null || "" ) &&
-                  ( event.meta.email === this.userProfile.email ) ) {
+        else if ( ( JSON.stringify(event.color) === JSON.stringify(colors.yellow ) ) &&
+                  ( event.bookerEmail != null || "" ) &&
+                  ( event.bookerEmail === this.userProfile.email ) ) {
           if (confirm("Cancel booking?")) {
             var eventCopy = event;
             eventCopy.color = colors.green;
@@ -466,12 +533,17 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
             this.bookingService.deleteBooking(event.id).subscribe(
               response => {
                 this.events = this.events.map((iEvent) => {
-                  if (iEvent.start.getTime() === Date.parse(eventCopy.start + ".000Z")) {
-                    console.log("iii " + iEvent.start.getTime() + " - " + Date.parse(eventCopy.start + ".000Z"));
-                    iEvent.color = eventCopy.color;
+                  if (iEvent.start.getTime() === Date.parse(eventCopy.start + ".000Z") &&
+                  iEvent.end.getTime() === Date.parse(eventCopy.end + ".000Z")) {
+                    //console.log("iii " + iEvent.start.getTime() + " - " + Date.parse(eventCopy.start + ".000Z"));
+                    iEvent.color = colors.green;
                     iEvent.id = null;
                     iEvent.meta.incrementsBadgeTotal = true;
-                    iEvent.meta.email = null;
+
+                    iEvent.bookerEmail = null;
+                    iEvent.bookingEntityGid = eventCopy.bookingEntityGid;
+                    iEvent.bookingEntityName = null;
+
                   }
                   return iEvent;
                 });
@@ -491,7 +563,7 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
       else {
         console.log("4 " + this.isLoggedIn);
         this.keycloakService.login(
-          {redirectUri: "http://localhost:4200/select",}
+          //{redirectUri: "http://localhost:4200/select",}
         );
         return value;
       }
@@ -510,6 +582,7 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
       if (day.date.getDay() === 0 || day.date.getDay() === 6) {
         day.cssClass = 'cal-weekends';
       }
+      console.log(day.badgeTotal);
     });
     console.log('beforeRender');
   }

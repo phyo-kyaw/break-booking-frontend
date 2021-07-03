@@ -1,1 +1,9 @@
-
+.cell-booking-entity {
+   font-size: 1.6em ;
+   font-weight: 900;
+   opacity: 0.7;
+   margin-top: 10px;
+   margin-right: 5%;
+   text-align: right;
+   margin-bottom: 10px;
+ }

@@ -28,6 +28,8 @@ import { MenuComponent } from './menu/menu.component';
 import { FooterComponent } from './footer/footer.component';
 import { BookingEntityComponent } from './booking-entity/booking-entity.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ListBookingEntitiesComponent } from './list-booking-entities/list-booking-entities.component';
+import { BookingAdminComponent } from './booking-admin/booking-admin.component';
 
 
 
@@ -39,7 +41,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     CalendarSelComponent,
     MenuComponent,
     FooterComponent,
-    BookingEntityComponent
+    BookingEntityComponent,
+    ListBookingEntitiesComponent,
+    BookingAdminComponent
   ],
   imports: [
     CommonModule,
