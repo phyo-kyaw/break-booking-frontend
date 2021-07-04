@@ -1,5 +1,10 @@
 import { Guid } from "guid-typescript";
 
+export interface WorkSession {
+   day: number;
+   session: string;
+}
+
 export interface TimeM {
    hour: number;
    minute: number;
@@ -32,11 +37,18 @@ export interface _BookingEntity {
    sessionM: DurationM;
    intervalBreakM: DurationM;
  
-   dayStartM: TimeM ;
-   dayEndM: TimeM;
+   amStartM: TimeM ;
+   amEndM: TimeM;
    
-   breakStartM: TimeM;
-   breakDurationM: DurationM;
+   pmStartM: TimeM;
+   pmEndM: TimeM;
  
-   workingDays: number[];
+   workingDays: WorkSession[];
 }
+
+export interface WorkSessionCheckBox {
+   id: WorkSession;
+   name: String;
+   isChecked: boolean;
+}
+//{ id: { day: 0 , session: "A" }, name: "Sunday", isChecked: false }

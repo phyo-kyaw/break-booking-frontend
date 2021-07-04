@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { EmailValidator } from '@angular/forms';
 import { startOfToday } from 'date-fns';
 import { TimeFormatterPipe } from 'ngx-material-timepicker/src/app/material-timepicker/pipes/time-formatter.pipe';
-import { TimeM, DurationM, Break, _BookingEntity } from './models'
+import { TimeM, DurationM, Break, _BookingEntity, WorkSession, WorkSessionCheckBox } from './models'
 import { Guid } from "guid-typescript";
 
 import { BookingEntityDataService } from 'app/service/data/booking-entity-data.service';
@@ -23,34 +23,56 @@ export class BookingEntityComponent implements OnInit {
   title_1: string;
   title_2: string;
   email: string;
-  phone: string ='+61';
+  phone: string = '+61';
   startDate: Date;
 
   minAdvanceBookingUnit;
-  minAdvanceBooking ;
+  minAdvanceBooking;
   maxAdvanceBookingInDay;
 
-  dayStartM: TimeM ;
-  dayEndM: TimeM ;
+  amStartM: TimeM;
+  amEndM: TimeM;
   
-  breakStartM: TimeM ;
-  breakDurationM: DurationM ;
+  pmStartM: TimeM;
+  pmEndM: TimeM;
 
-  workingDays: number[];
+  // workingDays: WorkSession[];
 
   mobNumberPattern: string; // = "^((\\+61-?)|0)?[0-9]{10}$";
 
-  meridian = true;  
+  meridian = true;
 
-  objects = [
-    { id: 0, name: "Sunday", isChecked: false },
-    { id: 1, name: "Monday", isChecked: true },
-    { id: 2, name: "Tuesday", isChecked: true },
-    { id: 3, name: "Wednesday", isChecked: true },
-    { id: 4, name: "Thursday", isChecked: true },
-    { id: 5, name: "Friday", isChecked: true },
-    { id: 6, name: "Saturday", isChecked: false },
+  //objects: { [id: workSession]: any } = { };
+
+  // objects = [
+  //   { id: 0, name: "Sunday", isChecked: false },
+  //   { id: 1, name: "Monday", isChecked: true },
+  //   { id: 2, name: "Tuesday", isChecked: true },
+  //   { id: 3, name: "Wednesday", isChecked: true },
+  //   { id: 4, name: "Thursday", isChecked: true },
+  //   { id: 5, name: "Friday", isChecked: true },
+  //   { id: 6, name: "Saturday", isChecked: false },
+  // ]
+
+  workingWeekDays: WorkSessionCheckBox[] = [
+    { id: { day: 0, session: "AM" }, name: "AM Sunday", isChecked: false },
+    { id: { day: 0, session: "PM" }, name: "PM Sunday", isChecked: false },
+    { id: { day: 1, session: "AM" }, name: "AM Monday", isChecked: true },
+    { id: { day: 1, session: "PM" }, name: "PM Monday", isChecked: true },
+    { id: { day: 2, session: "AM" }, name: "AM Tuesday", isChecked: true },
+    { id: { day: 2, session: "PM" }, name: "PM Tuesday", isChecked: true },
+    { id: { day: 3, session: "AM" }, name: "AM Wednesday", isChecked: true },
+    { id: { day: 3, session: "PM" }, name: "PM Wednesday", isChecked: true },
+    { id: { day: 4, session: "AM" }, name: "AM Thursday", isChecked: true },
+    { id: { day: 4, session: "PM" }, name: "PM Thursday", isChecked: true },
+    { id: { day: 5, session: "AM" }, name: "AM Friday", isChecked: true },
+    { id: { day: 5, session: "PM" }, name: "PM Friday", isChecked: true },
+    { id: { day: 6, session: "AM" }, name: "AM Saturday", isChecked: false },
+    { id: { day: 6, session: "PM" }, name: "PM Saturday", isChecked: false },
   ]
+
+
+  //{ id: { day: 0 , session: "P" }, name: "Monday", isChecked: true },
  
 
 
@@ -77,23 +99,29 @@ export class BookingEntityComponent implements OnInit {
         "hour":0,
         "minute":5
       },
-      "dayStartM":{
+      "amStartM":{
          "hour":9,
          "minute":30
       },
-      "dayEndM":{
-         "hour":17,
+      "amEndM":{
+         "hour":12,
          "minute":30
       },
-      "breakStartM":{
-         "hour":13,
-         "minute":30
-      },
-      "breakDurationM":{
-         "hour":1,
+      "pmStartM":{
+         "hour":14,
          "minute":0
       },
-      "workingDays": [1,2,3,4,5]
+      "pmEndM":{
+         "hour":17,
+         "minute":0
+      },
+      "workingDays": [
+        { day: 1, session: "AM" }, { day: 1, session: "PM" },
+        { day: 2, session: "AM" }, { day: 2, session: "PM" },
+        { day: 3, session: "AM" }, { day: 3, session: "PM" },
+        { day: 4, session: "AM" }, { day: 4, session: "PM" },
+        { day: 5, session: "AM" }, { day: 5, session: "PM" },
+      ]
     }
 
     this.mobNumberPattern = "^((\\+61-?)|0)[2-478][0-9]{8}$"; //'^(\+61|0)[2-478]([0-9]){8}$';
@@ -118,13 +146,29 @@ export class BookingEntityComponent implements OnInit {
           //this.dayStartMinute = this.bookingEntity.dayStartM.minute;
           console.log(this.bookingEntity);
 
-          for (var object of this.objects) {
-            if (this.bookingEntity.workingDays.includes(object.id)) {
+          for (var object of this.workingWeekDays) {
+            console.log(this.bookingEntity.workingDays.filter(s =>
+              s.day === object.id.day && s.session === object.id.session).length);
+            if (this.bookingEntity.workingDays.filter(s =>
+              s.day === object.id.day && s.session === object.id.session).length == 1 ) {
+            //if (this.bookingEntity.workingDays.includes(object.id)) {
               console.log(this.bookingEntity.workingDays);
-              this.objects[object.id].isChecked = true;
+              //this.objects[object.id].isChecked = true;
+              this.workingWeekDays = this.workingWeekDays.map((session) => {
+                if ( JSON.stringify(session.id) === JSON.stringify(object.id) ) {
+                  session.isChecked = true;
+                }
+                return session;
+              });
             }
             else {
-              this.objects[object.id].isChecked = false;
+              //this.objects[object.id].isChecked = false;
+              this.workingWeekDays = this.workingWeekDays.map((session) => {
+                if ( JSON.stringify(session.id) === JSON.stringify(object.id) ) {
+                  session.isChecked = false;
+                }
+                return session;
+              });
             }
           }
  
@@ -136,34 +180,75 @@ export class BookingEntityComponent implements OnInit {
     }
     else {
       //this.bookingEntity.gid = Guid.create().toString();
+      
+      for (var object of this.workingWeekDays) {
+        if (this.bookingEntity.workingDays.filter(s =>
+          s.day === object.id.day && s.session === object.id.session).length == 1) {
+          
+          //this.objects[object.id].isChecked = true;
+          this.workingWeekDays = this.workingWeekDays.map((session) => {
+            if ( JSON.stringify(session.id) === JSON.stringify(object.id) ) {
+              session.isChecked = true;
+            }
+            return session;
+          });
+        }
+        else {
+          //this.objects[object.id].isChecked = false;
+          this.workingWeekDays = this.workingWeekDays.map((session) => {
+            if ( JSON.stringify(session.id) === JSON.stringify(object.id) ) {
+              session.isChecked = false;
+            }
+            return session;
+          });
+        }
+      }
+      console.log('this.bookingEntity.workingDays');
+      console.log(this.bookingEntity.workingDays);
+      console.log('this.workingWeekDays');
+      console.log(this.workingWeekDays);
     }
     
     //console.log(this.bookingEntity.workingDays);
     //this.workingDays = this.bookingEntity.workingDays;
     //this.workingDays = new Array<number>();
-    for (var object of this.objects) {
-      if (this.bookingEntity.workingDays.includes(object.id)) {
-        console.log(this.bookingEntity.workingDays);
-        this.objects[object.id].isChecked = true;
-      }
-      else {
-        this.objects[object.id].isChecked = false;
-      }
-    }
+    // for (var object of this.objects) {
+    //   if (this.bookingEntity.workingDays.includes(object.id)) {
+    //     console.log(this.bookingEntity.workingDays);
+    //     this.objects[object.id].isChecked = true;
+    //   }
+    //   else {
+    //     this.objects[object.id].isChecked = false;
+    //   }
+    // }
     
   }
 
-  getDayId(e: any, id: number) {
+  getDayId(e: any, id: WorkSession) {
     console.log(e);
     if (e.target.checked) {
-      console.log(id + ' checked ' );
+      console.log(id + ' checked ');
+      //this.bookingEntity.workingDays.push(id);
+      //this.objects[id].isChecked = true;
       this.bookingEntity.workingDays.push(id);
-      this.objects[id].isChecked = true;
+      //this.workingWeekDays[id].isChecked = true;
+      this.workingWeekDays = this.workingWeekDays.map((session) => {
+        if ( JSON.stringify(session.id) === JSON.stringify(id) ) {
+          session.isChecked = true;
+        }
+        return session;
+      });
     }
     else { //if (e.target.unchecked) {
       console.log(id + ' unchecked ');
-      this.bookingEntity.workingDays = this.bookingEntity.workingDays.filter(m => m != id);
-      this.objects[id].isChecked = false;
+      this.bookingEntity.workingDays = this.bookingEntity.workingDays.filter(m => JSON.stringify(m) !== JSON.stringify(id) );
+      //this.objects[id].isChecked = false;
+      this.workingWeekDays = this.workingWeekDays.map((session) => {
+        if ( JSON.stringify(session.id) === JSON.stringify(id) ) {
+          session.isChecked = false;
+        }
+        return session;
+      });
     }
     console.log(this.bookingEntity.workingDays);
     
