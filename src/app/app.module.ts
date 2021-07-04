@@ -22,8 +22,8 @@ import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import { initializeKeycloak } from './demo-utils/app.init';
 
 
-//import { environment } from '../environments/environment.prod';
-import { environment } from '../environments/environment';
+import { environment } from '../environments/environment.prod';
+//import { environment } from '../environments/environment';
 import { MenuComponent } from './menu/menu.component';
 import { FooterComponent } from './footer/footer.component';
 import { BookingEntityComponent } from './booking-entity/booking-entity.component';
