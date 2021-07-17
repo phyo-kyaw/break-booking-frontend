@@ -5,6 +5,7 @@ export interface EventData extends CalendarEvent {
   bookingEntityName?: string;
   bookerEmail?: string;
   bookerPhone?: string;
+  bookerName?: string;
 
   // id?: string;
   // title: string ;
