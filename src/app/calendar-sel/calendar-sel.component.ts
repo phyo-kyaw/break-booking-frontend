@@ -487,7 +487,8 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
     console.log("3 " + this.isLoggedIn);
 
     var loginPromise =  this.keycloakService.isLoggedIn();
-    loginPromise.then((value) => {
+    //loginPromise.then((value) => {
+    let value = true;
       if (value) {
         ///console.log('Event clicked ' + value);
         //console.log(event.color);
@@ -530,7 +531,7 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
             );
             console.log('Event clicked', event);
           }
-          return value;
+          //return value;  //keycloak log in 
         }
         else if ( ( JSON.stringify(event.color) === JSON.stringify(colors.yellow ) ) &&
                   ( event.bookerEmail != null || "" ) &&
@@ -567,20 +568,20 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
             );
             console.log('Event clicked', event);
           }
-          return value;
+          //return value; //keycloak log in 
         }
       }
-      else {
-        console.log("4 " + this.isLoggedIn);
-        this.keycloakService.login(
-          //{redirectUri: "http://localhost:4200/select",}
-        );
-        return value;
-      }
-    }).catch( (error) => {
-      console.log("4 " + this.isLoggedIn + " " + error);
+    //   else {
+    //     console.log("4 " + this.isLoggedIn);
+    //     this.keycloakService.login(
+    //       //{redirectUri: "http://localhost:4200/select",}
+    //     );
+    //     return value;
+    //   }
+    // }).catch( (error) => {
+    //   console.log("4 " + this.isLoggedIn + " " + error);
 
-    });
+    // });
 
   }
 
