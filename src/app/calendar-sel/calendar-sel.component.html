@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-between"> 
   <!-- <div class="button success">Show booker details</div>  -->
   <div class="col-sm-6 custom-control custom-switch">
-    <input id="bookerDetails" type="checkbox" class="custom-control-input" (change)="getEvent($event)">
+    <input id="bookerDetails" type="checkbox" class="custom-control-input" (change)="getEvent($event)" disabled>
     <label class="custom-control-label" for="bookerDetails">Booker Details</label>
   </div>
   <span class="col-sm-6" *ngIf="bookingEntity.title_1 != null" 

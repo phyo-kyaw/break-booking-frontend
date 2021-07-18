@@ -4,7 +4,8 @@ export function initializeKeycloak(keycloak: KeycloakService): () => Promise<boo
     return () =>
         keycloak.init({
             config: {
-                url: 'https://break-booking.online:8443/auth',
+                // url: 'https://break-booking.online:8443/auth',
+                url: 'http://localhost:8181/auth',
                 realm: 'break-booking',
                 clientId: 'break-booking-frontend-client',
             },

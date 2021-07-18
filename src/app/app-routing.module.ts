@@ -10,8 +10,8 @@ import { ListBookingEntitiesComponent } from './list-booking-entities/list-booki
 const routes: Routes = [
   { path: 'adjust', component: CalendarDisplayComponent},
   //{ path: 'select', component: CalendarSelComponent },
-  { path: 'entity', component: BookingEntityComponent }, //, canActivate: [AuthGuard] , data: { roles: ['booking-admin'] }},
-  { path: 'entity/:gid', component: BookingEntityComponent }, // , canActivate: [AuthGuard] , data: { roles: ['booking-admin'] }},
+  { path: 'entity', component: BookingEntityComponent , canActivate: [AuthGuard] , data: { roles: ['booking-admin'] }},
+  { path: 'entity/:gid', component: BookingEntityComponent , canActivate: [AuthGuard] , data: { roles: ['booking-admin'] }},
   { path: 'book', component: ListBookingEntitiesComponent },
   { path: 'list', component: ListBookingEntitiesComponent },
   { path: 'select/:gid', component: CalendarSelComponent },
