@@ -1,11 +1,11 @@
-<div class="d-flex justify-content-between"> 
+<div class="d-flex justify-content-between">
   <!-- <div class="button success">Show booker details</div>  -->
   <div class="col-sm-6 custom-control custom-switch">
     <input id="bookerDetails" type="checkbox" class="custom-control-input" (change)="getEvent($event)" disabled>
     <label class="custom-control-label" for="bookerDetails">Booker Details</label>
   </div>
-  <span class="col-sm-6" *ngIf="bookingEntity.title_1 != null" 
-  >{{ this.bookingEntity.title_1 }} - {{ this.bookingEntity.title_2 }} </span
+  <span class="col-sm-6" *ngIf="apptBookingEntity.title_1 != null && apptBookingEntity.title_2 != null "
+  >{{ this.apptBookingEntity.title_1 }} - {{ this.apptBookingEntity.title_2 }} </span
   >
 
 </div>

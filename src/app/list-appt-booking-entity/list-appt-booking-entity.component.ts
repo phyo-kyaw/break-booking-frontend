@@ -1,20 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { _BookingEntity } from 'app/booking-entity/models';
-import { BookingEntityDataService } from 'app/service/data/booking-entity-data.service';
+import { ApptBookingEntity } from 'app/appt-booking-entity/models';
+import { ApptBookingEntityDataService } from 'app/service/data/appt-booking-entity-data.service';
 
 @Component({
-  selector: 'app-list-booking-entities',
-  templateUrl: './list-booking-entities.component.html',
-  styleUrls: ['./list-booking-entities.component.css']
+  selector: 'app-list-appt-booking-entity',
+  templateUrl: './list-appt-booking-entity.component.html',
+  styleUrls: ['./list-appt-booking-entity.component.css']
 })
-export class ListBookingEntitiesComponent implements OnInit {
+export class ListApptBookingEntityComponent implements OnInit {
 
-  bookingEntity: _BookingEntity;
-  bookingEntityList: _BookingEntity[];
+  bookingEntity: ApptBookingEntity;
+  bookingEntityList: ApptBookingEntity[];
 
   constructor(
-    private bookingEntityDataService: BookingEntityDataService,
+    private bookingEntityDataService: ApptBookingEntityDataService,
     private router: Router
   ) { }
 
@@ -36,6 +36,6 @@ export class ListBookingEntitiesComponent implements OnInit {
   }
 
 
-  
+
 
 }

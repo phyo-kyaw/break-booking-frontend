@@ -19,11 +19,11 @@ import {
 } from 'angular-calendar';
 import {  KeycloakService } from 'keycloak-angular';
 import { WeekDay, WeekViewHourSegment, WeekViewHourColumn, EventAction, EventColor } from 'calendar-utils';
-import { CalendarHeaderComponent } from '../demo-utils/calendar-header.component';
-import { CustomEventTitleFormatter } from '../demo-utils/custom-event-title-formatter.provider';
-import { CustomDateFormatter } from '../demo-utils/custom-date-formatter.provider';
-import { colors } from '../demo-utils/colors';
-import { BookingEvent } from '../demo-utils/event-b';
+import { CalendarHeaderComponent } from '../appt-booking-utils/calendar-header.component';
+import { CustomEventTitleFormatter } from '../appt-booking-utils/custom-event-title-formatter.provider';
+import { CustomDateFormatter } from '../appt-booking-utils/custom-date-formatter.provider';
+import { colors } from '../appt-booking-utils/colors';
+//import { BookingEvent } from '../appt-booking-utils/event-b';
 import { Subject, timer } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
@@ -47,19 +47,19 @@ import {
   startOfHour,
   isAfter,
 } from 'date-fns';
-import { BookingDataService } from '../service/data/booking-data.service';
-import { EventData } from './event-data';
+import { ApptBookingDataService } from '../service/data/appt-booking-data.service';
+import { ApptBookingData } from './event-data';
 import { KeycloakProfile } from 'keycloak-js';
 import { createElementCssSelector } from '@angular/compiler';
-import { BookingEntityDataService } from 'app/service/data/booking-entity-data.service';
-import { WorkSession, _BookingEntity } from 'app/booking-entity/models';
+import { ApptBookingEntityDataService } from 'app/service/data/appt-booking-entity-data.service';
+import { WorkSession, ApptBookingEntity } from 'app/appt-booking-entity/models';
 
 
 @Component({
-  selector: 'app-calendar-sel',
-  templateUrl: './calendar-sel.component.html',
+  selector: 'app-appt-booking',
+  templateUrl: './appt-booking.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrls: ['./calendar-sel.component.css',],
+  styleUrls: ['./appt-booking.component.css',],
   // don't do this in your app, its only so the styles get applied globally
   styles: [
     `
@@ -140,7 +140,7 @@ import { WorkSession, _BookingEntity } from 'app/booking-entity/models';
   ],
   encapsulation: ViewEncapsulation.None,
 })
-export class CalendarSelComponent  implements OnInit, OnDestroy {
+export class ApptBookingComponent  implements OnInit, OnDestroy {
 
   view: CalendarView = CalendarView.Month;
 
@@ -156,14 +156,14 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
 
   hourColumns: WeekViewHourColumn[];
 
-  bookingEntity: _BookingEntity;
+  apptBookingEntity: ApptBookingEntity;
 
 
   dayStartHour=9
   dayStartMinute=0
   dayEndHour=18
   dayEndMinute=0
-  
+
   hourSegmentHeight: number = 10;
 
   hourSegments: number = 5;
@@ -172,23 +172,23 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
 
   amStartHour: number;
   amStartMinute: number;
-  amStart: number; 
+  amStart: number;
 
   amEndHour: number;
   amEndMinute: number;
-  amEnd: number; 
+  amEnd: number;
 
   pmStartHour: number;
   pmStartMinute: number;
   pmStart: number;
-  
+
   pmEndHour: number;
   pmEndMinute: number;
   pmEnd: number;
 
-  sessionTaken : number; 
+  sessionTaken : number;
   intervalBreak: number;
-  
+
   minAdvanceBookingUnit: string ;
   minAdvanceBooking: number;
   maxAdvanceBookingInDay: number;
@@ -198,14 +198,14 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
   bookAllowFrom: number = 0;
 
 
-  events: EventData[] = []; //CalendarEvent[] = [];
-  eventDataArry: EventData[] = [];
+  events: ApptBookingData[] = []; //events angular calendar variable
+  apptBookingDataRef: ApptBookingData[] = [];
 
-  eventBook: BookingEvent;
+  //eventBook: BookingEvent;
 
-  eventBs: BookingEvent[];
+  //eventBs: BookingEvent[];
 
-  eveA: CalendarEvent[] = [];
+  //eveA: CalendarEvent[] = [];
 
   //workingDays: number[] = [];
 
@@ -233,8 +233,8 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
   constructor(
     private breakpointObserver: BreakpointObserver,
     private cd: ChangeDetectorRef,
-    private bookingService: BookingDataService,
-    private bookingEntityDataService: BookingEntityDataService,
+    private bookingService: ApptBookingDataService,
+    private bookingEntityDataService: ApptBookingEntityDataService,
     protected readonly keycloakService: KeycloakService,
     private route: ActivatedRoute
   ) {}
@@ -258,37 +258,37 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
     this.bookingEntityDataService.getBookingEntity(this.gid).subscribe(
       response => {
 
-        this.bookingEntity = response as _BookingEntity;
+        this.apptBookingEntity = response as ApptBookingEntity;
 
-        this.sessionTaken = this.bookingEntity.sessionM.hour * 60 + this.bookingEntity.sessionM.minute; 
-        this.intervalBreak = this.bookingEntity.intervalBreakM.hour * 60 + this.bookingEntity.intervalBreakM.minute;
+        this.sessionTaken = this.apptBookingEntity.sessionM.hour * 60 + this.apptBookingEntity.sessionM.minute;
+        this.intervalBreak = this.apptBookingEntity.intervalBreakM.hour * 60 + this.apptBookingEntity.intervalBreakM.minute;
 
         this.hourSegments = 60 / Math.floor(this.sessionTaken / 3 );
-        
-        this.amStartHour = this.bookingEntity.amStartM.hour;
-        this.amStartMinute = this.bookingEntity.amStartM.minute;
-        this.amStart = this.bookingEntity.amStartM.hour * 60 + this.bookingEntity.amStartM.minute;
 
-        this.amEndHour = this.bookingEntity.amEndM.hour;
-        this.amEndMinute = this.bookingEntity.amEndM.minute;
-        this.amEnd = this.bookingEntity.amEndM.hour * 60 + this.bookingEntity.amEndM.minute;
+        this.amStartHour = this.apptBookingEntity.amStartM.hour;
+        this.amStartMinute = this.apptBookingEntity.amStartM.minute;
+        this.amStart = this.apptBookingEntity.amStartM.hour * 60 + this.apptBookingEntity.amStartM.minute;
 
-        this.pmStartHour = this.bookingEntity.pmStartM.hour;
-        this.pmStartMinute = this.bookingEntity.pmStartM.minute;
-        this.pmStart = this.bookingEntity.pmStartM.hour * 60 + this.bookingEntity.pmStartM.minute;
+        this.amEndHour = this.apptBookingEntity.amEndM.hour;
+        this.amEndMinute = this.apptBookingEntity.amEndM.minute;
+        this.amEnd = this.apptBookingEntity.amEndM.hour * 60 + this.apptBookingEntity.amEndM.minute;
 
-        this.pmEndHour = this.bookingEntity.pmEndM.hour;
-        this.pmEndMinute = this.bookingEntity.pmEndM.minute;
-        this.pmEnd = this.bookingEntity.pmEndM.hour * 60 + this.bookingEntity.pmEndM.minute;
+        this.pmStartHour = this.apptBookingEntity.pmStartM.hour;
+        this.pmStartMinute = this.apptBookingEntity.pmStartM.minute;
+        this.pmStart = this.apptBookingEntity.pmStartM.hour * 60 + this.apptBookingEntity.pmStartM.minute;
 
-        this.minAdvanceBookingUnit = this.bookingEntity.minAdvanceBookingUnit;
-        this.minAdvanceBooking = this.bookingEntity.minAdvanceBooking;
-        this.maxAdvanceBookingInDay = this.bookingEntity.maxAdvanceBookingInDay;
+        this.pmEndHour = this.apptBookingEntity.pmEndM.hour;
+        this.pmEndMinute = this.apptBookingEntity.pmEndM.minute;
+        this.pmEnd = this.apptBookingEntity.pmEndM.hour * 60 + this.apptBookingEntity.pmEndM.minute;
+
+        this.minAdvanceBookingUnit = this.apptBookingEntity.minAdvanceBookingUnit;
+        this.minAdvanceBooking = this.apptBookingEntity.minAdvanceBooking;
+        this.maxAdvanceBookingInDay = this.apptBookingEntity.maxAdvanceBookingInDay;
         //this.workingDays = this.bookingEntity.workingDays;
-        this.workingWeekDays = this.bookingEntity.workingDays;
-        
+        this.workingWeekDays = this.apptBookingEntity.workingDays;
 
-        console.log(this.bookingEntity.minAdvanceBookingUnit);
+
+        console.log(this.apptBookingEntity.minAdvanceBookingUnit);
         this.prepareFrontEndData();
         this.updateWithBackEndData();
       },
@@ -348,11 +348,11 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
     this.bookingService.getBookingsByGid(this.gid).subscribe(
       response => {
         console.log(response);
-        this.eventDataArry = response;
-        console.log(this.eventDataArry);
+        this.apptBookingDataRef = response;
+        console.log(this.apptBookingDataRef);
         console.log(this.events);
-        if (this.eventDataArry.length > 0) {
-          for (let event of this.eventDataArry) {
+        if (this.apptBookingDataRef.length > 0) {
+          for (let event of this.apptBookingDataRef) {
             this.events = this.events.map((iEvent) => {
 
               if (iEvent.start.getTime() === Date.parse(event.start + ".000Z") &&
@@ -360,33 +360,33 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
                 console.log("iii " + iEvent.start.getTime() + " - " + Date.parse(event.start + ".000Z"));
 
                 iEvent.color = colors.red;
-                console.log(event.bookerEmail);
+                console.log(event.apptBookerEmail);
                 console.log(this.userProfile);
-                if ((event.bookerEmail != null || "") && (this.userProfile != null || "") ) {
-                  if (( event.bookerEmail === this.userProfile.email )) {
+                if ((event.apptBookerEmail != null || "") && (this.userProfile != null || "") ) {
+                  if (( event.apptBookerEmail === this.userProfile.email )) {
                     iEvent.color = colors.yellow; //event.color;
-                    console.log(event.bookerEmail);
+                    console.log(event.apptBookerEmail);
                   }
                 }
-                               
+
                 iEvent.id = event.id;
-                
+
                 iEvent.meta.incrementsBadgeTotal = false;
                 if (event.meta != null) {
                   if (event.meta.email != null) {
                     iEvent.meta.email = event.meta.email;
                   }
                 }
-                if (event.bookerEmail != null) {
-                    iEvent.bookerEmail = event.bookerEmail;
+                if (event.apptBookerEmail != null) {
+                    iEvent.apptBookerEmail = event.apptBookerEmail;
                 }
-                if (event.bookerName != null) {
-                  iEvent.bookerName = event.bookerName;
-                  iEvent.title = event.bookerName;
+                if (event.apptBookerName != null) {
+                  iEvent.apptBookerName = event.apptBookerName;
+                  iEvent.title = event.apptBookerName;
               }
 
-                iEvent.bookingEntityGid = this.bookingEntity.gid;
-                iEvent.bookingEntityName = this.bookingEntity.title_1;
+                iEvent.apptBookingEntityGid = this.apptBookingEntity.gid;
+                iEvent.apptBookingEntityName = this.apptBookingEntity.title_1;
               }
               return iEvent;
             });
@@ -414,7 +414,7 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
     for (let i = start;
         isBefore(i, endOfMonth(addMonths(new Date(), 1)));
       i = addDays(i, 1)) {
-      
+
       console.log('allow from ', startOfDay(i).getTime() === startOfToday().getTime() && this.minAdvanceBookingUnit == "hour");
 
       if (startOfDay(i).getTime() === startOfToday().getTime() && this.minAdvanceBookingUnit == "hour") {
@@ -438,7 +438,7 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
               start: addMinutes(i, j),
               end: addMinutes(i, j + this.sessionTaken),
               color: colors.green,
-              bookingEntityGid: this.bookingEntity.gid,
+              apptBookingEntityGid: this.apptBookingEntity.gid,
               meta: {
                 incrementsBadgeTotal: true,
               },
@@ -456,7 +456,7 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
               start: addMinutes(i, j),
               end: addMinutes(i, j + this.sessionTaken),
               color: colors.green,
-              bookingEntityGid: this.bookingEntity.gid,
+              apptBookingEntityGid: this.apptBookingEntity.gid,
               meta: {
                 incrementsBadgeTotal: true,
               },
@@ -465,6 +465,8 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
         }
     }
     }
+    console.log('this.apptBookingData');
+    console.log(this.events);
   }
 
 
@@ -474,14 +476,14 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
       //console.log(this.viewDate);
       if (this.viewDate.getDay() > this.viewDateDec) {
         this.viewDate.setDate(this.viewDate.getDate() - this.viewDateDec);
-      }   
+      }
       //console.log(this.viewDate);
       //console.log(this.viewDateDec);
       this.view = CalendarView.Week;
     }
   }
 
-  eventClicked({ event }: { event: EventData }): void { //{ event: CalendarEvent }): void {
+  eventClicked({ event }: { event: ApptBookingData }): void { //{ event: CalendarEvent }): void {
     //console.log("1 " + this.isLoggedIn);
     //this.keycloakService.isLoggedIn().then(status => { this.isLoggedIn = status; console.log("2 " +this.isLoggedIn); });
     console.log("3 " + this.isLoggedIn);
@@ -496,10 +498,10 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
           if (confirm("Confirm booking?")) {
             var eventCopy = event;
             eventCopy.color = colors.red;
-            eventCopy.bookerEmail = this.userProfile.email;
-            eventCopy.bookerName = this.userProfile.firstName + " " + this.userProfile.lastName;
-            eventCopy.bookingEntityName = this.bookingEntity.title_1;
-            eventCopy.bookingEntityGid = this.bookingEntity.gid;
+            eventCopy.apptBookerEmail = this.userProfile.email;
+            eventCopy.apptBookerName = this.userProfile.firstName + " " + this.userProfile.lastName;
+            eventCopy.apptBookingEntityName = this.apptBookingEntity.title_1;
+            eventCopy.apptBookingEntityGid = this.apptBookingEntity.gid;
 
             this.bookingService.createBooking(eventCopy).subscribe(
               response => {
@@ -511,10 +513,10 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
                     iEvent.color = eventCopy.color;
                     iEvent.meta.incrementsBadgeTotal = false;
 
-                    iEvent.bookerEmail = eventCopy.bookerEmail;
-                    iEvent.bookerEmail = eventCopy.bookerName;
-                    iEvent.bookingEntityGid = eventCopy.bookingEntityName;
-                    iEvent.bookingEntityName = eventCopy.bookingEntityGid;
+                    iEvent.apptBookerEmail = eventCopy.apptBookerEmail;
+                    iEvent.apptBookerEmail = eventCopy.apptBookerName;
+                    iEvent.apptBookingEntityGid = eventCopy.apptBookingEntityName;
+                    iEvent.apptBookingEntityName = eventCopy.apptBookingEntityGid;
 
                   }
                   //console.log('iEvent ' );
@@ -531,11 +533,11 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
             );
             console.log('Event clicked', event);
           }
-          return value;  //keycloak log in 
+          return value;  //keycloak log in
         }
         else if ( ( JSON.stringify(event.color) === JSON.stringify(colors.yellow ) ) &&
-                  ( event.bookerEmail != null || "" ) &&
-                  ( event.bookerEmail === this.userProfile.email ) ) {
+                  ( event.apptBookerEmail != null || "" ) &&
+                  ( event.apptBookerEmail === this.userProfile.email ) ) {
           if (confirm("Cancel booking?")) {
             var eventCopy = event;
             eventCopy.color = colors.green;
@@ -550,10 +552,10 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
                     iEvent.id = null;
                     iEvent.meta.incrementsBadgeTotal = true;
 
-                    iEvent.bookerEmail = null;
-                    iEvent.bookerName = null;
-                    iEvent.bookingEntityGid = eventCopy.bookingEntityGid;
-                    iEvent.bookingEntityName = null;
+                    iEvent.apptBookerEmail = null;
+                    iEvent.apptBookerName = null;
+                    iEvent.apptBookingEntityGid = eventCopy.apptBookingEntityGid;
+                    iEvent.apptBookingEntityName = null;
 
                   }
                   return iEvent;
@@ -568,7 +570,7 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
             );
             console.log('Event clicked', event);
           }
-          return value; //keycloak log in 
+          return value; //keycloak log in
         }
       }
       else { //keycloak log in
@@ -620,7 +622,7 @@ export class CalendarSelComponent  implements OnInit, OnDestroy {
       if (this.isServiceProvider) {
         this.isBookerDetailsOn = false;
         this.ngOnInit();
-      }      
+      }
     }
   }
 

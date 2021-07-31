@@ -21,7 +21,7 @@ export interface Break {
    duration: DurationM;
 }
 
-export interface _BookingEntity {
+export interface ApptBookingEntity {
 
    gid: string;
    title_1: string;
@@ -29,20 +29,20 @@ export interface _BookingEntity {
    email: string;
    phone: string;
    startDate: Date;
- 
+
    minAdvanceBookingUnit: string;
    minAdvanceBooking: number;
    maxAdvanceBookingInDay: number;
-   
+
    sessionM: DurationM;
    intervalBreakM: DurationM;
- 
+
    amStartM: TimeM ;
    amEndM: TimeM;
-   
+
    pmStartM: TimeM;
    pmEndM: TimeM;
- 
+
    workingDays: WorkSession[];
 }
 

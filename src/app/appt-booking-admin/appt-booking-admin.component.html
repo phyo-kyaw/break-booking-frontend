@@ -10,15 +10,15 @@
        </tr>
      </thead>
      <tbody>
-       <tr *ngFor="let bookingEntity of bookingEntityList">
+       <tr *ngFor="let apptBookingEntity of apptBookingEntityList">
          <!-- <td>{{bookingEntity.gid}}</td> -->
-         <td >{{bookingEntity.title_1}}</td>
+         <td >{{apptBookingEntity.title_1}}</td>
          <!--<td>{{_formatDate(new Date(waterOrder.startDateTime))}}</td>-->
-         <td >{{bookingEntity.title_2}}</td>
+         <td >{{apptBookingEntity.title_2}}</td>
          <!--<td>{{new Date() | date:'yyyy-MM-ddTHH:mm:ss' }}</td>-->
          <!-- <a [routerLink]="['/user/bob']" [queryParams]="{gid: bookingEntity.gid}" >Book</a> -->
-         <td><button (click)="update(bookingEntity.gid)" class="btn btn-warning">Edit</button></td>
-         <td><button (click)="delete(bookingEntity.gid)" class="btn btn-danger">Delete</button></td>
+         <td><button (click)="update(apptBookingEntity.gid)" class="btn btn-warning">Edit</button></td>
+         <td><button (click)="delete(apptBookingEntity.gid)" class="btn btn-danger">Delete</button></td>
          <!-- <td><button (click)="book(bookingEntity.gid)" class="btn btn-success">Book</button></td> -->
          <!-- <td><button (click)="cancelWaterOrder(waterOrder)" class="btn btn-warning">Cancel</button></td>
          <td><button (click)="obtainWaterOrderLog(waterOrder)" class="btn btn-success">Details</button></td> -->
@@ -29,8 +29,7 @@
      </tbody>
    </table>
    <div class="dd">
-    <button (click)="addBookingEntity()" class="btn btn-success">Add Booking Entity</button>
+    <button (click)="addApptBookingEntity()" class="btn btn-success">Add Booking Entity</button>
     <!-- <button (click)="refreshDB()" class="btn btn-danger">Refresh DB</button> -->
    </div>
  </div>
- 

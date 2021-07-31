@@ -1,6 +1,6 @@
 for mainFileName in /usr/share/nginx/html/main*.js;
 do
-        if ! envsubst '${BACKEND_API_URL} ' < ${mainFileName} > main.tmp ;
+        if ! envsubst '${HOME_URL} ' < ${mainFileName} > main.tmp ;
         then
                 exit 1;
         fi

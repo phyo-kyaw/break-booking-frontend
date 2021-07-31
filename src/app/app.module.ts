@@ -10,26 +10,25 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { CalendarModule, DateAdapter  } from 'angular-calendar';
 //import { SchedulerModule } from 'angular-calendar-scheduler';
-import { DemoUtilsModule } from './demo-utils/module';
+import { ApptBookingUtilsModule } from './appt-booking-utils/module';
 
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CalendarDisplayComponent } from './calendar-display/calendar-display.component';
-import { CalendarSelComponent } from './calendar-sel/calendar-sel.component';
+import { ApptBookingComponent } from './appt-booking/appt-booking.component';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 
-import { initializeKeycloak } from './demo-utils/app.init';
+import { initializeKeycloak } from './appt-booking-utils/app.init';
 
 
 //import { environment } from '../environments/environment.prod';
 import { environment } from '../environments/environment';
 import { MenuComponent } from './menu/menu.component';
 import { FooterComponent } from './footer/footer.component';
-import { BookingEntityComponent } from './booking-entity/booking-entity.component';
+import { ApptBookingEntityComponent } from './appt-booking-entity/appt-booking-entity.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ListBookingEntitiesComponent } from './list-booking-entities/list-booking-entities.component';
-import { BookingAdminComponent } from './booking-admin/booking-admin.component';
+import { ListApptBookingEntityComponent } from './list-appt-booking-entity/list-appt-booking-entity.component';
+import { ApptBookingAdminComponent } from './appt-booking-admin/appt-booking-admin.component';
 
 
 
@@ -37,13 +36,12 @@ import { BookingAdminComponent } from './booking-admin/booking-admin.component';
 @NgModule({
   declarations: [
     AppComponent,
-    CalendarDisplayComponent,
-    CalendarSelComponent,
+    ApptBookingComponent,
     MenuComponent,
     FooterComponent,
-    BookingEntityComponent,
-    ListBookingEntitiesComponent,
-    BookingAdminComponent
+    ApptBookingEntityComponent,
+    ListApptBookingEntityComponent,
+    ApptBookingAdminComponent
   ],
   imports: [
     CommonModule,
@@ -52,7 +50,7 @@ import { BookingAdminComponent } from './booking-admin/booking-admin.component';
       provide: DateAdapter,
       useFactory: adapterFactory,
     }),
-    DemoUtilsModule,
+    ApptBookingUtilsModule,
     //SchedulerModule.forRoot({ locale: 'en', headerDateFormat: 'daysRange' }),
     AppRoutingModule,
     HttpClientModule,
@@ -71,7 +69,7 @@ import { BookingAdminComponent } from './booking-admin/booking-admin.component';
     multi: true,
     deps: [KeycloakService],
   },
-   { provide: 'BACKEND_API_URL', useValue: environment.backendApiUrl }
+   { provide: 'BACKEND_API_URL', useValue: environment.homeUrl }
   ],
   bootstrap: [AppComponent]
 })

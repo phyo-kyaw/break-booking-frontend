@@ -3,20 +3,20 @@ import { Component, OnInit } from '@angular/core';
 import { EmailValidator } from '@angular/forms';
 import { startOfToday } from 'date-fns';
 import { TimeFormatterPipe } from 'ngx-material-timepicker/src/app/material-timepicker/pipes/time-formatter.pipe';
-import { TimeM, DurationM, Break, _BookingEntity, WorkSession, WorkSessionCheckBox } from './models'
+import { TimeM, DurationM, Break, ApptBookingEntity, WorkSession, WorkSessionCheckBox } from './models'
 import { Guid } from "guid-typescript";
 
-import { BookingEntityDataService } from 'app/service/data/booking-entity-data.service';
+import { ApptBookingEntityDataService } from 'app/service/data/appt-booking-entity-data.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-booking-entity',
-  templateUrl: './booking-entity.component.html',
-  styleUrls: ['./booking-entity.component.css']
+  selector: 'app-appt-booking-entity',
+  templateUrl: './appt-booking-entity.component.html',
+  styleUrls: ['./appt-booking-entity.component.css']
 })
-export class BookingEntityComponent implements OnInit {
+export class ApptBookingEntityComponent implements OnInit {
 
-  bookingEntity: _BookingEntity;
+  bookingEntity: ApptBookingEntity;
 
   gid: string;
 
@@ -32,7 +32,7 @@ export class BookingEntityComponent implements OnInit {
 
   amStartM: TimeM;
   amEndM: TimeM;
-  
+
   pmStartM: TimeM;
   pmEndM: TimeM;
 
@@ -71,13 +71,8 @@ export class BookingEntityComponent implements OnInit {
     { id: { day: 6, session: "PM" }, name: "PM Saturday", isChecked: false },
   ]
 
-
-  //{ id: { day: 0 , session: "P" }, name: "Monday", isChecked: true },
- 
-
-
   constructor(
-    private bookingEntityDataService: BookingEntityDataService,
+    private bookingEntityDataService: ApptBookingEntityDataService,
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -125,7 +120,7 @@ export class BookingEntityComponent implements OnInit {
     }
 
     this.mobNumberPattern = "^((\\+61-?)|0)[2-478][0-9]{8}$"; //'^(\+61|0)[2-478]([0-9]){8}$';
-   
+
     console.log(this.bookingEntity);
   }
 
@@ -139,9 +134,9 @@ export class BookingEntityComponent implements OnInit {
         response => {
           console.log(response);
           console.log('select');
-          
-          
-          this.bookingEntity = response as _BookingEntity;
+
+
+          this.bookingEntity = response as ApptBookingEntity;
           //this.dayStartHour = this.bookingEntity.dayStartM.hour;
           //this.dayStartMinute = this.bookingEntity.dayStartM.minute;
           console.log(this.bookingEntity);
@@ -171,7 +166,7 @@ export class BookingEntityComponent implements OnInit {
               });
             }
           }
- 
+
         },
         error => {
           console.log(error);
@@ -180,11 +175,11 @@ export class BookingEntityComponent implements OnInit {
     }
     else {
       //this.bookingEntity.gid = Guid.create().toString();
-      
+
       for (var object of this.workingWeekDays) {
         if (this.bookingEntity.workingDays.filter(s =>
           s.day === object.id.day && s.session === object.id.session).length == 1) {
-          
+
           //this.objects[object.id].isChecked = true;
           this.workingWeekDays = this.workingWeekDays.map((session) => {
             if ( JSON.stringify(session.id) === JSON.stringify(object.id) ) {
@@ -208,7 +203,7 @@ export class BookingEntityComponent implements OnInit {
       console.log('this.workingWeekDays');
       console.log(this.workingWeekDays);
     }
-    
+
     //console.log(this.bookingEntity.workingDays);
     //this.workingDays = this.bookingEntity.workingDays;
     //this.workingDays = new Array<number>();
@@ -221,7 +216,7 @@ export class BookingEntityComponent implements OnInit {
     //     this.objects[object.id].isChecked = false;
     //   }
     // }
-    
+
   }
 
   getDayId(e: any, id: WorkSession) {
@@ -251,7 +246,7 @@ export class BookingEntityComponent implements OnInit {
       });
     }
     console.log(this.bookingEntity.workingDays);
-    
+
   }
 
   getEndTime(time:Time): void  {
@@ -275,15 +270,15 @@ export class BookingEntityComponent implements OnInit {
     // this.bookingEntity.email = this.email;
     // this.bookingEntity.phone = this.phone;
     // this.bookingEntity.startDate = this.startDate;
-    
-  
+
+
     // this.bookingEntity.minAdvanceBookingUnit = this.minAdvanceBookingUnit;
     // this.bookingEntity.minAdvanceBooking = this.minAdvanceBooking;
     // this.bookingEntity.maxAdvanceBookingInDay = this.maxAdvanceBookingInDay;
-  
+
     // this.bookingEntity.dayStartM = this.dayStartM;
     // this.bookingEntity.dayEndM = this.dayEndM;
-    
+
     // this.bookingEntity.breakStartM = this.breakStartM;
     // this.bookingEntity.breakDurationM = this.breakDurationM;
     console.log(this.bookingEntity);
@@ -309,10 +304,10 @@ export class BookingEntityComponent implements OnInit {
         error => {
           console.log(error);
         }
-      );  
+      );
 
     }
-    else {   
+    else {
       console.log('update');
       this.bookingEntityDataService.updateBookingEntity(this.gid, this.bookingEntity).subscribe(
         response => {
@@ -322,7 +317,7 @@ export class BookingEntityComponent implements OnInit {
         error => {
           console.log(error);
         }
-      );      
+      );
     }
 
     this.bookingEntityDataService.retrieveAllBookingEntities().subscribe(
@@ -333,7 +328,7 @@ export class BookingEntityComponent implements OnInit {
         console.log(error);
       }
     );
-    
+
   }
 
 }

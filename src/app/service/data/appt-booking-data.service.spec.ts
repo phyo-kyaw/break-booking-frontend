@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { BookingDataService } from './booking-data.service';
+import { ApptBookingDataService } from './appt-booking-data.service';
 
 describe('BookingDataService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: BookingDataService = TestBed.get(BookingDataService);
+    const service: ApptBookingDataService = TestBed.get(ApptBookingDataService);
     expect(service).toBeTruthy();
   });
 });
