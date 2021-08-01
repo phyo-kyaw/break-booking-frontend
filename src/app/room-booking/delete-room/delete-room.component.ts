@@ -13,9 +13,7 @@ export class DeleteRoomComponent implements OnInit {
 
   constructor(private modalService: NgbModal) {}
 
-  ngOnInit(): void {
-    console.log(this.roomId, 'ROOM ID')
-  }
+  ngOnInit(): void { }
 
   open(content: any) {
     this.modalService.open(content, { ariaLabelledBy: 'delete-room-modal' });
