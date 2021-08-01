@@ -5,6 +5,9 @@ import { ApptBookingEntityComponent } from './appt-booking-entity/appt-booking-e
 import { ApptBookingComponent } from './appt-booking/appt-booking.component';
 import { AuthGuard } from './appt-booking-utils/app.guard';
 import { ListApptBookingEntityComponent } from './list-appt-booking-entity/list-appt-booking-entity.component';
+import { RoomBookingComponent } from './room-booking/room-booking.component';
+import { AddRoomComponent } from './room-booking/add-room/add-room.component';
+import { EditRoomComponent } from './room-booking/edit-room/edit-room.component';
 
 const routes: Routes = [
   //{ path: 'select', component: CalendarSelComponent },
@@ -13,7 +16,10 @@ const routes: Routes = [
   { path: 'book', component: ListApptBookingEntityComponent },
   { path: 'list', component: ListApptBookingEntityComponent },
   { path: 'select/:gid', component: ApptBookingComponent },
-  { path: 'admin', component: ApptBookingAdminComponent }
+  { path: 'admin', component: ApptBookingAdminComponent },
+  { path: 'room-booking', component: RoomBookingComponent },
+  { path: 'room-booking/create', component: AddRoomComponent },
+  { path: 'room-booking/edit/:id', component: EditRoomComponent },
 ];
 
 @NgModule({

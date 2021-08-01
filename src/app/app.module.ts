@@ -29,6 +29,12 @@ import { ApptBookingEntityComponent } from './appt-booking-entity/appt-booking-e
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ListApptBookingEntityComponent } from './list-appt-booking-entity/list-appt-booking-entity.component';
 import { ApptBookingAdminComponent } from './appt-booking-admin/appt-booking-admin.component';
+import { RoomBookingComponent } from './room-booking/room-booking.component';
+import { RoomFormComponent } from './room-booking/room-form/room-form.component';
+import { FormButtonsComponent } from './room-booking/room-form/form-buttons/form-buttons.component';
+import { AddRoomComponent } from './room-booking/add-room/add-room.component';
+import { EditRoomComponent } from './room-booking/edit-room/edit-room.component';
+import { DeleteRoomComponent } from './room-booking/delete-room/delete-room.component';
 
 
 
@@ -41,7 +47,13 @@ import { ApptBookingAdminComponent } from './appt-booking-admin/appt-booking-adm
     FooterComponent,
     ApptBookingEntityComponent,
     ListApptBookingEntityComponent,
-    ApptBookingAdminComponent
+    ApptBookingAdminComponent,
+    RoomBookingComponent,
+    RoomFormComponent,
+    FormButtonsComponent,
+    AddRoomComponent,
+    EditRoomComponent,
+    DeleteRoomComponent
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,16 @@
+<div>
+  <a routerLink="/room-booking" class="btn btn-outline-secondary mr-2"
+    >Cancel</a
+  >
+  <input
+    *ngIf="!isEditForm"
+    type="reset"
+    value="Clear fields"
+    class="btn btn-outline-primary mr-2"
+  />
+  <input
+    type="submit"
+    [value]="isEditForm ? 'Update' : 'Create'"
+    class="btn btn-success"
+  />
+</div>

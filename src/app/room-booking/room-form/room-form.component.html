@@ -1,0 +1,54 @@
+<form #roomForm="ngForm" *ngIf="room !== null; else noRoomFound">
+  <div class="d-flex align-items-center justify-content-between">
+    <h1>{{ roomId === null ? 'Create' : 'Edit' }} room</h1>
+    <app-form-buttons [isEditForm]="!!roomId"></app-form-buttons>
+  </div>
+
+  <div class="form-group">
+    <label for="name" class="">Room name</label>
+    <input
+      #roomName="ngModel"
+      [(ngModel)]="room.name"
+      class="form-control"
+      [class.is-invalid]="roomName.invalid && roomName.touched"
+      type="text"
+      id="name"
+      name="name"
+      required
+    />
+    <small
+      class="text-danger"
+      [class.d-none]="roomName.valid || roomName.untouched"
+    >
+      Room name is required
+    </small>
+  </div>
+  <div class="form-group">
+    <label for="maxPeople">Maximum number of people the room can hold </label>
+    <input
+      #maxPeople="ngModel"
+      [(ngModel)]="room.maxPeople"
+      [class.is-invalid]="maxPeople.invalid && maxPeople.touched"
+      class="form-control"
+      type="number"
+      id="maxPeople"
+      name="maxPeople"
+      min="1"
+      required
+    />
+    <small
+      class="text-danger"
+      [class.d-none]="maxPeople.valid || maxPeople.untouched"
+    >
+      Maximum people in room is required and must be a positive number.
+    </small>
+  </div>
+
+  <div class="form-group">
+    <app-form-buttons [isEditForm]="!!roomId"></app-form-buttons>
+  </div>
+</form>
+
+<ng-template #noRoomFound>
+  Sorry, the selected room was not found.
+</ng-template>
