@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { fakeData } from '../fake-data';
-import { Room } from '../model/room';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-edit-room',
