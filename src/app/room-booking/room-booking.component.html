@@ -17,7 +17,12 @@
       <th>Actions</th>
     </thead>
     <tbody>
-      <tr *ngFor="let room of rooms" class="align-middle">
+      <tr
+        *ngFor="let room of rooms; let i = index"
+        class="align-middle room-row"
+        [attr.data-index]="i"
+        #roomRow
+      >
         <td class="align-middle">{{ room.name }}</td>
         <td class="align-middle">{{ room.maxPeople }}</td>
         <td class="align-middle">
@@ -26,11 +31,10 @@
             class="btn btn-primary mr-2"
             >Edit</a
           >
-
           <app-delete-room
             [roomId]="room.id"
             [roomName]="room.name"
-            (deleteRoomSuccess)="roomDeleted()"
+            (deleteRoomSuccess)="roomDeleted(room.id)"
           ></app-delete-room>
         </td>
       </tr>

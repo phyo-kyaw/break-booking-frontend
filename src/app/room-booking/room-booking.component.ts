@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChildren } from '@angular/core';
 import { Room } from './model/room';
 
 const fakeData: Room[] = [
   {
-    id: 1,
+    id: 0,
     name: 'First room',
     city: 'Sydney',
     address: '12 Paramatta Street',
@@ -22,7 +22,7 @@ const fakeData: Room[] = [
     popularity: 10
   },
   {
-    id: 2,
+    id: 1,
     name: 'Second room',
     city: 'Sydney',
     address: '12 Paramatta Street',
@@ -48,7 +48,9 @@ const fakeData: Room[] = [
   styleUrls: ['./room-booking.component.css']
 })
 export class RoomBookingComponent implements OnInit {
+  @ViewChildren('roomRow') roomRows;
   rooms: Room[] | [] = [];
+
   constructor() {}
 
   /**
@@ -61,9 +63,13 @@ export class RoomBookingComponent implements OnInit {
   }
 
   /**
-   * Hides the table row for which the room is deleted.
+   * Deletes the room and hides the table row
    */
-  roomDeleted(): void {
-    console.log('successfully deleted');
+  roomDeleted(id: number): void {
+    const row = this.roomRows._results.find(
+      room => room.nativeElement.dataset.index == id
+    ).nativeElement;
+
+    row.classList.add('room-row--deleted');
   }
 }

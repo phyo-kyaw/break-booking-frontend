@@ -3,7 +3,7 @@ import { Room } from '../model/room';
 
 const fakeData: Room[] = [
   {
-    id: 1,
+    id: 0,
     name: 'First room',
     city: 'Sydney',
     address: '12 Paramatta Street',
@@ -22,7 +22,7 @@ const fakeData: Room[] = [
     popularity: 10
   },
   {
-    id: 2,
+    id: 1,
     name: 'Second room',
     city: 'Sydney',
     address: '12 Paramatta Street',
