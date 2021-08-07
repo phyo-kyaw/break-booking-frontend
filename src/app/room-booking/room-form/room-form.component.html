@@ -7,22 +7,155 @@
   <div class="form-group">
     <label for="name" class="">Room name</label>
     <input
-      #roomName="ngModel"
+      #name="ngModel"
       [(ngModel)]="room.name"
       class="form-control"
-      [class.is-invalid]="roomName.invalid && roomName.touched"
+      [class.is-invalid]="name.invalid && name.touched"
       type="text"
       id="name"
       name="name"
       required
     />
-    <small
-      class="text-danger"
-      [class.d-none]="roomName.valid || roomName.untouched"
-    >
+    <small class="text-danger" [class.d-none]="name.valid || name.untouched">
       Room name is required
     </small>
   </div>
+
+  <div class="form-group">
+    <label for="city" class="">City</label>
+    <input
+      #city="ngModel"
+      [(ngModel)]="room.city"
+      class="form-control"
+      [class.is-invalid]="city.invalid && city.touched"
+      type="text"
+      id="city"
+      name="city"
+      required
+    />
+    <small class="text-danger" [class.d-none]="city.valid || city.untouched">
+      City is required
+    </small>
+  </div>
+
+  <div class="form-group">
+    <label for="address" class="">address</label>
+    <input
+      #address="ngModel"
+      [(ngModel)]="room.address"
+      class="form-control"
+      [class.is-invalid]="address.invalid && address.touched"
+      type="text"
+      id="address"
+      name="address"
+      required
+    />
+    <small
+      class="text-danger"
+      [class.d-none]="address.valid || address.untouched"
+    >
+      Address is required
+    </small>
+  </div>
+
+  <div class="form-group">
+    <label for="roomNumber" class="">Room number</label>
+    <input
+      #roomNumber="ngModel"
+      [(ngModel)]="room.roomNumber"
+      class="form-control"
+      [class.is-invalid]="roomNumber.invalid && roomNumber.touched"
+      type="number"
+      id="roomNumber"
+      name="roomNumber"
+      min="1"
+      required
+    />
+    <small
+      class="text-danger"
+      [class.d-none]="roomNumber.valid || roomNumber.untouched"
+    >
+      Room number is required
+    </small>
+  </div>
+
+  <div class="form-group">
+    <label for="description" class="">Description</label>
+    <input
+      #description="ngModel"
+      [(ngModel)]="room.description"
+      class="form-control"
+      [class.is-invalid]="description.invalid && description.touched"
+      type="text"
+      id="description"
+      name="description"
+      required
+    />
+    <small
+      class="text-danger"
+      [class.d-none]="description.valid || description.untouched"
+    >
+      Description is required
+    </small>
+  </div>
+
+  <div class="form-group">
+    <label for="type" class="">Type of room</label>
+    <select
+      #type="ngModel"
+      [(ngModel)]="room.type"
+      class="form-control"
+      [class.is-invalid]="type.invalid && type.touched"
+      id="type"
+      name="type"
+      required
+    >
+      <option selected disabled>Select a room type</option>
+      <option value="Party room">Party room</option>
+      <option value="Meeting room">Meeting room</option>
+      <option value="Dinning room">Dinning room</option>
+    </select>
+    <small class="text-danger" [class.d-none]="type.valid || type.untouched">
+      Room type is required
+    </small>
+  </div>
+
+  <div class="form-group">
+    <label for="floor">Floor number</label>
+    <input
+      #floor="ngModel"
+      [(ngModel)]="room.floor"
+      [class.is-invalid]="floor.invalid && floor.touched"
+      class="form-control"
+      type="text"
+      pattern="^[\w\s]+$"
+      id="floor"
+      name="floor"
+      required
+    />
+    <small class="text-danger" [class.d-none]="floor.valid || floor.untouched">
+      Floor number is required and must be a positive number or letter.
+    </small>
+  </div>
+
+  <div class="form-group">
+    <label for="size">Room size in square meters</label>
+    <input
+      #size="ngModel"
+      [(ngModel)]="room.size"
+      [class.is-invalid]="size.invalid && size.touched"
+      class="form-control"
+      type="number"
+      id="size"
+      name="size"
+      min="1"
+      required
+    />
+    <small class="text-danger" [class.d-none]="size.valid || size.untouched">
+      Room size is required and must be a positive number.
+    </small>
+  </div>
+
   <div class="form-group">
     <label for="maxPeople">Maximum number of people the room can hold </label>
     <input
@@ -41,6 +174,65 @@
       [class.d-none]="maxPeople.valid || maxPeople.untouched"
     >
       Maximum people in room is required and must be a positive number.
+    </small>
+  </div>
+
+  <div class="form-group">
+    <label for="price">Price</label>
+    <input
+      #price="ngModel"
+      [(ngModel)]="room.price"
+      [class.is-invalid]="price.invalid && price.touched"
+      class="form-control"
+      type="number"
+      id="price"
+      name="price"
+      min="0"
+      required
+    />
+    <small class="text-danger" [class.d-none]="price.valid || price.untouched">
+      Price is required and must be a number.
+    </small>
+  </div>
+
+  <div class="form-group">
+    <label for="discount">Discount</label>
+    <input
+      #discount="ngModel"
+      [(ngModel)]="room.discount"
+      [class.is-invalid]="discount.invalid && discount.touched"
+      class="form-control"
+      type="number"
+      id="discount"
+      name="discount"
+      min="0"
+      required
+    />
+    <small
+      class="text-danger"
+      [class.d-none]="discount.valid || discount.untouched"
+    >
+      Discount must be a number.
+    </small>
+  </div>
+
+  <div class="form-group">
+    <label for="facilities">Facilities</label>
+    <input
+      #facilities="ngModel"
+      [(ngModel)]="room.facilities"
+      [class.is-invalid]="facilities.invalid && facilities.touched"
+      class="form-control"
+      type="text"
+      id="facilities"
+      name="facilities"
+      required
+    />
+    <small
+      class="text-danger"
+      [class.d-none]="facilities.valid || facilities.untouched"
+    >
+      Facilities must be letters.
     </small>
   </div>
 

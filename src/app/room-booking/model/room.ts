@@ -1,14 +1,14 @@
 type RoomParams = {
   id: number | null;
-  name: string;
-  city: string;
-  address: string;
-  roomNumber: number | null;
+  name: string; //
+  city: string; //
+  address: string; //
+  roomNumber: number | null; //
   images: any[];
   description: string;
   type: string;
   floor: number | null;
-  size: string;
+  size: number | null;
   maxPeople: number | null;
   price: number | null;
   discount: number;
@@ -28,7 +28,7 @@ export class Room {
   description: string = '';
   type: string = '';
   floor: number | null = null;
-  size: string = '';
+  size: number | null = null;
   maxPeople: number | null = null;
   price: number | null = null;
   discount: number = 0;
@@ -54,7 +54,7 @@ export class Room {
       this.description = params.description ?? '';
       this.type = params.type ?? '';
       this.floor = params.floor ?? null;
-      this.size = params.size ?? '';
+      this.size = params.size ?? null;
       this.maxPeople = params.maxPeople ?? null;
       this.price = params.price ?? null;
       this.discount = params.discount ?? 0;
