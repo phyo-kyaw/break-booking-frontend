@@ -1,23 +1,35 @@
-<form #roomForm="ngForm" *ngIf="room !== null; else noRoomFound">
+<form
+  #roomForm="ngForm"
+  *ngIf="room !== null; else noRoomFound"
+  (ngSubmit)="onSubmit(roomForm)"
+>
   <div class="d-flex align-items-center justify-content-between">
     <h1>{{ roomId === null ? 'Create' : 'Edit' }} room</h1>
     <app-form-buttons [isEditForm]="!!roomId"></app-form-buttons>
   </div>
 
+  <div>
+    <div class="alert alert-danger" id="alert">
+      Room is not saved. Please check the highlighted fields and fix problems.
+    </div>
+  </div>
+
+  <input type="hidden" name="id" #id="ngModel" [(ngModel)]="room.id" />
+
   <div class="form-group">
-    <label for="name" class="">Room name</label>
+    <label for="title" class="">Room name</label>
     <input
-      #name="ngModel"
-      [(ngModel)]="room.name"
+      #title="ngModel"
+      [(ngModel)]="room.title"
       class="form-control"
-      [class.is-invalid]="name.invalid && name.touched"
+      [class.is-invalid]="title.invalid && title.touched"
       type="text"
-      id="name"
-      name="name"
+      id="title"
+      name="title"
       required
     />
-    <small class="text-danger" [class.d-none]="name.valid || name.untouched">
-      Room name is required
+    <small class="text-danger" [class.d-none]="title.valid || title.untouched">
+      Room title is required
     </small>
   </div>
 
@@ -226,7 +238,6 @@
       type="text"
       id="facilities"
       name="facilities"
-      required
     />
     <small
       class="text-danger"
@@ -242,5 +253,48 @@
 </form>
 
 <ng-template #noRoomFound>
-  Sorry, the selected room was not found.
+  {{ roomFetchStatus }}
+</ng-template>
+
+<div
+  class="
+    loading-screen
+    d-flex
+    flex-column
+    align-items-center
+    justify-content-center
+  "
+  [class.d-none]="!isLoading"
+>
+  <span class="h1">{{ fetchStatusForUser }}</span>
+
+  <div class="spinner-border text-primary mt-4" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>
+
+<ng-template #errorOccurredModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="error-modal">Error occured</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <pre>{{ fetchStatusForUser }}</pre>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline-primary"
+      (click)="modal.close()"
+    >
+      Ok
+    </button>
+  </div>
 </ng-template>

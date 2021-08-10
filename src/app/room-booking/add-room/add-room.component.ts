@@ -8,15 +8,10 @@ import { Room } from '../model/room';
 })
 export class AddRoomComponent implements OnInit {
   roomName: string = '';
-  maxPeople: number = 1;
 
   room: Room | {} = {};
 
   constructor() {}
 
-  ngOnInit(): void { }
-
-  onSubmit(): void {
-    console.log('ass');
-  }
+  ngOnInit(): void {}
 }
