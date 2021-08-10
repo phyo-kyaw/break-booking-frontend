@@ -43,8 +43,6 @@ export class Room {
       Object.keys(params).length > 0 && // Check if the object is not empty (e.g. `{}`)
       params.constructor === Object // Check if params is an object
     ) {
-      console.log('arg is present in Room constructor');
-
       this.id = params.id ?? params.id;
       this.title = params.title ?? '';
       this.city = params.city ?? '';
@@ -62,8 +60,6 @@ export class Room {
       this.bookedTime = params.bookedTime ?? [];
       this.facilities = params.facilities ?? [];
       this.rating = params.rating ?? null;
-    } else {
-      console.log('arg is not provided to Room constructor');
     }
   }
 }

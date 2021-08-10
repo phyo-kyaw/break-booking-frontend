@@ -19,7 +19,7 @@
       <tr
         *ngFor="let room of rooms; let i = index"
         class="align-middle room-row"
-        [attr.data-index]="i"
+        [attr.data-id]="room.id"
         #roomRow
       >
         <td class="align-middle room-name">{{ room.title }}</td>
@@ -31,7 +31,7 @@
           >
           <app-delete-room
             [roomId]="room.id"
-            [roomName]="room.name"
+            [roomName]="room.title"
             (deleteRoomSuccess)="roomDeleted(room.id)"
           ></app-delete-room>
         </td>

@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-delete-room',
@@ -13,15 +14,35 @@ export class DeleteRoomComponent implements OnInit {
 
   constructor(private modalService: NgbModal) {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
+  /**
+   * Opens a modal
+   */
   open(content: any) {
     this.modalService.open(content, { ariaLabelledBy: 'delete-room-modal' });
   }
 
-  deleteRoom(id: number): void {
-    this.deleteRoomSuccess.emit();
+  /**
+   * Submits a DELETE request to destory the room with the given ID.
+   * When deleted, it emits an event to parent component to hide the room row
+   *
+   *
+   * @param id - room ID
+   */
+  async deleteRoom(id: number): Promise<void> {
+    const response = await fetch(`${environment.roomsApi}/delete/${id}`, {
+      method: 'DELETE'
+    });
 
-    this.modalService.dismissAll();
+    const result = await response.json();
+
+    if (result.success) {
+      this.deleteRoomSuccess.emit();
+
+      this.modalService.dismissAll();
+    } else {
+      console.log('Could not delete the room');
+    }
   }
 }
