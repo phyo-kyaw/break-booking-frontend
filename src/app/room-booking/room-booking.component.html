@@ -22,7 +22,7 @@
         [attr.data-index]="i"
         #roomRow
       >
-        <td class="align-middle">{{ room.name }}</td>
+        <td class="align-middle room-name">{{ room.title }}</td>
         <td class="align-middle">
           <a
             [routerLink]="['/room-booking/edit/', room.id]"
@@ -39,5 +39,5 @@
     </tbody>
   </table>
 
-  <ng-template #noDataTemplate> Loading... </ng-template>
+  <ng-template #noDataTemplate> {{ roomStatusMessage }} </ng-template>
 </div>

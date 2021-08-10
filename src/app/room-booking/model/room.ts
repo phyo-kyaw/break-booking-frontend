@@ -1,41 +1,41 @@
 type RoomParams = {
-  id: number | null;
-  name: string; //
-  city: string; //
-  address: string; //
-  roomNumber: number | null; //
-  images: any[];
-  description: string;
+  id: string;
+  title: string;
+  address: string;
+  roomNumber: number | null;
   type: string;
+  city: string;
+  description: string;
   floor: number | null;
   size: number | null;
   maxPeople: number | null;
   price: number | null;
   discount: number;
+  rating: number | null;
   commentCount: number | null;
   bookedTime: [];
-  facilities: string;
-  popularity: number | null;
+  images: string[];
+  facilities: string[];
 };
 
 export class Room {
-  id: number | null = null;
-  name: string = '';
-  city: string = '';
+  id: string = '';
+  title: string = '';
   address: string = '';
   roomNumber: number | null = null;
-  images: any[] = [];
-  description: string = '';
   type: string = '';
+  city: string = '';
+  description: string = '';
   floor: number | null = null;
   size: number | null = null;
   maxPeople: number | null = null;
   price: number | null = null;
   discount: number = 0;
+  rating: number | null = null;
   commentCount: number | null = null;
   bookedTime: [] = [];
-  facilities: string = '';
-  popularity: number | null = null;
+  images: string[] = [];
+  facilities: string[] = [];
 
   constructor(params?: RoomParams) {
     if (
@@ -46,7 +46,7 @@ export class Room {
       console.log('arg is present in Room constructor');
 
       this.id = params.id ?? params.id;
-      this.name = params.name ?? '';
+      this.title = params.title ?? '';
       this.city = params.city ?? '';
       this.address = params.address ?? '';
       this.roomNumber = params.roomNumber ?? null;
@@ -60,8 +60,8 @@ export class Room {
       this.discount = params.discount ?? 0;
       this.commentCount = params.commentCount ?? null;
       this.bookedTime = params.bookedTime ?? [];
-      this.facilities = params.facilities ?? '';
-      this.popularity = params.popularity ?? null;
+      this.facilities = params.facilities ?? [];
+      this.rating = params.rating ?? null;
     } else {
       console.log('arg is not provided to Room constructor');
     }

@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  homeUrl: 'http://localhost:8080'
+  homeUrl: 'http://localhost:8080',
+  roomsApi: 'http://3.24.177.28:8081/api/v1/rooms'
   //backendhomeUrl: 'break-booking.online/api'
 };
 
