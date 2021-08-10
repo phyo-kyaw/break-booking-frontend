@@ -13,7 +13,6 @@
   >
     <thead>
       <th>Room name</th>
-      <th>Max number of people</th>
       <th>Actions</th>
     </thead>
     <tbody>
@@ -24,11 +23,10 @@
         #roomRow
       >
         <td class="align-middle">{{ room.name }}</td>
-        <td class="align-middle">{{ room.maxPeople }}</td>
         <td class="align-middle">
           <a
             [routerLink]="['/room-booking/edit/', room.id]"
-            class="btn btn-primary mr-2"
+            class="btn btn-outline-primary mr-2"
             >Edit</a
           >
           <app-delete-room
