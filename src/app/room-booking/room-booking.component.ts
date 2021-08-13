@@ -9,19 +9,20 @@ import { environment as env } from '../../environments/environment';
 })
 export class RoomBookingComponent implements OnInit {
   @ViewChildren('roomRow') roomRows;
-  rooms: any = [];
+  rooms: Room[] = [];
   roomStatusMessage: string = 'Loading room information...';
   constructor() {}
 
   /**
-   * Loads dummy data after 250ms to simulate fetching from API
+   * Loads room from API
    */
   async ngOnInit(): Promise<void> {
-    const response = await fetch(env.roomsApi);
+    const response = await fetch(`${env.roomsApi}/?size=50`);
     const result = await response.json();
 
     if (result.success) {
       this.rooms = result.data.content;
+      console.log(result);
     } else {
       this.roomStatusMessage =
         'An error occured while trying to get room information.';
