@@ -102,8 +102,8 @@ export class RoomFormComponent implements OnInit {
       console.log('success on uupdate room');
       this.fetchStatusForUser = 'Room successfully updated. Redirecting...';
       setTimeout(() => {
-        this.router.navigateByUrl('/room-booking');
-      }, 2000);
+        this.router.navigateByUrl('/rooms/all');
+      }, 1100);
     } else {
       this.notifyOfError(result, 'update');
     }
@@ -125,8 +125,8 @@ export class RoomFormComponent implements OnInit {
       this.fetchStatusForUser = 'Room created successfully. Redirecting...';
       // Redirect to the room booking home page
       setTimeout(() => {
-        this.router.navigateByUrl('/room-booking');
-      }, 1500);
+        this.router.navigateByUrl('/rooms/all');
+      }, 1100);
     } else {
       // Notify user of the fail
       this.notifyOfError(result, 'create');

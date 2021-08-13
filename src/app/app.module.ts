@@ -35,6 +35,7 @@ import { FormButtonsComponent } from './room-booking/room-form/form-buttons/form
 import { AddRoomComponent } from './room-booking/add-room/add-room.component';
 import { EditRoomComponent } from './room-booking/edit-room/edit-room.component';
 import { DeleteRoomComponent } from './room-booking/delete-room/delete-room.component';
+import { ViewRoomComponent } from './room-booking/view-room/view-room.component';
 
 
 
@@ -53,7 +54,8 @@ import { DeleteRoomComponent } from './room-booking/delete-room/delete-room.comp
     FormButtonsComponent,
     AddRoomComponent,
     EditRoomComponent,
-    DeleteRoomComponent
+    DeleteRoomComponent,
+    ViewRoomComponent
   ],
   imports: [
     CommonModule,

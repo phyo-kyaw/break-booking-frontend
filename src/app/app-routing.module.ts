@@ -8,6 +8,7 @@ import { ListApptBookingEntityComponent } from './list-appt-booking-entity/list-
 import { RoomBookingComponent } from './room-booking/room-booking.component';
 import { AddRoomComponent } from './room-booking/add-room/add-room.component';
 import { EditRoomComponent } from './room-booking/edit-room/edit-room.component';
+import { ViewRoomComponent } from './room-booking/view-room/view-room.component';
 
 const routes: Routes = [
   //{ path: 'select', component: CalendarSelComponent },
@@ -17,9 +18,10 @@ const routes: Routes = [
   { path: 'list', component: ListApptBookingEntityComponent },
   { path: 'select/:gid', component: ApptBookingComponent },
   { path: 'admin', component: ApptBookingAdminComponent },
-  { path: 'room-booking', component: RoomBookingComponent, canActivate: [AuthGuard] , data: { roles: ['booking-admin'] }},
-  { path: 'room-booking/create', component: AddRoomComponent, canActivate: [AuthGuard] , data: { roles: ['booking-admin'] }},
-  { path: 'room-booking/edit/:id', component: EditRoomComponent,canActivate: [AuthGuard] , data: { roles: ['booking-admin'] } },
+  { path: 'rooms/all', component: RoomBookingComponent, canActivate: [AuthGuard] , data: { roles: ['booking-admin'] }},
+  { path: 'rooms/create', component: AddRoomComponent, canActivate: [AuthGuard] , data: { roles: ['booking-admin'] }},
+  { path: 'rooms/edit/:id', component: EditRoomComponent,canActivate: [AuthGuard] , data: { roles: ['booking-admin'] } },
+  { path: 'rooms/view/:id', component: ViewRoomComponent }
 ];
 
 @NgModule({
