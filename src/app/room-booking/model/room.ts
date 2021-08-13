@@ -23,19 +23,19 @@ export class Room {
   title: string = '';
   address: string = '';
   roomNumber: number | null = null;
-  type: string = '';
-  city: string = '';
-  description: string = '';
-  floor: number | null = null;
-  size: number | null = null;
-  maxPeople: number | null = null;
-  price: number | null = null;
-  discount: number = 0;
-  rating: number | null = null;
-  commentCount: number | null = null;
-  bookedTime: [] = [];
-  images: string[] = [];
-  facilities: string[] = [];
+  type?: string = '';
+  city?: string = '';
+  description?: string = '';
+  floor?: number | null = null;
+  size?: number | null = null;
+  maxPeople?: number | null = null;
+  price?: number | null = null;
+  discount?: number = 0;
+  rating?: number | null = null;
+  commentCount?: number | null = null;
+  bookedTime?: [] = [];
+  images?: string[] = [];
+  facilities?: string[] = [];
 
   constructor(params?: RoomParams) {
     if (

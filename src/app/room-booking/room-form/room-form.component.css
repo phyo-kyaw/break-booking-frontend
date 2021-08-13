@@ -11,3 +11,12 @@
 pre {
   white-space: break-spaces;
 }
+
+.required label::after {
+  content: ' *';
+  color: red;
+}
+
+.form-alert {
+  display: none;
+}

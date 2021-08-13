@@ -14,7 +14,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 export class RoomFormComponent implements OnInit {
   @ViewChild('errorOccurredModal', { static: false })
   private errorOccurredModal;
-  @Input() roomId: number | null = null;
+  @ViewChild('alert') alert;
+  @Input() roomId: string = '';
 
   room: Room | null = null;
   roomFetchStatus: string = 'Getting room info...';
@@ -31,25 +32,12 @@ export class RoomFormComponent implements OnInit {
 
   /**
    * If there is an ID passed to the component, the form fetches the room with
-   * the given ID and binds it to itself. Otherwise it creates an empty form
-   * for creating a new room.
+   * the given ID and binds it to itself. Otherwise it creates an empty form.
    */
-  async ngOnInit(): Promise<void> {
+  ngOnInit(): void {
     // Is there an ID passed to the component?
-    if (this.roomId !== null) {
-      // Get the room with the ID
-      const response = await fetch(
-        `${environment.roomsApi}/byId/${this.roomId}`
-      );
-      const result = await response.json();
-
-      if (result.success) {
-        // Room fetching was good, bind it to component
-        this.room = result.data;
-      } else {
-        // Something went wrong with getting the room
-        this.roomFetchStatus = 'Sorry, the selected room was not found.';
-      }
+    if (this.roomId.trim().length > 0) {
+      this.fetchRoom();
     } else {
       // Create empty form with the room model
       this.room = new Room();
@@ -61,7 +49,7 @@ export class RoomFormComponent implements OnInit {
    * Checks validity of all form inputs, and submits a PUT request to
    * update the given room, or creates a new room if there is no roomId
    *
-   * @param f form instance
+   * @param {NgForm} f form instance
    */
   onSubmit(f: NgForm): void {
     // Check if all the fields are valid
@@ -70,18 +58,34 @@ export class RoomFormComponent implements OnInit {
       this.isLoading = true;
 
       // Check if the form is an edit form
-      if (this.roomId) {
-        // TODO: finish when CORS is enabled
+      if (this.roomId.trim().length) {
         this.editRoom(f);
       } else {
-        // (roomId === null) => this is a create form
         this.addRoom(f);
       }
     } else {
       // Not all fields are valid, tell user to fix the inputs
-      // TODO: Highlight all invalid fields
-      console.log(f);
+
+      this.alert.nativeElement.style.display = 'block';
+      this.checkInputs(f);
       this.viewportScroller.scrollToAnchor('alert');
+    }
+  }
+
+  /**
+   * Retrieves the room and loads it in the form
+   */
+  async fetchRoom(): Promise<void> {
+    // Get the room with the ID
+    const response = await fetch(`${environment.roomsApi}/byId/${this.roomId}`);
+    const result = await response.json();
+
+    if (result.success) {
+      // Room fetching was good, bind it to component
+      this.room = result.data;
+    } else {
+      // Something went wrong with getting the room
+      this.roomFetchStatus = 'Sorry, the selected room was not found.';
     }
   }
 
@@ -155,5 +159,15 @@ export class RoomFormComponent implements OnInit {
       result
     );
     this.openModal(this.errorOccurredModal);
+  }
+
+  /**
+   * Iterates over every form input. Checks validity and highlights invalid fields
+   */
+  checkInputs(f: NgForm): void {
+    console.log(f);
+    Object.keys(f.form.controls).forEach(field => {
+      console.log(field);
+    });
   }
 }
