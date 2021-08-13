@@ -14,7 +14,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 export class RoomFormComponent implements OnInit {
   @ViewChild('errorOccurredModal', { static: false })
   private errorOccurredModal;
-  @ViewChild('alert') alert;
   @Input() roomId: string = '';
 
   room: Room | null = null;
@@ -65,10 +64,9 @@ export class RoomFormComponent implements OnInit {
       }
     } else {
       // Not all fields are valid, tell user to fix the inputs
-
-      this.alert.nativeElement.style.display = 'block';
-      this.checkInputs(f);
-      this.viewportScroller.scrollToAnchor('alert');
+      setTimeout(() => {
+        this.viewportScroller.scrollToAnchor('alert');
+      }, 0);
     }
   }
 
@@ -159,15 +157,5 @@ export class RoomFormComponent implements OnInit {
       result
     );
     this.openModal(this.errorOccurredModal);
-  }
-
-  /**
-   * Iterates over every form input. Checks validity and highlights invalid fields
-   */
-  checkInputs(f: NgForm): void {
-    console.log(f);
-    Object.keys(f.form.controls).forEach(field => {
-      console.log(field);
-    });
   }
 }

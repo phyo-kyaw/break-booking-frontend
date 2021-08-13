@@ -3,20 +3,21 @@
   *ngIf="room !== null; else noRoomFound"
   (ngSubmit)="onSubmit(roomForm)"
 >
-  <div class="d-flex align-items-center justify-content-between">
+  <div class="d-flex align-items-center justify-content-between mb-2">
     <h1>{{ roomId.trim().length ? 'Edit' : 'Create' }} room</h1>
     <app-form-buttons [isEditForm]="!!roomId"></app-form-buttons>
   </div>
 
-  <div class="form-alert" #alert>
-    <div class="alert alert-danger" id="alert">
-      Room is not saved. Please check the highlighted fields and fix problems
-      before submitting again.
-    </div>
+  <div
+    class="alert alert-danger"
+    id="alert"
+    [class.d-block]="roomForm.submitted && roomForm.form.status === 'INVALID'"
+  >
+    Room is not saved. Please check the highlighted fields and fix problems
+    before submitting again.
   </div>
 
   <input type="hidden" name="id" #id="ngModel" [(ngModel)]="room.id" />
-  {{ roomForm.submitted }}
   <div class="form-group required">
     <label for="title">Room name</label>
     <input
@@ -33,8 +34,11 @@
       required
     />
     <small
-      class="text-danger"
-      [class.d-none]="!roomForm.submitted && (title.valid || title.untouched)"
+      class="text-danger user-input-notification"
+      [class.d-block]="
+        (title.invalid && title.touched) ||
+        (roomForm.submitted && title.invalid)
+      "
     >
       Room title is required
     </small>
@@ -46,15 +50,21 @@
       #address="ngModel"
       [(ngModel)]="room.address"
       class="form-control"
-      [class.is-invalid]="address.invalid && address.touched"
+      [class.is-invalid]="
+        (address.invalid && address.touched) ||
+        (roomForm.submitted && address.invalid)
+      "
       type="text"
       id="address"
       name="address"
       required
     />
     <small
-      class="text-danger"
-      [class.d-none]="address.valid || address.untouched"
+      class="text-danger user-input-notification"
+      [class.d-block]="
+        (address.invalid && address.touched) ||
+        (roomForm.submitted && address.invalid)
+      "
     >
       Address is required
     </small>
@@ -71,7 +81,10 @@
       id="city"
       name="city"
     />
-    <small class="text-danger" [class.d-none]="city.valid || city.untouched">
+    <small
+      class="text-danger user-input-notification"
+      [class.d-none]="city.valid || city.untouched"
+    >
       City is required
     </small>
   </div>
@@ -82,7 +95,10 @@
       #roomNumber="ngModel"
       [(ngModel)]="room.roomNumber"
       class="form-control"
-      [class.is-invalid]="roomNumber.invalid && roomNumber.touched"
+      [class.is-invalid]="
+        (roomNumber.invalid && roomNumber.touched) ||
+        (roomForm.submitted && roomNumber.invalid)
+      "
       type="number"
       id="roomNumber"
       name="roomNumber"
@@ -90,10 +106,13 @@
       required
     />
     <small
-      class="text-danger"
-      [class.d-none]="roomNumber.valid || roomNumber.untouched"
+      class="text-danger user-input-notification"
+      [class.d-block]="
+        (roomNumber.invalid && roomNumber.touched) ||
+        (roomForm.submitted && roomNumber.invalid)
+      "
     >
-      Room number is required
+      Room number is required and must be a positive number
     </small>
   </div>
 
@@ -109,7 +128,7 @@
       name="description"
     />
     <small
-      class="text-danger"
+      class="text-danger user-input-notification"
       [class.d-none]="description.valid || description.untouched"
     >
       Description is required
@@ -131,7 +150,10 @@
       <option value="Meeting room">Meeting room</option>
       <option value="Dinning room">Dinning room</option>
     </select>
-    <small class="text-danger" [class.d-none]="type.valid || type.untouched">
+    <small
+      class="text-danger user-input-notification"
+      [class.d-none]="type.valid || type.untouched"
+    >
       Room type is required
     </small>
   </div>
@@ -148,7 +170,10 @@
       id="floor"
       name="floor"
     />
-    <small class="text-danger" [class.d-none]="floor.valid || floor.untouched">
+    <small
+      class="text-danger user-input-notification"
+      [class.d-none]="floor.valid || floor.untouched"
+    >
       Floor number is required and must be a positive number or letter.
     </small>
   </div>
@@ -165,7 +190,10 @@
       name="size"
       min="1"
     />
-    <small class="text-danger" [class.d-none]="size.valid || size.untouched">
+    <small
+      class="text-danger user-input-notification"
+      [class.d-none]="size.valid || size.untouched"
+    >
       Room size is required and must be a positive number.
     </small>
   </div>
@@ -183,7 +211,7 @@
       min="1"
     />
     <small
-      class="text-danger"
+      class="text-danger user-input-notification"
       [class.d-none]="maxPeople.valid || maxPeople.untouched"
     >
       Maximum people in room is required and must be a positive number.
@@ -202,7 +230,10 @@
       name="price"
       min="0"
     />
-    <small class="text-danger" [class.d-none]="price.valid || price.untouched">
+    <small
+      class="text-danger user-input-notification"
+      [class.d-none]="price.valid || price.untouched"
+    >
       Price is required and must be a number.
     </small>
   </div>
@@ -220,7 +251,7 @@
       min="0"
     />
     <small
-      class="text-danger"
+      class="text-danger user-input-notification"
       [class.d-none]="discount.valid || discount.untouched"
     >
       Discount must be a number.
@@ -239,7 +270,7 @@
       name="facilities"
     />
     <small
-      class="text-danger"
+      class="text-danger user-input-notification"
       [class.d-none]="facilities.valid || facilities.untouched"
     >
       Facilities must be letters.

@@ -17,6 +17,10 @@ pre {
   color: red;
 }
 
-.form-alert {
+#alert {
+  display: none;
+}
+
+small {
   display: none;
 }
