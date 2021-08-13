@@ -17,9 +17,9 @@ const routes: Routes = [
   { path: 'list', component: ListApptBookingEntityComponent },
   { path: 'select/:gid', component: ApptBookingComponent },
   { path: 'admin', component: ApptBookingAdminComponent },
-  { path: 'room-booking', component: RoomBookingComponent },
-  { path: 'room-booking/create', component: AddRoomComponent },
-  { path: 'room-booking/edit/:id', component: EditRoomComponent },
+  { path: 'room-booking', component: RoomBookingComponent, canActivate: [AuthGuard] , data: { roles: ['booking-admin'] }},
+  { path: 'room-booking/create', component: AddRoomComponent, canActivate: [AuthGuard] , data: { roles: ['booking-admin'] }},
+  { path: 'room-booking/edit/:id', component: EditRoomComponent,canActivate: [AuthGuard] , data: { roles: ['booking-admin'] } },
 ];
 
 @NgModule({
