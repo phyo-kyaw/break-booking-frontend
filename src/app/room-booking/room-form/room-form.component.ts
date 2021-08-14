@@ -55,6 +55,7 @@ export class RoomFormComponent implements OnInit {
     if (f.valid) {
       // Show loading screen
       this.isLoading = true;
+      console.log('form submitted:\n', f);
 
       // Check if the form is an edit form
       if (this.roomId.trim().length) {
@@ -84,6 +85,10 @@ export class RoomFormComponent implements OnInit {
     } else {
       // Something went wrong with getting the room
       this.roomFetchStatus = 'Sorry, the selected room was not found.';
+      console.error(
+        'An error occurred while trying to fetch the room:\n',
+        result
+      );
     }
   }
 
@@ -99,11 +104,10 @@ export class RoomFormComponent implements OnInit {
     const result = await response.json();
 
     if (result.success) {
-      console.log('success on uupdate room');
       this.fetchStatusForUser = 'Room successfully updated. Redirecting...';
       setTimeout(() => {
         this.router.navigateByUrl('/rooms/all');
-      }, 1100);
+      }, 1000);
     } else {
       this.notifyOfError(result, 'update');
     }

@@ -18,6 +18,31 @@
   </div>
 
   <input type="hidden" name="id" #id="ngModel" [(ngModel)]="room.id" />
+  <input
+    type="hidden"
+    name="rating"
+    #rating="ngModel"
+    [(ngModel)]="room.rating"
+  />
+  <input
+    type="hidden"
+    name="commentCount"
+    #commentCount="ngModel"
+    [(ngModel)]="room.commentCount"
+  />
+  <input
+    type="hidden"
+    name="bookedTime"
+    #bookedTime="ngModel"
+    [(ngModel)]="room.bookedTime"
+  />
+  <input
+    type="hidden"
+    name="images"
+    #images="ngModel"
+    [(ngModel)]="room.images"
+  />
+
   <div class="form-group required">
     <label for="title">Room name</label>
     <input
@@ -165,8 +190,8 @@
       [(ngModel)]="room.floor"
       [class.is-invalid]="floor.invalid && floor.touched"
       class="form-control"
-      type="text"
-      pattern="^[\w\s]+$"
+      type="number"
+      min="1"
       id="floor"
       name="floor"
     />
@@ -174,7 +199,7 @@
       class="text-danger user-input-notification"
       [class.d-none]="floor.valid || floor.untouched"
     >
-      Floor number is required and must be a positive number or letter.
+      Floor number is required and must be a positive number.
     </small>
   </div>
 
