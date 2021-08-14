@@ -17,7 +17,7 @@ export class RoomFormComponent implements OnInit {
   @Input() roomId: string = '';
 
   room: Room | null = null;
-  roomFetchStatus: string = 'Getting room info...';
+  gettingRoomInfo: string = 'Getting room info...';
   fetchStatusForUser: string = 'Loading...';
   isLoading: boolean = false;
 
@@ -82,9 +82,10 @@ export class RoomFormComponent implements OnInit {
     if (result.success) {
       // Room fetching was good, bind it to component
       this.room = result.data;
+      console.log('Room loaded in edit form: \n', result.data);
     } else {
       // Something went wrong with getting the room
-      this.roomFetchStatus = 'Sorry, the selected room was not found.';
+      this.gettingRoomInfo = 'Sorry, the selected room was not found.';
       console.error(
         'An error occurred while trying to fetch the room:\n',
         result
@@ -98,7 +99,7 @@ export class RoomFormComponent implements OnInit {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(f.form.value)
+      body: this.prepareForm(f)
     });
 
     const result = await response.json();
@@ -119,7 +120,7 @@ export class RoomFormComponent implements OnInit {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(f.form.value)
+      body: this.prepareForm(f)
     });
 
     const result = await response.json();
@@ -138,10 +139,40 @@ export class RoomFormComponent implements OnInit {
   }
 
   /**
+   * Prepares form contents for submission
+   *
+   * @param {NgForm} f - form instance
+   * @return JSON string
+   */
+  prepareForm(f: NgForm): string {
+    const formBody = {
+      ...f.form.value,
+      images:
+        typeof f.form.value.images === 'string'
+          ? f.form.value.images.split(',')
+          : f.form.value.images,
+      facilities:
+        typeof f.form.value.facilities === 'string'
+          ? f.form.value.facilities.split(',')
+          : f.form.value.facilities
+    };
+
+    return JSON.stringify(formBody);
+  }
+
+  /**
    * Opens a modal
    */
   openModal(content: any) {
     this.modalService.open(content, { ariaLabelledBy: 'error-modal' });
+  }
+
+  /**
+   * Closes modals and resets message to 'Loading...'
+   */
+  closeModal(): void {
+    this.modalService.dismissAll();
+    this.fetchStatusForUser = 'Loading...';
   }
 
   /**
