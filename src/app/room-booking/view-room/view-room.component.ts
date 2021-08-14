@@ -35,6 +35,8 @@ export class ViewRoomComponent implements OnInit {
     if (result.success) {
       console.log(result);
       this.room = result.data;
+
+      console.log(result.data.images);
     } else {
       console.error('Error occurred while retrieving room:\n', result);
     }
