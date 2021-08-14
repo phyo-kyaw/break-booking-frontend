@@ -1,1 +1,55 @@
-<p>view-room works!</p>
+<div class="container">
+  <div *ngIf="room !== null; else roomNotFound">
+    <div class="row">
+      <div class="col">
+        <h1 class="room-title mb-3">
+          {{ room.title }}
+        </h1>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <address>
+          <span *ngIf="isNumber(room.floor)">Floor {{ 1 }},</span>
+          Room {{ room.roomNumber }}, {{ room.address
+          }}<span *ngIf="room.city.trim().length">, {{ room.city }}</span>
+        </address>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="room.description.trim().length">
+      <div class="col">
+        <p>Description: {{ room.description }}</p>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="room.price">
+      <div class="col">
+        <p><strong>Price:</strong> ${{ room.price }}/hr</p>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="true">
+      <div class="col">
+        <p><strong>Size:</strong> {{ room.size }}m&#xB2;</p>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="room.maxPeople">
+      <div class="col">
+        <p><strong>Max people in room</strong>: {{ room.maxPeople }}</p>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="room.rating">
+      <div class="col">
+        <p>Rating: {{ room.rating }}</p>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #roomNotFound>
+    {{ roomFetchStatus }}
+  </ng-template>
+</div>
