@@ -1,0 +1,11 @@
+.value-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.value {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  margin-right: 16px;
+}

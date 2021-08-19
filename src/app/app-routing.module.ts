@@ -10,6 +10,8 @@ import { AddRoomComponent } from './room-booking/add-room/add-room.component';
 import { EditRoomComponent } from './room-booking/edit-room/edit-room.component';
 import { ViewRoomComponent } from './room-booking/view-room/view-room.component';
 import { RoomListComponent } from './room-booking/room-list/room-list.component';
+import { DictionaryListComponent } from './dictionaries/dictionary-list/dictionary-list.component';
+import { ViewDictionaryComponent } from './dictionaries/view-dictionary/view-dictionary.component';
 
 const routes: Routes = [
   //{ path: 'select', component: CalendarSelComponent },
@@ -24,6 +26,8 @@ const routes: Routes = [
   { path: 'rooms/edit/:id', component: EditRoomComponent/*,canActivate: [AuthGuard] , data: { roles: ['room-provider'] }  */},
   { path: 'rooms/view/:id', component: ViewRoomComponent },
   { path: 'rooms', component: RoomListComponent },
+  { path: 'dictionaries', component: DictionaryListComponent, /*,canActivate: [AuthGuard] , data: { roles: ['room-provider'] }  */},
+  { path: 'dictionaries/view/:id', component: ViewDictionaryComponent, /*,canActivate: [AuthGuard] , data: { roles: ['room-provider'] }  */},
 ];
 
 @NgModule({

@@ -1,0 +1,26 @@
+<div class="container">
+  <h1>Dictionaries</h1>
+  <p>
+    Dictionaries are collections of terms. They are used in forms for: cities,
+    facilities...
+  </p>
+
+  <table class="table" *ngIf="dicts.length">
+    <tr>
+      <td>Name</td>
+      <td>Items</td>
+      <td>Actions</td>
+    </tr>
+    <tr *ngFor="let item of dicts">
+      <td class="align-middle">{{ item.name }}</td>
+      <td class="align-middle">{{ item.values.length }}</td>
+      <td class="align-middle">
+        <a
+          [routerLink]="['/dictionaries/view/', item.id]"
+          class="btn btn-outline-primary"
+          >View</a
+        >
+      </td>
+    </tr>
+  </table>
+</div>

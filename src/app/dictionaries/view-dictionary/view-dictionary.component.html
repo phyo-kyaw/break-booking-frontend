@@ -1,0 +1,57 @@
+<div class="container">
+  <ng-container *ngIf="dictionary; else noDictionaryFound">
+    <div class="d-flex align-items-center">
+      <h1>{{ dictionary.name }}</h1>
+
+      <a class="btn btn-outline-primary ml-auto" routerLink="/dictionaries"
+        >Back</a
+      >
+    </div>
+
+    <form
+      class="mb-4"
+      #form="ngForm"
+      (ngSubmit)="addValue(form)"
+      autocomplete="off"
+    >
+      <label for="value" class="h3">Add entry</label>
+      <input type="text" id="value" name="value" class="form-control" ngModel />
+      <input type="hidden" name="id" [ngModel]="dictionary.id" />
+
+      <div *ngIf="apiResponse.length">
+        <small class="text-danger">{{ apiResponse }}</small>
+      </div>
+
+      <button type="submit" class="btn btn-primary mt-2">Add</button>
+    </form>
+
+    <div *ngIf="dictionary.values.length; else noEntries">
+      <h2 class="h3 mb-2">Existing entries</h2>
+      <div class="value-container">
+        <div
+          class="value"
+          #deleteFormWrap
+          *ngFor="let value of dictionary.values"
+        >
+          <form #deleteForm="ngForm">
+            {{ value }}
+            <input type="hidden" name="value" [ngModel]="value" />
+            <input type="hidden" name="id" [ngModel]="dictionary.id" />
+            <button
+              type="button"
+              class="btn btn-outline-danger btn-sm ml-2"
+              (click)="removeSingleValue(deleteForm, deleteFormWrap)"
+            >
+              Remove
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <ng-template #noEntries> No entries yet </ng-template>
+  </ng-container>
+
+  <ng-template #noDictionaryFound>
+    The requested dictionary was not found.
+  </ng-template>
+</div>

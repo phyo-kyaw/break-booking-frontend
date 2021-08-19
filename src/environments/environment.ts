@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   homeUrl: 'http://localhost:8080',
-  roomsApi: 'http://3.24.177.28:8081/api/v1/rooms'
+  roomsApi: 'http://3.24.177.28:8081/api/v1/rooms',
+  dictApi: 'http://3.24.177.28:8081/api/v1/dicts' // dictionaries
   //backendhomeUrl: 'break-booking.online/api'
 };
 
