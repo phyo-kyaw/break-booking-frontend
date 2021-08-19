@@ -36,6 +36,7 @@ import { AddRoomComponent } from './room-booking/add-room/add-room.component';
 import { EditRoomComponent } from './room-booking/edit-room/edit-room.component';
 import { DeleteRoomComponent } from './room-booking/delete-room/delete-room.component';
 import { ViewRoomComponent } from './room-booking/view-room/view-room.component';
+import { RoomListComponent } from './room-booking/room-list/room-list.component';
 
 
 
@@ -55,7 +56,8 @@ import { ViewRoomComponent } from './room-booking/view-room/view-room.component'
     AddRoomComponent,
     EditRoomComponent,
     DeleteRoomComponent,
-    ViewRoomComponent
+    ViewRoomComponent,
+    RoomListComponent
   ],
   imports: [
     CommonModule,
