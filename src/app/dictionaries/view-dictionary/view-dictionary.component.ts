@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Dictionary } from '../model/dictionary';
 import { NgForm } from '@angular/forms';
-import { DictionaryService } from '../services/value.service';
+import { DictionaryService } from '../../service/dictionaries/dictionary.service';
 
 @Component({
   selector: 'app-view-dictionary',
