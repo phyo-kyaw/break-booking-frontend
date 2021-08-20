@@ -18,7 +18,13 @@ export class DictionaryListComponent implements OnInit {
     this._dictionaryService.getAllDictionaries().subscribe(
       (response: any) => {
         if (response.success) {
-          this.dicts = response.data.content;
+          // Response was successfull, but there are no dictionaries created yet:
+          if (response.data === null) {
+            this.apiStatus =
+              'There are no dictionaries created yet. Please contact the site admin to add them.';
+          } else {
+            this.dicts = response.data.content;
+          }
         } else {
           // Server responded, but with an error
           this.apiStatus =

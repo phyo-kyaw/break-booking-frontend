@@ -19,7 +19,13 @@ export class RoomListComponent implements OnInit {
     this._roomService.getAllRooms().subscribe(
       (response: any) => {
         if (response.success) {
-          this.rooms = response.data.content;
+          // Response was successfull, but there are no rooms created yet:
+          if (response.data === null) {
+            this.roomStatusMessage =
+              'There are no rooms created yet! Come back later when some content is added.';
+          } else {
+            this.rooms = response.data.content;
+          }
         } else {
           this.roomStatusMessage =
             'An error occured while trying to get rooms. Please try again later';
