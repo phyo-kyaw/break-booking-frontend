@@ -5,7 +5,7 @@
     facilities...
   </p>
 
-  <table class="table" *ngIf="dicts.length">
+  <table class="table" *ngIf="dicts.length; else elseBlock">
     <thead>
       <tr>
         <th>Name</th>
@@ -27,4 +27,8 @@
       </tr>
     </tbody>
   </table>
+
+  <ng-template #elseBlock>
+    {{ apiStatus }}
+  </ng-template>
 </div>
