@@ -18,8 +18,8 @@
       <input type="text" id="value" name="value" class="form-control" ngModel />
       <input type="hidden" name="id" [ngModel]="dictionary.id" />
 
-      <div *ngIf="apiResponse.length">
-        <small class="text-danger">{{ apiResponse }}</small>
+      <div *ngIf="apiResponse.length" class="mt-2">
+        <small class="text-danger api-response">{{ apiResponse }}</small>
       </div>
 
       <button type="submit" class="btn btn-primary mt-2">Add</button>
@@ -34,16 +34,18 @@
           *ngFor="let value of dictionary.values"
         >
           <form #deleteForm="ngForm">
-            {{ value }}
+            <div class="dict-value">
+              {{ value }}
+              <button
+                type="button"
+                class="btn btn-outline-danger btn-sm ml-2"
+                (click)="removeSingleValue(deleteForm, deleteFormWrap)"
+              >
+                Remove
+              </button>
+            </div>
             <input type="hidden" name="value" [ngModel]="value" />
             <input type="hidden" name="id" [ngModel]="dictionary.id" />
-            <button
-              type="button"
-              class="btn btn-outline-danger btn-sm ml-2"
-              (click)="removeSingleValue(deleteForm, deleteFormWrap)"
-            >
-              Remove
-            </button>
           </form>
         </div>
       </div>

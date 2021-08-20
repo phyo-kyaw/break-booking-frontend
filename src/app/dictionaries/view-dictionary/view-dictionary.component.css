@@ -9,3 +9,12 @@
   margin-bottom: 8px;
   margin-right: 16px;
 }
+
+.api-response {
+  display: block;
+}
+
+.dict-value::first-letter,
+.api-response::first-letter {
+  text-transform: uppercase;
+}
