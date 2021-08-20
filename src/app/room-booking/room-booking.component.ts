@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChildren } from '@angular/core';
 import { Room } from './model/room';
-import { environment as env } from '../../environments/environment';
+import { RoomService } from 'app/service/rooms/room.service';
 
 @Component({
   selector: 'app-room-booking',
@@ -11,23 +11,28 @@ export class RoomBookingComponent implements OnInit {
   @ViewChildren('roomRow') roomRows;
   rooms: Room[] = [];
   roomStatusMessage: string = 'Loading room information...';
-  constructor() {}
+  constructor(private _roomService: RoomService) {}
 
   /**
    * Loads room from API
    */
-  async ngOnInit(): Promise<void> {
-    const response = await fetch(`${env.roomsApi}/?size=50`);
-    const result = await response.json();
-
-    if (result.success) {
-      this.rooms = result.data.content;
-      console.log(result);
-    } else {
-      this.roomStatusMessage =
-        'An error occured while trying to get room information.';
-      console.error('Error occurred while fetching rooms\n', result);
-    }
+  ngOnInit(): void {
+    this._roomService.getAllRooms().subscribe(
+      (response: any) => {
+        if (response.success) {
+          this.rooms = response.data.content;
+        } else {
+          this.roomStatusMessage =
+            'An error occured while trying to get rooms. Please try again later';
+          console.error('Error occurred while fetching rooms\n', response);
+        }
+      },
+      error => {
+        this.roomStatusMessage =
+          'An error occured while trying to connect to the API to get all rooms.';
+        console.error(`${this.roomStatusMessage}\n`, error);
+      }
+    );
   }
 
   /**

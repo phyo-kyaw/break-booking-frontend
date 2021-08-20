@@ -5,6 +5,7 @@ import { Room } from '../model/room';
 import { ViewportScroller } from '@angular/common';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { RoomService } from 'app/service/rooms/room.service';
 
 @Component({
   selector: 'app-room-form',
@@ -24,7 +25,8 @@ export class RoomFormComponent implements OnInit {
   constructor(
     private viewportScroller: ViewportScroller,
     private router: Router,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private _roomService: RoomService
   ) {
     this.viewportScroller.setOffset([0, 70]);
   }
@@ -74,68 +76,125 @@ export class RoomFormComponent implements OnInit {
   /**
    * Retrieves the room and loads it in the form
    */
-  async fetchRoom(): Promise<void> {
+  fetchRoom(): void {
     // Get the room with the ID
-    const response = await fetch(`${environment.roomsApi}/byId/${this.roomId}`);
-    const result = await response.json();
+    this._roomService.getRoomById(this.roomId).subscribe(
+      (response: any) => {
+        if (response.success) {
+          // Room fetching was good, bind it to component
+          this.room = response.data;
+          console.log('Room loaded in edit form: \n', response.data);
+        } else {
+          // Something went wrong with getting the room
+          this.gettingRoomInfo = 'Sorry, the selected room was not found.';
+          console.error(
+            'An error occurred while trying to fetch the room:\n',
+            response
+          );
+        }
+      },
+      error => {
+        // Something went wrong when connecting to the API
+        this.gettingRoomInfo =
+          'An error occurred while trying to connecet to the API to get the room';
+        console.error(
+          'An error occurred while trying to connecet to the API to get the room',
+          error
+        );
+      }
+    );
+    // const response = await fetch(`${environment.roomsApi}/byId/${this.roomId}`);
+    // const result = await response.json();
 
-    if (result.success) {
-      // Room fetching was good, bind it to component
-      this.room = result.data;
-      console.log('Room loaded in edit form: \n', result.data);
-    } else {
-      // Something went wrong with getting the room
-      this.gettingRoomInfo = 'Sorry, the selected room was not found.';
-      console.error(
-        'An error occurred while trying to fetch the room:\n',
-        result
-      );
-    }
+    // if (result.success) {
+    //   // Room fetching was good, bind it to component
+    //   this.room = result.data;
+    //   console.log('Room loaded in edit form: \n', result.data);
+    // } else {
+    //   // Something went wrong with getting the room
+    //   this.gettingRoomInfo = 'Sorry, the selected room was not found.';
+    //   console.error(
+    //     'An error occurred while trying to fetch the room:\n',
+    //     result
+    //   );
+    // }
   }
 
   async editRoom(f: NgForm): Promise<void> {
-    const response = await fetch(`${environment.roomsApi}/update`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
+    this._roomService.updateRoom(this.prepareForm(f)).subscribe(
+      (response: any) => {
+        if (response.success) {
+          this.fetchStatusForUser = 'Room successfully updated. Redirecting...';
+          setTimeout(() => {
+            this.router.navigateByUrl('/rooms/all');
+          }, 1000);
+        } else {
+          this.notifyOfError(response, 'update');
+        }
       },
-      body: this.prepareForm(f)
-    });
+      error => this.notifyOfError(error, 'update')
+    );
 
-    const result = await response.json();
+    // const response = await fetch(`${environment.roomsApi}/update`, {
+    //   method: 'PUT',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: this.prepareForm(f)
+    // });
 
-    if (result.success) {
-      this.fetchStatusForUser = 'Room successfully updated. Redirecting...';
-      setTimeout(() => {
-        this.router.navigateByUrl('/rooms/all');
-      }, 1000);
-    } else {
-      this.notifyOfError(result, 'update');
-    }
+    // const result = await response.json();
+
+    // if (result.success) {
+    //   this.fetchStatusForUser = 'Room successfully updated. Redirecting...';
+    //   setTimeout(() => {
+    //     this.router.navigateByUrl('/rooms/all');
+    //   }, 1000);
+    // } else {
+    //   this.notifyOfError(result, 'update');
+    // }
   }
 
   async addRoom(f: NgForm): Promise<void> {
-    const response = await fetch(`${environment.roomsApi}/add`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
+    this._roomService.addRoom(this.prepareForm(f)).subscribe(
+      (response: any) => {
+        if (response.success) {
+          // Notify user of the success
+          this.fetchStatusForUser = 'Room created successfully. Redirecting...';
+          // Redirect to the room booking home page
+          setTimeout(() => {
+            this.router.navigateByUrl('/rooms/all');
+          }, 1100);
+        } else {
+          // Notify user of the fail
+          this.notifyOfError(response, 'create');
+        }
       },
-      body: this.prepareForm(f)
-    });
+      error => {
+        this.notifyOfError(error, 'create');
+      }
+    );
+    // const response = await fetch(`${environment.roomsApi}/add`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: this.prepareForm(f)
+    // });
 
-    const result = await response.json();
+    // const result = await response.json();
 
-    if (result.success) {
-      // Notify user of the success
-      this.fetchStatusForUser = 'Room created successfully. Redirecting...';
-      // Redirect to the room booking home page
-      setTimeout(() => {
-        this.router.navigateByUrl('/rooms/all');
-      }, 1100);
-    } else {
-      // Notify user of the fail
-      this.notifyOfError(result, 'create');
-    }
+    // if (result.success) {
+    //   // Notify user of the success
+    //   this.fetchStatusForUser = 'Room created successfully. Redirecting...';
+    //   // Redirect to the room booking home page
+    //   setTimeout(() => {
+    //     this.router.navigateByUrl('/rooms/all');
+    //   }, 1100);
+    // } else {
+    //   // Notify user of the fail
+    //   this.notifyOfError(result, 'create');
+    // }
   }
 
   /**
