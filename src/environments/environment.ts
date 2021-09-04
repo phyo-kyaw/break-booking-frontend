@@ -2,11 +2,12 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+const baseApiUrl = 'http://13.239.19.231';
 export const environment = {
   production: false,
   homeUrl: 'http://localhost:8080',
-  roomsApi: 'http://3.24.177.28:8081/api/v1/rooms',
-  dictApi: 'http://3.24.177.28:8081/api/v1/dicts' // dictionaries
+  roomsApi: `${baseApiUrl}:8081/api/v1/rooms`,
+  dictApi: `${baseApiUrl}:8086/api/v1/dicts` // dictionaries
   //backendhomeUrl: 'break-booking.online/api'
 };
 
