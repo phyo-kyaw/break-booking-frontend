@@ -14,6 +14,7 @@
   display: block;
 }
 
+.name::first-letter,
 .dict-value::first-letter,
 .api-response::first-letter {
   text-transform: uppercase;

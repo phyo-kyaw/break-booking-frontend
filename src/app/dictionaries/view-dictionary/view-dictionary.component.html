@@ -1,7 +1,7 @@
 <div class="container">
   <ng-container *ngIf="dictionary; else noDictionaryFound">
     <div class="d-flex align-items-center">
-      <h1>{{ dictionary.name }}</h1>
+      <h1 class="name">{{ dictionary.name }}</h1>
 
       <a class="btn btn-outline-primary ml-auto" routerLink="/dictionaries"
         >Back</a

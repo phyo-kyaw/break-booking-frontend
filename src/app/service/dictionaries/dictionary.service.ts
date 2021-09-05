@@ -58,4 +58,24 @@ export class DictionaryService {
       }
     );
   }
+
+  /**
+   * Get facilities dictionary
+   *
+   */
+  getFacilities() {
+    const facilityId = '613412b542c0d062f86bc4f0';
+
+    return this.getValues(facilityId);
+  }
+
+  /**
+   * Get cities dictionary
+   *
+   */
+  getCities() {
+    const citiesId = '6131dc47ae5de546904be115';
+
+    return this.getValues(citiesId);
+  }
 }
