@@ -1,0 +1,224 @@
+
+<div class="container">
+    <div *ngIf=!modifyFlag>
+        <h3>{{event.title}}</h3>
+        <p>Ticket: A${{event.price}} </p>
+        <p>Planning Time: {{event.startTime}} - {{event.endTime}}</p>
+        <p>Event Description: {{event.description}}</p>
+        <p>Event Location: {{event.location.street}}, {{event.location.city}}, {{event.location.postCode}}</p>
+    </div>
+    <div *ngIf=modifyFlag>
+        <div class="pt-sm-4 text-center">
+            <form  (ngSubmit)="onSubmit()"  #f="ngForm">
+                <div
+                id="event-data"
+                ngModelGroup="eventData"
+                #eventData="ngModelGroup">
+                    <h3 class="h3">Event Title</h3>
+                    <div class="form-group">
+                        <label for="title"></label>
+                        <input
+                            placeholder={{aevent.title}}
+                            value={{aevent.title}}
+                            type="text"
+                            id="title"
+                            class="col-sm-8"
+                            ngModel
+                            required minlength="4"
+                            name="title"
+                            #title="ngModel"
+                            required>
+                    </div>
+                    <!-- <span *ngIf='name.invalid && name.touched'>
+                    <div *ngIf='name.errors.required'>Title can not be empty</div>
+                    <div *ngIf='name.errors.minlength'>Title can not less than 4 characters</div>
+                    </span> -->
+                    <!-- <h3 class="h3">Booker Details</h3>
+                    <span class="form-group">
+                        <label for="bEmail">Email</label>
+                        <input
+                        placeholder={{aevent.bEmail}}
+                        type="text"
+                        id="bEmail"
+                        class="col-ml-6 ml-4 mr-4"
+                        ngModel
+                        required minlength="4"
+                        name="bEmail"
+                        #bEmail="ngModel"
+                        required>
+                    </span>
+                    <span class="form-group">
+                        <label for="bname">Name</label>
+                        <input
+                        placeholder={{aevent.bName}}
+                        type="text"
+                        id="bName"
+                        class="col-ml-6 ml-4 mr-4"
+                        ngModel
+                        required minlength="4"
+                        name="bName"
+                        #bName="ngModel"
+                        required>
+                    </span>
+                    <span class="form-group">
+                        <label for="bPhone">Phone</label>
+                        <input
+                        placeholder={{aevent.bPhone}}
+                        type="number"
+                        id="bPhone"
+                        class="col-ml-6 ml-4"
+                        ngModel
+                        required minlength="4"
+                        name="bPhone"
+                        #bPhone="ngModel"
+                        required>
+                    </span> -->
+                    <h3 class="h3">Event Date</h3>
+                    <p>Original Planning Time: {{event.startTime}} - {{event.endTime}}</p>
+                    <span class="form-group">
+                        <label for="sTime">Event Start Date</label>
+                        <input
+                            type="date"
+                            id="sTime"
+                            class="col-ml-6 ml-4 mr-4"
+                            ngModel
+                            name="sTime"
+                            required
+                            sTime
+                            #sTime="ngModel">
+                    </span>
+                    <span class="form-group">
+                        <label for="ssTime">Event Start Time</label>
+                        <input
+                            type="time"
+                            id="ssTime"
+                            class="col-ml-6 ml-4 mr-4"
+                            ngModel
+                            name="ssTime"
+                            required
+                            ssTime
+                            #ssTime="ngModel">
+                    </span>
+                    <h3 class="h3"></h3>
+                    <span class="form-group">
+                        <label for="eTime">Event End Date</label>
+                        <input
+                        type="date"
+                        id="eTime" 
+                        class="col-ml-6 ml-4 mr-4"
+                        ngModel
+                        name="eTime"
+                        required
+                        eTime
+                        #eTime="ngModel">
+                    </span>
+                    <span class="form-group">
+                        <label for="eeTime">Event End Time</label>
+                        <input
+                            type="time"
+                            id="eeTime"
+                            class="col-ml-6 ml-4 mr-4"
+                            ngModel
+                            name="eeTime"
+                            required
+                            eeTime
+                            #eeTime="ngModel">
+                    </span>
+                    <h3 class="h3">Event location</h3>
+                    <span class="form-group">
+                        <label for="city">City</label>
+                        <input
+                            placeholder={{aevent.city}}
+                            type="string"
+                            id="city"
+                            class="col-ml-6 ml-4 mr-4"
+                            ngModel
+                            name="city"
+                            required
+                            city
+                            #city="ngModel">
+                    </span>
+                    <span class="form-group">
+                        <label for="street">Street</label>
+                        <input
+                        placeholder={{aevent.street}}
+                            type="string"
+                            id="street"
+                            class="col-ml-6 ml-4 mr-4"
+                            ngModel
+                            name="street"
+                            required
+                            street
+                            #street="ngModel">
+                    </span>
+                    <!-- <span class="form-group">
+                        <label for="postCode">Postcode</label>
+                        <input
+                        placeholder={{aevent.postCode}}
+                            type="string"
+                            id="postCode"
+                            class="col-ml-6 ml-4"
+                            ngModel
+                            name="postCode"
+                            required
+                            postCode
+                            #postCode="ngModel">
+                    </span> -->
+                    <span class="form-group">
+                        <label for="postCode">Postcode</label>
+                        <input
+                            placeholder={{aevent.postCode}}
+                            type="string"
+                            id="postCode"
+                            class="col-ml-6 ml-4"
+                            ngModel
+                            name="postCode"
+                            required
+                            postCode
+                            #postCode="ngModel">
+                    </span>
+                    <!-- <div *ngIf='people.in valid && people.touched'>People number can not be empty</div> -->
+                    <h3 class="h3">Event description</h3>
+                    <div class="form-group">
+                        <label for="description"></label>
+                        <textarea
+                        placeholder={{aevent.description}}
+                        id="description"
+                        class="col-sm-8"
+                        ngModel
+                        name="description"
+                        required
+                        description
+                        #description="ngModel"></textarea>
+                    </div>
+                    <h3 class="h3">Event price</h3>
+                    <div class="form-group">
+                        <label for="price"></label>
+                        <input
+                        placeholder={{aevent.price}}
+                        type="number"
+                        id="price"
+                        class="col-ml-6 ml-4"
+                        ngModel
+                        name="price"
+                        required
+                        price
+                        #price="ngModel">
+                    </div>
+                </div>
+                <button
+                    class="btn-danger"
+                    type="submit" >Modify
+                </button>
+                <button
+                    class="btn-success"
+                    (click)=noModify()
+                    >Cancel
+                </button>
+            </form>
+        </div>
+    </div>
+    <button class="btn-success pull-right" (click)=goModify() *ngIf=!modifyFlag>Modify</button>
+    <button class="btn-danger  pull-right " (click)=goDelete()  *ngIf=!modifyFlag>Delete</button>
+    <h3 class="h3"></h3>
+</div>

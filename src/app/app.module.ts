@@ -29,6 +29,8 @@ import { ApptBookingEntityComponent } from './appt-booking-entity/appt-booking-e
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ListApptBookingEntityComponent } from './list-appt-booking-entity/list-appt-booking-entity.component';
 import { ApptBookingAdminComponent } from './appt-booking-admin/appt-booking-admin.component';
+import { ApptBookingEventComponent } from './appt-booking-event/appt-booking-event.component';
+import { ApptBookingAEventComponent } from './appt-booking-event/appt-booking-a-event/appt-booking-a-event.component';
 
 
 
@@ -41,7 +43,9 @@ import { ApptBookingAdminComponent } from './appt-booking-admin/appt-booking-adm
     FooterComponent,
     ApptBookingEntityComponent,
     ListApptBookingEntityComponent,
-    ApptBookingAdminComponent
+    ApptBookingAdminComponent,
+    ApptBookingEventComponent,
+    ApptBookingAEventComponent
   ],
   imports: [
     CommonModule,
