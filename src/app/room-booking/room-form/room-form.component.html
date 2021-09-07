@@ -178,6 +178,28 @@
   </div>
 
   <div class="form-group">
+    <label for="availability">Availability</label>
+    <select
+      #availability="ngModel"
+      [(ngModel)]="room.availability"
+      class="form-control"
+      [class.is-invalid]="availability.invalid && availability.touched"
+      id="availability"
+      name="availability"
+    >
+      <option selected disabled>Select room availability</option>
+      <option value="Weekend">Weekends</option>
+      <option value="Weekdays">Weekdays</option>
+    </select>
+    <small
+      class="text-danger user-input-notification"
+      [class.d-none]="type.valid || type.untouched"
+    >
+      Room type is required
+    </small>
+  </div>
+
+  <div class="form-group">
     <label for="floor">Floor number</label>
     <input
       #floor="ngModel"
@@ -279,16 +301,34 @@
 
   <div class="form-group">
     <label for="facilities">Facilities</label>
-    <input
-      #facilities="ngModel"
-      [(ngModel)]="room.facilities"
-      [class.is-invalid]="facilities.invalid && facilities.touched"
-      class="form-control"
-      type="text"
-      id="facilities"
-      name="facilities"
-      pattern="^[\w\s,]*$"
-    />
+
+    <div *ngIf="facilities.length; else noFacilities">
+      <div *ngFor="let facility of roomFacilities; let i = index">
+        <label [attr.for]="'facility-' + i">
+          {{ facility.value }}
+          <input
+            type="checkbox"
+            name="facilities[]"
+            [attr.id]="'facility-' + i"
+            [attr.value]="facility.value"
+            [(checked)]="facility.checked"
+            (change)="updateFacility($event)"
+          />
+        </label>
+      </div>
+    </div>
+
+    <ng-template #noFacilities>
+      <div>
+        {{ facilityStatus }}
+      </div>
+      <div *ngIf="showFacilitiesLink">
+        <a routerLink="/dictionaries" class="btn btn-primary btn-sm mt-2"
+          >Add facilities</a
+        >
+      </div>
+    </ng-template>
+
     <small
       class="text-danger user-input-notification"
       [class.d-none]="facilities.valid || facilities.untouched"

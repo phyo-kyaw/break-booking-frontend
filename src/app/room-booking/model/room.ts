@@ -4,6 +4,7 @@ type RoomParams = {
   address: string;
   roomNumber: number | null;
   type: string;
+  availableType: string;
   city: string;
   description: string;
   floor: number | null;
@@ -24,6 +25,7 @@ export class Room {
   address: string = '';
   roomNumber: number | null = null;
   type?: string = '';
+  availableType: string;
   city?: string = '';
   description?: string = '';
   floor?: number | null = null;
@@ -51,6 +53,7 @@ export class Room {
       this.images = params.images ?? [];
       this.description = params.description ?? '';
       this.type = params.type ?? '';
+      this.availableType = params.availableType ?? '';
       this.floor = params.floor ?? null;
       this.size = params.size ?? null;
       this.maxPeople = params.maxPeople ?? null;

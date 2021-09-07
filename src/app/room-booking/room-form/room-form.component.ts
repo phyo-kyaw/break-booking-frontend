@@ -1,11 +1,11 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { environment } from 'environments/environment';
 import { Room } from '../model/room';
 import { ViewportScroller } from '@angular/common';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RoomService } from 'app/service/rooms/room.service';
+import { DictionaryService } from 'app/service/dictionaries/dictionary.service';
 
 @Component({
   selector: 'app-room-form',
@@ -21,12 +21,24 @@ export class RoomFormComponent implements OnInit {
   gettingRoomInfo: string = 'Getting room info...';
   fetchStatusForUser: string = 'Loading...';
   isLoading: boolean = false;
+  allCities: string[] = [];
+  /**
+   * All possible facilities from API
+   */
+  facilities: string[] = [];
+  facilityStatus = 'Getting facilities...';
+  showFacilitiesLink = false;
+  /**
+   * Facilities that the room has
+   */
+  roomFacilities: { value: string; checked: boolean }[] = [];
 
   constructor(
     private viewportScroller: ViewportScroller,
     private router: Router,
     private modalService: NgbModal,
-    private _roomService: RoomService
+    private _roomService: RoomService,
+    private _dictionaryService: DictionaryService
   ) {
     this.viewportScroller.setOffset([0, 70]);
   }
@@ -35,7 +47,15 @@ export class RoomFormComponent implements OnInit {
    * If there is an ID passed to the component, the form fetches the room with
    * the given ID and binds it to itself. Otherwise it creates an empty form.
    */
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    // // Get all possible facilities from API
+    // // this.fetchFacilities();
+    const promiseResolved = await this.fetchFacilities();
+
+    if (await promiseResolved) {
+      this.createFacilityCheckboxes();
+    }
+
     // Is there an ID passed to the component?
     if (this.roomId.trim().length > 0) {
       this.fetchRoom();
@@ -83,7 +103,9 @@ export class RoomFormComponent implements OnInit {
         if (response.success) {
           // Room fetching was good, bind it to component
           this.room = response.data;
-          console.log('Room loaded in edit form: \n', response.data);
+
+          // Check checkboxes
+          this.checkInitialFacilities(response.data);
         } else {
           // Something went wrong with getting the room
           this.gettingRoomInfo = 'Sorry, the selected room was not found.';
@@ -103,21 +125,6 @@ export class RoomFormComponent implements OnInit {
         );
       }
     );
-    // const response = await fetch(`${environment.roomsApi}/byId/${this.roomId}`);
-    // const result = await response.json();
-
-    // if (result.success) {
-    //   // Room fetching was good, bind it to component
-    //   this.room = result.data;
-    //   console.log('Room loaded in edit form: \n', result.data);
-    // } else {
-    //   // Something went wrong with getting the room
-    //   this.gettingRoomInfo = 'Sorry, the selected room was not found.';
-    //   console.error(
-    //     'An error occurred while trying to fetch the room:\n',
-    //     result
-    //   );
-    // }
   }
 
   async editRoom(f: NgForm): Promise<void> {
@@ -134,25 +141,6 @@ export class RoomFormComponent implements OnInit {
       },
       error => this.notifyOfError(error, 'update')
     );
-
-    // const response = await fetch(`${environment.roomsApi}/update`, {
-    //   method: 'PUT',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: this.prepareForm(f)
-    // });
-
-    // const result = await response.json();
-
-    // if (result.success) {
-    //   this.fetchStatusForUser = 'Room successfully updated. Redirecting...';
-    //   setTimeout(() => {
-    //     this.router.navigateByUrl('/rooms/all');
-    //   }, 1000);
-    // } else {
-    //   this.notifyOfError(result, 'update');
-    // }
   }
 
   async addRoom(f: NgForm): Promise<void> {
@@ -174,27 +162,6 @@ export class RoomFormComponent implements OnInit {
         this.notifyOfError(error, 'create');
       }
     );
-    // const response = await fetch(`${environment.roomsApi}/add`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: this.prepareForm(f)
-    // });
-
-    // const result = await response.json();
-
-    // if (result.success) {
-    //   // Notify user of the success
-    //   this.fetchStatusForUser = 'Room created successfully. Redirecting...';
-    //   // Redirect to the room booking home page
-    //   setTimeout(() => {
-    //     this.router.navigateByUrl('/rooms/all');
-    //   }, 1100);
-    // } else {
-    //   // Notify user of the fail
-    //   this.notifyOfError(result, 'create');
-    // }
   }
 
   /**
@@ -213,9 +180,11 @@ export class RoomFormComponent implements OnInit {
       facilities:
         typeof f.form.value.facilities === 'string'
           ? f.form.value.facilities.split(',')
-          : f.form.value.facilities
+          : this.prepareFacilities()
     };
 
+    console.log(this.roomFacilities);
+    console.log(JSON.stringify(formBody));
     return JSON.stringify(formBody);
   }
 
@@ -251,5 +220,114 @@ export class RoomFormComponent implements OnInit {
       result
     );
     this.openModal(this.errorOccurredModal);
+  }
+
+  fetchFacilities(): Promise<any> {
+    // Get the room with the ID
+    const promise = new Promise((resolve, reject) => {
+      this._dictionaryService.getFacilities().subscribe(
+        (response: any) => {
+          if (response.success) {
+            if (response.data === null) {
+              // There is no 'facilities' key in the dictionary
+              this.facilityStatus =
+                'Facilities data is null. Please contact the site admin to add a `facilities` dictionary.';
+              resolve(false);
+            } else {
+              // Facilities fetching was good
+              if (response.data.values.length) {
+                // Values exist, bind to component
+
+                this.facilities = response.data.values;
+                resolve(true);
+              } else {
+                this.showFacilitiesLink = true;
+                this.facilityStatus =
+                  'There are no facilities to display. Please add some facilities to proceed.';
+                resolve(false);
+              }
+            }
+          } else {
+            // Something went wrong with getting the room
+            this.facilityStatus = 'Error occurred while getting facilities';
+            console.error(this.facilityStatus, response);
+            resolve(false);
+          }
+        },
+        error => {
+          // Something went wrong when connecting to the API
+          this.facilityStatus =
+            'Error occurred while connecting to facilities API\n';
+          console.error(this.facilityStatus, error);
+          resolve(false);
+        }
+      );
+    });
+
+    return promise;
+  }
+
+  /**
+   * Creates checkboxes for every facility that was returned from the API
+   */
+  createFacilityCheckboxes() {
+    this.roomFacilities = this.facilities.map(fac => {
+      return {
+        value: fac,
+        checked: false
+      };
+    });
+  }
+
+  /**
+   * Updates facilities checkbox data
+   *
+   * @param event - Checkbox change event
+   */
+  updateFacility(event: Event) {
+    const target = event.target as HTMLInputElement;
+
+    const index = this.roomFacilities.findIndex(entry => {
+      if (entry.value == target.value) {
+        return true;
+      }
+    });
+
+    this.roomFacilities[index].checked = !this.roomFacilities[index].checked;
+  }
+
+  /**
+   * Selects the facility checkboxes if a room is loaded into the form
+   *
+   * @param roomData - all room data from API
+   */
+  checkInitialFacilities(roomData) {
+    roomData.facilities.forEach(facility => {
+      const index = this.roomFacilities.findIndex(roomFacility => {
+        if (roomFacility.value === facility) {
+          return true;
+        }
+      });
+      if (index > -1) {
+        this.roomFacilities[index].checked = true;
+      }
+    });
+  }
+
+  /**
+   *  Returns only checked facilities for form submission
+   *
+   * @returns array of string facilities
+   */
+  prepareFacilities(): string[] {
+    let values = [];
+
+    this.roomFacilities.forEach(facility => {
+      if (facility.checked) {
+        values.push(facility.value);
+      }
+    });
+
+    return values;
   }
 }
