@@ -21,17 +21,22 @@ export class RoomFormComponent implements OnInit {
   gettingRoomInfo: string = 'Getting room info...';
   fetchStatusForUser: string = 'Loading...';
   isLoading: boolean = false;
+  /**
+   * All possible cities from API
+   */
   allCities: string[] = [];
   /**
    * All possible facilities from API
    */
   facilities: string[] = [];
   facilityStatus = 'Getting facilities...';
-  showFacilitiesLink = false;
+  showDictionaryLink = false;
   /**
    * Facilities that the room has
    */
   roomFacilities: { value: string; checked: boolean }[] = [];
+  cityStatus = 'Getting cities...';
+  showCityLink = false;
 
   constructor(
     private viewportScroller: ViewportScroller,
@@ -50,9 +55,10 @@ export class RoomFormComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     // // Get all possible facilities from API
     // // this.fetchFacilities();
-    const promiseResolved = await this.fetchFacilities();
+    const dictionariesResolved = await this.fetchFacilities();
+    await this.fetchCities();
 
-    if (await promiseResolved) {
+    if (dictionariesResolved) {
       this.createFacilityCheckboxes();
     }
 
@@ -97,7 +103,6 @@ export class RoomFormComponent implements OnInit {
    * Retrieves the room and loads it in the form
    */
   fetchRoom(): void {
-    // Get the room with the ID
     this._roomService.getRoomById(this.roomId).subscribe(
       (response: any) => {
         if (response.success) {
@@ -241,7 +246,7 @@ export class RoomFormComponent implements OnInit {
                 this.facilities = response.data.values;
                 resolve(true);
               } else {
-                this.showFacilitiesLink = true;
+                this.showDictionaryLink = true;
                 this.facilityStatus =
                   'There are no facilities to display. Please add some facilities to proceed.';
                 resolve(false);
@@ -329,5 +334,49 @@ export class RoomFormComponent implements OnInit {
     });
 
     return values;
+  }
+
+  fetchCities(): Promise<any> {
+    const promise = new Promise((resolve, reject) => {
+      this._dictionaryService.getCities().subscribe(
+        (response: any) => {
+          if (response.success) {
+            if (response.data === null) {
+              // There is no 'cities' key in the dictionary
+              this.facilityStatus =
+                'Cities data is null. Please contact the site admin to add a `cities` dictionary.';
+              resolve(false);
+            } else {
+              // Cities fetching was good
+              if (response.data.values.length) {
+                // Values exist, bind to component
+
+                this.allCities = response.data.values;
+                resolve(true);
+              } else {
+                this.showCityLink = true;
+                this.cityStatus =
+                  'There are no cities to display. Please add some cities to proceed.';
+                resolve(false);
+              }
+            }
+          } else {
+            // Something went wrong with getting the cities
+            this.cityStatus = 'Error occurred while getting cities';
+            console.error(this.cityStatus, response);
+            resolve(false);
+          }
+        },
+        error => {
+          // Something went wrong when connecting to the API
+          this.facilityStatus =
+            'Error occurred while connecting to cities API\n';
+          console.error(this.cityStatus, error);
+          resolve(false);
+        }
+      );
+    });
+
+    return promise;
   }
 }
