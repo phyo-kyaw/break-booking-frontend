@@ -16,7 +16,7 @@ export class RoomService {
       pageSize = 50;
     }
 
-    return this._http.get(`${env.roomsApi}/?size=${pageSize}`);
+    return this._http.get(`${this._url}/?size=${pageSize}`);
   }
 
   /**
@@ -25,7 +25,7 @@ export class RoomService {
    * @param formData - a JSON that is stringified - all form fields are submitted
    */
   addRoom(formData: string) {
-    return this._http.post(`${env.roomsApi}/add`, {
+    return this._http.post(`${this._url}/add`, {
       headers: {
         'Content-Type': 'application/json'
       },
@@ -39,7 +39,7 @@ export class RoomService {
    * @param id - room ID
    */
   getRoomById(id: string) {
-    return this._http.get(`${env.roomsApi}/byId/${id}`);
+    return this._http.get(`${this._url}/byId/${id}`);
   }
 
   /**
@@ -48,9 +48,10 @@ export class RoomService {
    * @param formData - a JSON that is stringified - all form fields are submitted
    */
   updateRoom(formData: string) {
-    return this._http.put(`${env.roomsApi}/update`, {
+    return this._http.put(`${this._url}/update`, {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        accept: '*/*'
       },
       body: formData
     });
@@ -62,6 +63,6 @@ export class RoomService {
    * @param id - room ID
    */
   deleteRoom(id: string) {
-    return this._http.delete(`${env.roomsApi}/delete/${id}`);
+    return this._http.delete(`${this._url}/delete/${id}`);
   }
 }

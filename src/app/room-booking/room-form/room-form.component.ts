@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RoomService } from 'app/service/rooms/room.service';
 import { DictionaryService } from 'app/service/dictionaries/dictionary.service';
+import { environment as env } from 'environments/environment';
 
 @Component({
   selector: 'app-room-form',
@@ -83,13 +84,13 @@ export class RoomFormComponent implements OnInit {
     if (f.valid) {
       // Show loading screen
       this.isLoading = true;
-      console.log('form submitted:\n', f);
 
-      // Check if the form is an edit form
+      const formData = this.prepareForm(f);
+
       if (this.roomId.trim().length) {
-        this.editRoom(f);
+        this.editRoom(formData);
       } else {
-        this.addRoom(f);
+        this.addRoom(formData);
       }
     } else {
       // Not all fields are valid, tell user to fix the inputs
@@ -132,26 +133,56 @@ export class RoomFormComponent implements OnInit {
     );
   }
 
-  async editRoom(f: NgForm): Promise<void> {
-    this._roomService.updateRoom(this.prepareForm(f)).subscribe(
-      (response: any) => {
-        if (response.success) {
+  editRoom(f: string): void {
+    // TODO: investigate why roomService is not able to submit the room for update
+    fetch(`${env.roomsApi}/update`, {
+      method: 'PUT',
+      body: f,
+      headers: {
+        accept: '*/*',
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(response => response.json())
+      .then(result => {
+        if (result.success) {
           this.fetchStatusForUser = 'Room successfully updated. Redirecting...';
           setTimeout(() => {
             this.router.navigateByUrl('/rooms/all');
           }, 1000);
         } else {
-          this.notifyOfError(response, 'update');
+          this.notifyOfError(result, 'update');
         }
-      },
-      error => this.notifyOfError(error, 'update')
-    );
+      })
+      .catch(error => this.notifyOfError(error, 'update'));
+
+    // this._roomService.updateRoom(f).subscribe(
+    //   (response: any) => {
+    //     if (response.success) {
+    //       this.fetchStatusForUser = 'Room successfully updated. Redirecting...';
+    //       setTimeout(() => {
+    //         this.router.navigateByUrl('/rooms/all');
+    //       }, 1000);
+    //     } else {
+    //       this.notifyOfError(response, 'update');
+    //     }
+    //   },
+    //   error => this.notifyOfError(error, 'update')
+    // );
   }
 
-  async addRoom(f: NgForm): Promise<void> {
-    this._roomService.addRoom(this.prepareForm(f)).subscribe(
-      (response: any) => {
-        if (response.success) {
+  addRoom(f: string): void {
+    // TODO: investigate why roomService is not able to submit the room
+    fetch(`${env.roomsApi}/add`, {
+      method: 'POST',
+      body: f,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(response => response.json())
+      .then(result => {
+        if (result.success) {
           // Notify user of the success
           this.fetchStatusForUser = 'Room created successfully. Redirecting...';
           // Redirect to the room booking home page
@@ -160,13 +191,29 @@ export class RoomFormComponent implements OnInit {
           }, 1100);
         } else {
           // Notify user of the fail
-          this.notifyOfError(response, 'create');
+          this.notifyOfError(result, 'create');
         }
-      },
-      error => {
-        this.notifyOfError(error, 'create');
-      }
-    );
+      })
+      .catch(error => this.notifyOfError(error, 'create'));
+
+    // this._roomService.addRoom(f).subscribe(
+    //   (response: any) => {
+    //     if (response.success) {
+    //       // Notify user of the success
+    //       this.fetchStatusForUser = 'Room created successfully. Redirecting...';
+    //       // Redirect to the room booking home page
+    //       setTimeout(() => {
+    //         this.router.navigateByUrl('/rooms/all');
+    //       }, 1100);
+    //     } else {
+    //       // Notify user of the fail
+    //       this.notifyOfError(response, 'create');
+    //     }
+    //   },
+    //   error => {
+    //     this.notifyOfError(error, 'create');
+    //   }
+    // );
   }
 
   /**
@@ -185,11 +232,15 @@ export class RoomFormComponent implements OnInit {
       facilities:
         typeof f.form.value.facilities === 'string'
           ? f.form.value.facilities.split(',')
-          : this.prepareFacilities()
+          : this.prepareFacilities(),
+      reservedDates:
+        typeof f.form.value.reservedDates === 'string'
+          ? f.form.value.reservedDates.split(',')
+          : f.form.value.reservedDates
     };
 
-    console.log(this.roomFacilities);
-    console.log(JSON.stringify(formBody));
+    console.log(formBody);
+
     return JSON.stringify(formBody);
   }
 
