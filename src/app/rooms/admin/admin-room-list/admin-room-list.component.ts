@@ -1,13 +1,13 @@
 import { Component, OnInit, ViewChildren } from '@angular/core';
-import { Room } from './model/room';
+import { Room } from '../../model/room';
 import { RoomService } from 'app/service/rooms/room.service';
 
 @Component({
-  selector: 'app-room-booking',
-  templateUrl: './room-booking.component.html',
-  styleUrls: ['./room-booking.component.css']
+  selector: 'app-admin-room-list',
+  templateUrl: './admin-room-list.component.html',
+  styleUrls: ['./admin-room-list.component.css']
 })
-export class RoomBookingComponent implements OnInit {
+export class AdminRoomListComponent implements OnInit {
   @ViewChildren('roomRow') roomRows;
   rooms: Room[] = [];
   roomStatusMessage: string = 'Loading room information...';
