@@ -1,0 +1,23 @@
+<div class="container">
+  <h1>Rooms</h1>
+
+  <ng-container *ngIf="rooms.length; else elseTemplate">
+    <div *ngFor="let room of rooms" class="mt-3">
+      <h2>{{ room.title }}</h2>
+      <div>
+        <span *ngIf="room.maxPeople">
+          Room capacity: {{ room.maxPeople }}
+        </span>
+        <span *ngIf="room.size">Room size: {{ room.size }}</span>
+      </div>
+      <a
+        [routerLink]="['/rooms/view/', room.id]"
+        class="btn btn-outline-primary"
+        >See more</a
+      >
+    </div>
+  </ng-container>
+  <ng-template #elseTemplate>
+    {{ roomStatusMessage }}
+  </ng-template>
+</div>

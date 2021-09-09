@@ -1,0 +1,444 @@
+<form
+  #roomForm="ngForm"
+  *ngIf="room !== null; else noRoomFound"
+  (ngSubmit)="onSubmit(roomForm)"
+>
+  <div class="d-flex align-items-center justify-content-between mb-2">
+    <h1>{{ roomId.trim().length ? 'Edit' : 'Create' }} room</h1>
+    <app-form-buttons [isEditForm]="!!roomId"></app-form-buttons>
+  </div>
+
+  <div
+    class="alert alert-danger"
+    id="alert"
+    [class.d-block]="roomForm.submitted && roomForm.form.status === 'INVALID'"
+  >
+    Room is not saved. Please check the highlighted fields and fix problems
+    before submitting again.
+  </div>
+
+  <input type="hidden" name="id" #id="ngModel" [(ngModel)]="room.id" />
+  <input
+    type="hidden"
+    name="rating"
+    #rating="ngModel"
+    [(ngModel)]="room.rating"
+  />
+  <input
+    type="hidden"
+    name="commentCount"
+    #commentCount="ngModel"
+    [(ngModel)]="room.commentCount"
+  />
+  <!-- <input
+    type="hidden"
+    name="bookedTime"
+    #bookedTime="ngModel"
+    [(ngModel)]="room.bookedTime"
+  /> -->
+
+  <div class="form-group required">
+    <label for="title">Room name</label>
+    <input
+      #title="ngModel"
+      [(ngModel)]="room.title"
+      class="form-control"
+      [class.is-invalid]="
+        (title.invalid && title.touched) ||
+        (roomForm.submitted && title.invalid)
+      "
+      type="text"
+      id="title"
+      name="title"
+    />
+    <small
+      class="text-danger user-input-notification"
+      [class.d-block]="
+        (title.invalid && title.touched) ||
+        (roomForm.submitted && title.invalid)
+      "
+    >
+      Room title is required
+    </small>
+  </div>
+
+  <div class="form-group">
+    <label for="reservedDates">Set unavailable dates</label>
+    <input
+      #reservedDates="ngModel"
+      [(ngModel)]="room.reservedDates"
+      class="form-control"
+      [class.is-invalid]="
+        (reservedDates.invalid && reservedDates.touched) ||
+        (roomForm.submitted && reservedDates.invalid)
+      "
+      type="text"
+      id="reservedDates"
+      name="reservedDates"
+    />
+    <!-- <small
+      class="text-danger user-input-notification"
+      [class.d-block]="
+        (reservedDates.invalid && reservedDates.touched) ||
+        (roomForm.submitted && reservedDates.invalid)
+      "
+    >
+      reservedDates is not in a good format
+    </small> -->
+  </div>
+
+  <div class="form-group required">
+    <label for="address">Address</label>
+    <input
+      #address="ngModel"
+      [(ngModel)]="room.address"
+      class="form-control"
+      [class.is-invalid]="
+        (address.invalid && address.touched) ||
+        (roomForm.submitted && address.invalid)
+      "
+      type="text"
+      id="address"
+      name="address"
+    />
+    <small
+      class="text-danger user-input-notification"
+      [class.d-block]="
+        (address.invalid && address.touched) ||
+        (roomForm.submitted && address.invalid)
+      "
+    >
+      Address is required
+    </small>
+  </div>
+
+  <div class="form-group">
+    <label for="city">City</label>
+
+    <select
+      *ngIf="allCities.length; else noCities"
+      name="city"
+      class="form-control"
+      #city="ngModel"
+      [(ngModel)]="room.city"
+      place
+    >
+      <option value="" selected>Please select a city</option>
+      <option *ngFor="let city of allCities" [attr.value]="city">
+        {{ city }}
+      </option>
+    </select>
+
+    <ng-template #noCities>
+      <div>
+        {{ cityStatus }}
+      </div>
+      <div *ngIf="showCityLink">
+        <a routerLink="/dictionaries" class="btn btn-primary btn-sm mt-2"
+          >Add cities</a
+        >
+      </div>
+    </ng-template>
+    <!-- <small
+      class="text-danger user-input-notification"
+      [class.d-none]="city.valid || city.untouched"
+    >
+      City is required
+    </small> -->
+  </div>
+
+  <div class="form-group required">
+    <label for="roomNumber">Room number</label>
+    <input
+      #roomNumber="ngModel"
+      [(ngModel)]="room.roomNumber"
+      class="form-control"
+      [class.is-invalid]="
+        (roomNumber.invalid && roomNumber.touched) ||
+        (roomForm.submitted && roomNumber.invalid)
+      "
+      type="number"
+      id="roomNumber"
+      name="roomNumber"
+      min="1"
+    />
+    <small
+      class="text-danger user-input-notification"
+      [class.d-block]="
+        (roomNumber.invalid && roomNumber.touched) ||
+        (roomForm.submitted && roomNumber.invalid)
+      "
+    >
+      Room number is required and must be a positive number
+    </small>
+  </div>
+
+  <div class="form-group">
+    <label for="description">Description</label>
+    <input
+      #description="ngModel"
+      [(ngModel)]="room.description"
+      class="form-control"
+      [class.is-invalid]="description.invalid && description.touched"
+      type="text"
+      id="description"
+      name="description"
+    />
+    <small
+      class="text-danger user-input-notification"
+      [class.d-none]="description.valid || description.untouched"
+    >
+      Description is required
+    </small>
+  </div>
+
+  <div class="form-group">
+    <label for="type">Type of room</label>
+    <select
+      #type="ngModel"
+      [(ngModel)]="room.type"
+      class="form-control"
+      [class.is-invalid]="type.invalid && type.touched"
+      id="type"
+      name="type"
+    >
+      <option selected disabled>Select a room type</option>
+      <option value="Party room">Party room</option>
+      <option value="Meeting room">Meeting room</option>
+      <option value="Dinning room">Dinning room</option>
+    </select>
+    <small
+      class="text-danger user-input-notification"
+      [class.d-none]="type.valid || type.untouched"
+    >
+      Room type is required
+    </small>
+  </div>
+
+  <div class="form-group">
+    <label for="availableType">Availability</label>
+    <select
+      #availableType="ngModel"
+      [(ngModel)]="room.availableType"
+      class="form-control"
+      [class.is-invalid]="availableType.invalid && availableType.touched"
+      id="availableType"
+      name="availableType"
+    >
+      <option selected disabled>Select room availability</option>
+      <option [value]="0">Weekends</option>
+      <option [value]="1">Weekdays</option>
+    </select>
+    <small
+      class="text-danger user-input-notification"
+      [class.d-none]="type.valid || type.untouched"
+    >
+      Room type is required
+    </small>
+  </div>
+
+  <div class="form-group">
+    <label for="floor">Floor number</label>
+    <input
+      #floor="ngModel"
+      [(ngModel)]="room.floor"
+      [class.is-invalid]="floor.invalid && floor.touched"
+      class="form-control"
+      type="number"
+      min="1"
+      id="floor"
+      name="floor"
+    />
+    <small
+      class="text-danger user-input-notification"
+      [class.d-none]="floor.valid || floor.untouched"
+    >
+      Floor number is required and must be a positive number.
+    </small>
+  </div>
+
+  <div class="form-group">
+    <label for="size">Room size in square meters</label>
+    <input
+      #size="ngModel"
+      [(ngModel)]="room.size"
+      [class.is-invalid]="size.invalid && size.touched"
+      class="form-control"
+      type="number"
+      id="size"
+      name="size"
+      min="1"
+    />
+    <small
+      class="text-danger user-input-notification"
+      [class.d-none]="size.valid || size.untouched"
+    >
+      Room size is required and must be a positive number.
+    </small>
+  </div>
+
+  <div class="form-group">
+    <label for="maxPeople">Maximum number of people the room can hold </label>
+    <input
+      #maxPeople="ngModel"
+      [(ngModel)]="room.maxPeople"
+      [class.is-invalid]="maxPeople.invalid && maxPeople.touched"
+      class="form-control"
+      type="number"
+      id="maxPeople"
+      name="maxPeople"
+      min="1"
+    />
+    <small
+      class="text-danger user-input-notification"
+      [class.d-none]="maxPeople.valid || maxPeople.untouched"
+    >
+      Maximum people in room is required and must be a positive number.
+    </small>
+  </div>
+
+  <div class="form-group">
+    <label for="price">Price</label>
+    <input
+      #price="ngModel"
+      [(ngModel)]="room.price"
+      [class.is-invalid]="price.invalid && price.touched"
+      class="form-control"
+      type="number"
+      id="price"
+      name="price"
+      min="0"
+    />
+    <small
+      class="text-danger user-input-notification"
+      [class.d-none]="price.valid || price.untouched"
+    >
+      Price is required and must be a number.
+    </small>
+  </div>
+
+  <div class="form-group">
+    <label for="discount">Discount</label>
+    <input
+      #discount="ngModel"
+      [(ngModel)]="room.discount"
+      [class.is-invalid]="discount.invalid && discount.touched"
+      class="form-control"
+      type="number"
+      id="discount"
+      name="discount"
+      min="0"
+    />
+    <small
+      class="text-danger user-input-notification"
+      [class.d-none]="discount.valid || discount.untouched"
+    >
+      Discount must be a number.
+    </small>
+  </div>
+
+  <div class="form-group">
+    <label for="facilities">Facilities</label>
+
+    <div *ngIf="facilities.length; else noFacilities">
+      <div *ngFor="let facility of roomFacilities; let i = index">
+        <label [attr.for]="'facility-' + i">
+          {{ facility.value }}
+          <input
+            type="checkbox"
+            name="facilities[]"
+            [attr.id]="'facility-' + i"
+            [attr.value]="facility.value"
+            [(checked)]="facility.checked"
+            (change)="updateFacility($event)"
+          />
+        </label>
+      </div>
+    </div>
+
+    <ng-template #noFacilities>
+      <div>
+        {{ facilityStatus }}
+      </div>
+      <div *ngIf="showDictionaryLink">
+        <a routerLink="/dictionaries" class="btn btn-primary btn-sm mt-2"
+          >Add facilities</a
+        >
+      </div>
+    </ng-template>
+
+    <small
+      class="text-danger user-input-notification"
+      [class.d-none]="facilities.valid || facilities.untouched"
+    >
+      Facilities must be letters, numbers, commas or spaces.
+    </small>
+  </div>
+
+  <div class="form-group">
+    <label for="images">Images</label>
+    <input
+      #images="ngModel"
+      [(ngModel)]="room.images"
+      [class.is-invalid]="images.invalid && images.touched"
+      class="form-control"
+      type="text"
+      id="images"
+      name="images"
+    />
+    <small
+      class="text-danger user-input-notification"
+      [class.d-none]="facilities.valid || facilities.untouched"
+    >
+      Images must be letters, numbers, commas or spaces.
+    </small>
+  </div>
+
+  <div class="form-group">
+    <app-form-buttons [isEditForm]="!!roomId"></app-form-buttons>
+  </div>
+</form>
+
+<ng-template #noRoomFound>
+  {{ gettingRoomInfo }}
+</ng-template>
+
+<div
+  class="
+    loading-screen
+    d-flex
+    flex-column
+    align-items-center
+    justify-content-center
+  "
+  [class.d-none]="!isLoading"
+>
+  <div class="h1">{{ fetchStatusForUser }}</div>
+  <div class="spinner-border text-primary mt-4" role="status"></div>
+</div>
+
+<ng-template #errorOccurredModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="error-modal">Error occured</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <pre>{{ fetchStatusForUser }}</pre>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline-primary"
+      (click)="closeModal()"
+    >
+      Ok
+    </button>
+  </div>
+</ng-template>
