@@ -23,3 +23,8 @@ pre {
 p{
     margin-bottom: 50px;
 }
+
+input{
+    height: auto;
+    overflow: auto;
+}

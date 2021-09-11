@@ -30,23 +30,6 @@ import {Event} from './event.model'
 import {EventsService} from './event.service';
 import { NgForm } from '@angular/forms';
 
-// import { DatePipe } from '@angular/common';
-
-const colors: any = {
-  red: {
-    primary: '#ad2121',
-    secondary: '#FAE3E3',
-  },
-  blue: {
-    primary: '#1e90ff',
-    secondary: '#D1E8FF',
-  },
-  yellow: {
-    primary: '#e3bc08',
-    secondary: '#FDF1BA',
-  },
-};
-
 @Component({
   selector: 'app-appt-booking-event',
   templateUrl: './appt-booking-event.component.html',
@@ -66,54 +49,30 @@ export class ApptBookingEventComponent implements OnInit {
     event: CalendarEvent;
   };
 
-  eventsS: Event[];
+  // eventsS: Event[];
 
-  // eventS={
-  //   title:'',
-  //   description:'',
-  //   startTime:'',
-  //   endTime:'',
-  //   location.city:'',
-  //   location.postCode:"",
-  //   street:'',
-  //   price:0,
-  // }
-
-  // actions: CalendarEventAction[] = [
-  //   {
-  //     label: '<i class="fas fa-fw fa-pencil-alt"></i>',
-  //     a11yLabel: 'Edit',
-  //     onClick: ({ event }: { event: CalendarEvent }): void => {
-  //       this.handleEvent('Edited', event);
-  //     },
-  //   },
-  //   {
-  //     label: '<i class="fas fa-fw fa-trash-alt"></i>',
-  //     a11yLabel: 'Delete',
-  //     onClick: ({ event }: { event: CalendarEvent }): void => {
-  //       console.log('delete',event)
-  //     },
-  //   },
-  // ];
+  actions: CalendarEventAction[] = [
+    {
+      label: '<i class="fas fa-fw fa-pencil-alt"></i>',
+      a11yLabel: 'Edit',
+      onClick: ({ event }: { event: CalendarEvent }): void => {
+        this.handleEvent('Edited', event);
+      },
+    },
+    {
+      label: '<i class="fas fa-fw fa-trash-alt"></i>',
+      a11yLabel: 'Delete',
+      onClick: ({ event }: { event: CalendarEvent }): void => {
+        console.log('delete',event)
+      },
+    },
+  ];
 
   refresh: Subject<any> = new Subject();
 
-  // events: CalendarEvent[] = [
-  //   {
-  //     start: subDays(startOfDay(new Date()), 1),
-  //     end: addDays(new Date(), 1),
-  //     title: 'A 3 day event',
-  //     color: colors.red,
-  //     actions: this.actions,
-  //     allDay: true,
-  //     resizable: {
-  //       beforeStart: true,
-  //       afterEnd: true,
-  //     },
-  //     draggable: true,
-  //   },
-  // ];
-  events=[]
+  events: CalendarEvent[] = [];
+
+  DataEvents=[]
 
   activeDayIsOpen: boolean = true;
 
@@ -127,14 +86,29 @@ export class ApptBookingEventComponent implements OnInit {
     this.eventsService.getAllevents().subscribe(
       posts=>{
         console.log('hi,there,getall',posts)
-        this.events=posts
-        // if(posts.length!=0){
-        //   this.deleteFlag=true
-        // }
+        this.DataEvents=posts
+        this.events=[]
+        for (let i = 0; i < this.DataEvents.length; i++) {
+          console.log('hi',i)
+          this.events = [
+            ...this.events,
+            {
+              title: this.DataEvents[i].title,
+              start: startOfDay(new Date(this.DataEvents[i].startTime)),
+              end: endOfDay(new Date(this.DataEvents[i].endTime)),
+              // color: colors.red,
+              draggable: true,
+              resizable: {
+                beforeStart: true,
+                afterEnd: true,
+              },
+            },
+          ];
+        }
+        console.log('add1111',this.events)
       }
     )
   }
-
 
   // 月中点击天
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
@@ -178,15 +152,14 @@ export class ApptBookingEventComponent implements OnInit {
 
   // add
   addEvent(): void {
-    this.events = [
-      ...this.events,
+    this.DataEvents = [
+      ...this.DataEvents,
       {
-        description: "Description",
-        // eid: string,
+        description: "Description", 
         endTime: "No",
         location: {
           city: "City",
-          postCode:"PostCode",
+          postCode:1234,
           street: "Street"
         },
         price: 0,
@@ -199,7 +172,68 @@ export class ApptBookingEventComponent implements OnInit {
   addEventConfirm(event){
     console.log('Add',event)
     console.log('aasdsadsa',event.startTime)
-    this.eventsService.addNewEvent(event.title,event.price,event.startTime,event.endTime,
+    if(event.startTime>event.endTime){
+      alert("The end time cannot be earlier than the start time!")
+      return
+    }
+    if(event.title==""){
+      alert("Event Title cannot be empty!")
+      return
+    }
+    let start,startM,startD,startH,startMi
+    let end,endM,endD,endH,endMi
+    if((event.startTime.getMonth()+1)<10){
+      startM='0'+(event.startTime.getMonth()+1)
+    }
+    else{
+      startM=event.startTime.getMonth()+1
+    }
+    if((event.startTime.getDate())<10){
+      startD='0'+(event.startTime.getDate())
+    }
+    else{
+      startD=event.startTime.getDate()
+    }
+    if((event.startTime.getHours())<10){
+      startH='0'+(event.startTime.getHours())
+    }
+    else{
+      startH=event.startTime.getHours()
+    }
+    if((event.startTime.getMinutes())<10){
+      startMi='0'+(event.startTime.getMinutes())
+    }
+    else{
+      startMi=event.startTime.getMinutes()
+    }
+    start=event.startTime.getFullYear()+'-'+startM+'-'+startD+'T'+startH+':'+startD+':30'
+
+    if((event.endTime.getMonth()+1)<10){
+      endM='0'+(event.endTime.getMonth()+1)
+    }
+    else{
+      endM=event.endTime.getMonth()+1
+    }
+    if((event.endTime.getDate())<10){
+      endD='0'+(event.endTime.getDate())
+    }
+    else{
+      endD=event.endTime.getDate()
+    }
+    if((event.endTime.getHours())<10){
+      endH='0'+(event.endTime.getHours())
+    }
+    else{
+      endH=event.endTime.getHours()
+    }
+    if((event.endTime.getMinutes())<10){
+      endMi='0'+(event.endTime.getMinutes())
+    }
+    else{
+      endMi=event.endTime.getMinutes()
+    }
+    end=event.endTime.getFullYear()+'-'+endM+'-'+endD+'T'+endH+':'+endMi+':30'
+    this.eventsService.addNewEvent(event.title,event.price,start,end,
       // this.event.bEmail,this.event.bName,this.event.bPhone,
       event.location.city,event.location.postCode,event.location.street,
       event.description).subscribe(()=>{
@@ -208,16 +242,21 @@ export class ApptBookingEventComponent implements OnInit {
   }
 
   //delete
-  deleteEvent(event) {
+  deleteEvent(event,eventToDelete: CalendarEvent) {
     console.log('hi Delete',event)
-    // this.events = this.events.filter((event) => event !== eventToDelete);
     this.eventsService.deleteEvent(event.eid).subscribe(()=>{
       this.getAllEvents()
     })
+    this.events = this.events.filter((event) => event !== eventToDelete);
   }
 
   modifyEvent(event){
     console.log('hi modify',event)
+    if(event.startTime>event.endTime){
+      alert("The end time cannot be earlier than the start time!")
+      this.getAllEvents()
+      return
+    }
     this.eventsService.modifyEvent(event.eid,event.title,event.price,event.startTime,event.endTime,
       // this.event.bEmail,this.event.bName,this.event.bPhone,
       event.location.city,event.location.postCode,event.location.street,

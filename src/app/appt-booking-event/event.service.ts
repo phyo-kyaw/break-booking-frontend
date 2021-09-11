@@ -58,16 +58,16 @@ export class EventsService {
       //   // userId: string
       // },
       description: description,
-      // endTime: endTime,
-      endTime:"2021-09-11T16:24:30",
+      endTime: endTime,
+      // endTime:"2021-09-21T16:24:30",
       location: {
         city: city,
         postCode:postCode,
         street: street
       },
       price: price,
-      // startTime:startTime,
-      startTime:"2021-09-11T16:24:30",
+      startTime:startTime,
+      // startTime:"2021-09-01T16:24:30",
       title: title
     }
     return this.http
