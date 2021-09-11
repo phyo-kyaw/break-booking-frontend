@@ -1,0 +1,11 @@
+@import '../../node_modules/flatpickr/dist/flatpickr.min.css';
+@import '../../node_modules/flatpickr/dist/flatpickr.css';
+@import "../../node_modules/angular-calendar/css/angular-calendar.css";
+@import "../../node_modules/bootstrap/dist/css/bootstrap.min.css";
+@import "../../node_modules/ng-pick-datetime/assets/style/picker.min.css";
+
+/* <link href="https://unpkg.com/bootstrap-css-only@4.4.1/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://unpkg.com/@fortawesome/fontawesome-free@5.15.1/css/all.css" rel="stylesheet">
+<link href="https://unpkg.com/angular-calendar@0.28.28/css/angular-calendar.css" rel="stylesheet">
+<link href="https://unpkg.com/flatpickr@4.6.6/dist/flatpickr.css" rel="stylesheet">
+<mwl-demo-component>Loading...</mwl-demo-component> */

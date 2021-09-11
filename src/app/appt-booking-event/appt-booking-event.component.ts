@@ -1,9 +1,51 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  ViewChild,
+  TemplateRef,
+} from '@angular/core';
+import {
+  startOfDay,
+  endOfDay,
+  subDays,
+  addDays,
+  endOfMonth,
+  isSameDay,
+  isSameMonth,
+  addHours,
+} from 'date-fns';
+import { Subject } from 'rxjs';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {
+  CalendarEvent,
+  CalendarEventAction,
+  CalendarEventTimesChangedEvent,
+  CalendarView,
+} from 'angular-calendar';
+
 import { HttpClient } from '@angular/common/http';
 
 import {Event} from './event.model'
 import {EventsService} from './event.service';
 import { NgForm } from '@angular/forms';
+
+// import { DatePipe } from '@angular/common';
+
+const colors: any = {
+  red: {
+    primary: '#ad2121',
+    secondary: '#FAE3E3',
+  },
+  blue: {
+    primary: '#1e90ff',
+    secondary: '#D1E8FF',
+  },
+  yellow: {
+    primary: '#e3bc08',
+    secondary: '#FDF1BA',
+  },
+};
 
 @Component({
   selector: 'app-appt-booking-event',
@@ -11,134 +53,193 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./appt-booking-event.component.css']
 })
 export class ApptBookingEventComponent implements OnInit {
+  @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
 
-  @ViewChild('f', { static: false }) signupForm: NgForm;
-  addFlag=false
-  addControl="Add a New Event"
-  deleteFlag=false
-  deleteConfirmFlag=false
-  event={
-    title:'',
-    bEmail:'',
-    bName:'',
-    bPhone:"",
-    description:'',
-    sTime:'',
-    eTime:'',
-    city:'',
-    postCode:"",
-    street:'',
-    price:0,
+  view: CalendarView = CalendarView.Month;
 
-  }
+  CalendarView = CalendarView;
 
-  events: Event[] = [];
+  viewDate: Date = new Date();
 
-  constructor(private http: HttpClient, private eventsService:EventsService) { }
+  modalData: {
+    action: string;
+    event: CalendarEvent;
+  };
+
+  eventsS: Event[];
+
+  // eventS={
+  //   title:'',
+  //   description:'',
+  //   startTime:'',
+  //   endTime:'',
+  //   location.city:'',
+  //   location.postCode:"",
+  //   street:'',
+  //   price:0,
+  // }
+
+  // actions: CalendarEventAction[] = [
+  //   {
+  //     label: '<i class="fas fa-fw fa-pencil-alt"></i>',
+  //     a11yLabel: 'Edit',
+  //     onClick: ({ event }: { event: CalendarEvent }): void => {
+  //       this.handleEvent('Edited', event);
+  //     },
+  //   },
+  //   {
+  //     label: '<i class="fas fa-fw fa-trash-alt"></i>',
+  //     a11yLabel: 'Delete',
+  //     onClick: ({ event }: { event: CalendarEvent }): void => {
+  //       console.log('delete',event)
+  //     },
+  //   },
+  // ];
+
+  refresh: Subject<any> = new Subject();
+
+  // events: CalendarEvent[] = [
+  //   {
+  //     start: subDays(startOfDay(new Date()), 1),
+  //     end: addDays(new Date(), 1),
+  //     title: 'A 3 day event',
+  //     color: colors.red,
+  //     actions: this.actions,
+  //     allDay: true,
+  //     resizable: {
+  //       beforeStart: true,
+  //       afterEnd: true,
+  //     },
+  //     draggable: true,
+  //   },
+  // ];
+  events=[]
+
+  activeDayIsOpen: boolean = true;
+
+  constructor(private modal: NgbModal,private http: HttpClient, private eventsService:EventsService) {}
 
   ngOnInit(): void {
     this.getAllEvents()
   }
-  
-  changeAddControl(){
-    if(this.addFlag==true){
-      this.addControl="Cancel"
-    }
-    else{
-      this.addControl="Add a New Event"
-    }
-  }
+
   getAllEvents(){
     this.eventsService.getAllevents().subscribe(
       posts=>{
         console.log('hi,there,getall',posts)
         this.events=posts
-        if(posts.length!=0){
-          this.deleteFlag=true
-        }
+        // if(posts.length!=0){
+        //   this.deleteFlag=true
+        // }
       }
     )
   }
 
-  addNewEvents(){
-    this.eventsService.addNewEvent(this.event.title,this.event.price,this.event.sTime,this.event.eTime,
+
+  // 月中点击天
+  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+    if (isSameMonth(date, this.viewDate)) {
+      if (
+        (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
+        events.length === 0
+      ) {
+        this.activeDayIsOpen = false;
+      } else {
+        this.activeDayIsOpen = true;
+      }
+      this.viewDate = date;
+    }
+  }
+
+  //显示日历的部分
+  eventTimesChanged({
+    event,
+    newStart,
+    newEnd,
+  }: CalendarEventTimesChangedEvent): void {
+    this.events = this.events.map((iEvent) => {
+      if (iEvent === event) {
+        return {
+          ...event,
+          start: newStart,
+          end: newEnd,
+        };
+      }
+      return iEvent;
+    });
+    this.handleEvent('Dropped or resized', event);
+  }
+
+  // 点击日历中某天发生的事件
+  handleEvent(action: string, event: CalendarEvent): void {
+    this.modalData = { event, action };
+    this.modal.open(this.modalContent, { size: 'lg' });
+  }
+
+  // add
+  addEvent(): void {
+    this.events = [
+      ...this.events,
+      {
+        description: "Description",
+        // eid: string,
+        endTime: "No",
+        location: {
+          city: "City",
+          postCode:"PostCode",
+          street: "Street"
+        },
+        price: 0,
+        startTime:"No",
+        title: "New Event",
+        add:true
+      },
+    ];
+  }
+  addEventConfirm(event){
+    console.log('Add',event)
+    console.log('aasdsadsa',event.startTime)
+    this.eventsService.addNewEvent(event.title,event.price,event.startTime,event.endTime,
       // this.event.bEmail,this.event.bName,this.event.bPhone,
-      this.event.city,this.event.postCode,this.event.street,
-      this.event.description).subscribe(()=>{
+      event.location.city,event.location.postCode,event.location.street,
+      event.description).subscribe(()=>{
         this.getAllEvents()
       })
   }
 
-  addEvent(){
-    this.addFlag=!this.addFlag
-    this.changeAddControl()
+  //delete
+  deleteEvent(event) {
+    console.log('hi Delete',event)
+    // this.events = this.events.filter((event) => event !== eventToDelete);
+    this.eventsService.deleteEvent(event.eid).subscribe(()=>{
+      this.getAllEvents()
+    })
   }
 
-  onSubmit(){
-    var now = new Date().toISOString();
-    now=now.slice(0,17)
-    now=now+'60Z'
-    if(this.signupForm.value.eventData.title==''||
-    this.signupForm.value.eventData.description==''||
-    this.signupForm.value.eventData.price==''||
-    this.signupForm.value.eventData.sTime==''||
-    this.signupForm.value.eventData.ssTime==''||
-    this.signupForm.value.eventData.eTime==''||
-    this.signupForm.value.eventData.eeTime==''||
-    this.signupForm.value.eventData.city==''||
-    this.signupForm.value.eventData.postCode==''||
-    this.signupForm.value.eventData.street==''
-    ){
-      alert("The above information is required")
-    }
-    else if(this.signupForm.value.eventData.sTime+'T'+this.signupForm.value.eventData.ssTime+':30'+'Z'<now){
-      alert('This event cannot start before the current time')
-    }
-    else if(this.signupForm.value.eventData.eTime<this.signupForm.value.eventData.sTime){
-      alert("The end time cannot be earlier than the start time!")
-    }
-    else if(this.signupForm.value.eventData.eTime==this.signupForm.value.eventData.sTime){
-      if(this.signupForm.value.eventData.eeTime<this.signupForm.value.eventData.ssTime)
-      {
-        alert("The end time cannot be earlier than the start time!")
-      }
-    }
-    else{
-      console.log('no time issues')
-      this.event.title = this.signupForm.value.eventData.title;
-      this.event.description = this.signupForm.value.eventData.description;
-      this.event.price = this.signupForm.value.eventData.price;
-  
-      // this.event.bEmail = this.signupForm.value.eventData.bEmail;
-      // this.event.bName = this.signupForm.value.eventData.bName;
-      // this.event.bPhone = this.signupForm.value.eventData.bPhone;
-      
-      this.event.sTime = this.signupForm.value.eventData.sTime+'T'+this.signupForm.value.eventData.ssTime+':30'+'Z';
-      this.event.eTime = this.signupForm.value.eventData.eTime+'T'+this.signupForm.value.eventData.eeTime+':30'+'Z';
-  
-      this.event.city = this.signupForm.value.eventData.city;
-      this.event.postCode = this.signupForm.value.eventData.postCode;
-      this.event.street = this.signupForm.value.eventData.street;
-  
-      console.log('here',this.event.sTime)
-      this.addNewEvents()
-      this.signupForm.reset();
-      this.addEvent()
-    }
+  modifyEvent(event){
+    console.log('hi modify',event)
+    this.eventsService.modifyEvent(event.eid,event.title,event.price,event.startTime,event.endTime,
+      // this.event.bEmail,this.event.bName,this.event.bPhone,
+      event.location.city,event.location.postCode,event.location.street,
+      event.description).subscribe(()=>{
+        this.getAllEvents()
+      })
   }
 
-  deleteAll(){
+  deleteAllEvents(){
     this.eventsService.deleteAll().subscribe(()=>{
-      this.events=[]
-      this.deleteFlag=false
+      this.getAllEvents()
     })
     alert('Delete Successfully')
-    this.deleteConfirm()
-    console.log(this.deleteFlag)
   }
 
-  deleteConfirm(){
-    this.deleteConfirmFlag=!this.deleteConfirmFlag
-    this.deleteFlag=!this.deleteFlag
+  // 看是month/day/year
+  setView(view: CalendarView) {
+    this.view = view;
+  }
+
+  // previous/today/next 
+  closeOpenMonthViewDay() {
+    this.activeDayIsOpen = false;
   }
 }

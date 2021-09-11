@@ -19,5 +19,6 @@ export interface Event
   },
   price: number,
   startTime:string,
-  title: string
+  title: string,
+  // add:boolean
 }

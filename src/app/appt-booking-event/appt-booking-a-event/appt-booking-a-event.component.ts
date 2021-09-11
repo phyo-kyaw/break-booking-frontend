@@ -64,7 +64,7 @@ export class ApptBookingAEventComponent implements OnInit {
 
   goDelete(){
     this.eventsService.deleteEvent(this.event.eid).subscribe(() => {
-      this.updateEvent.getAllEvents()
+      // this.updateEvent.getAllEvents()
     });
     alert('Delete Successfully')
   }
@@ -138,7 +138,7 @@ export class ApptBookingAEventComponent implements OnInit {
         // this.event.bEmail,this.event.bName,this.event.bPhone,
         this.aevent.city,this.aevent.postCode,this.aevent.street,
         this.aevent.description).subscribe(()=>{
-          this.updateEvent.getAllEvents()
+          // this.updateEvent.getAllEvents()
         })
   
       this.signupForm.reset();

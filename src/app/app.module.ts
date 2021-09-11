@@ -1,3 +1,7 @@
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
+// import '../../node_modules/flatpickr/dist/flatpickr.css';
+import "../../node_modules/angular-calendar/css/angular-calendar.css";
+
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import  FormControl  from '@material-ui/core/FormControl';
@@ -32,8 +36,18 @@ import { ApptBookingAdminComponent } from './appt-booking-admin/appt-booking-adm
 import { ApptBookingEventComponent } from './appt-booking-event/appt-booking-event.component';
 import { ApptBookingAEventComponent } from './appt-booking-event/appt-booking-a-event/appt-booking-a-event.component';
 
+// import { NgModule } from '@angular/core';
+// import { CommonModule } from '@angular/common';
+// import { FormsModule } from '@angular/forms';
+import { FlatpickrModule } from 'angularx-flatpickr';
+// import { CalendarModule, DateAdapter } from 'angular-calendar';
+// import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+// import { DemoComponent } from './component';
+// import '../../node_modules/flatpickr/dist/flatpickr.css';
 
-
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
+// import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -48,8 +62,11 @@ import { ApptBookingAEventComponent } from './appt-booking-event/appt-booking-a-
     ApptBookingAEventComponent
   ],
   imports: [
+    NgbModalModule,
     CommonModule,
     BrowserModule,
+    FormsModule,
+    FlatpickrModule.forRoot(),
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory,
@@ -58,12 +75,14 @@ import { ApptBookingAEventComponent } from './appt-booking-event/appt-booking-a-
     //SchedulerModule.forRoot({ locale: 'en', headerDateFormat: 'daysRange' }),
     AppRoutingModule,
     HttpClientModule,
-    FormsModule,
     ReactiveFormsModule,
     KeycloakAngularModule,
     BrowserAnimationsModule,
     NgxMaterialTimepickerModule,
-    NgbModule
+    NgbModule,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule,
+    // BrowserAnimationsModule
   ],
   providers: [
    // {provide: HTTP_INTERCEPTORS, useClass: HttpIntercepterService, multi: true}
@@ -77,4 +96,5 @@ import { ApptBookingAEventComponent } from './appt-booking-event/appt-booking-a-
   ],
   bootstrap: [AppComponent]
 })
+
 export class AppModule { }

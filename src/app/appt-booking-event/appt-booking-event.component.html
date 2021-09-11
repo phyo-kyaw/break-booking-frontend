@@ -1,233 +1,249 @@
-<!-- <h4 style="text-align:center">List of Booking Entities</h4> -->
-<div class="container">
-    <!-- <div class="alert alert-warning" *ngIf='invalidCancel'>{{errorCancelMessage}}</div> -->
-    <h1 class="h1">List of all events</h1>
-    <button class="btn btn-success" (click)=addEvent()>{{addControl}}</button>
-    <button class="btn btn-danger" (click)=deleteConfirm() *ngIf=deleteFlag>Delete All Events</button>
-
-    <button class="btn btn-danger"  *ngIf=deleteConfirmFlag>Are you sure you want to delete all events
-        <button class="btn btn-success" (click)=deleteAll()>Yes</button>
-        <button class="btn btn-danger" (click)=deleteConfirm()>No</button>
-    </button>
-    <!-- <button class="btn btn-danger" (click)=deleteAll() *ngIf=deleteconfirm>Are you sure you want to delete all events</button> -->
-    <!-- add event -->
-    <div class="container" *ngIf=addFlag>
-        <div class="pt-sm-4 text-center">
-            <form  (ngSubmit)="onSubmit()"  #f="ngForm">
-                <div
-                id="event-data"
-                ngModelGroup="eventData"
-                #eventData="ngModelGroup">
-                    <h3 class="h3">Event Title</h3>
-                    <div class="form-group">
-                        <label for="title"></label>
-                        <input
-                            type="text"
-                            id="title"
-                            class="col-sm-8"
-                            ngModel
-                            required minlength="4"
-                            name="title"
-                            #title="ngModel"
-                            required>
-                    </div>
-                    <span *ngIf='title.invalid && title.touched'>
-                        <div class="alert-warning" *ngIf='title.errors.required'>Title can not be empty</div>
-                    <!-- <div *ngIf='name.errors.minlength'>Title can not less than 4 characters</div> -->
-                    </span>
-                    <!-- <h3 class="h3">Booker Details</h3>
-                    <span class="form-group">
-                        <label for="bEmail">Email</label>
-                        <input
-                        type="text"
-                        id="bEmail"
-                        class="col-ml-6 ml-4 mr-4"
-                        ngModel
-                        required minlength="4"
-                        name="bEmail"
-                        #bEmail="ngModel"
-                        required>
-                    </span>
-                    <span class="form-group">
-                        <label for="bname">Name</label>
-                        <input
-                        type="text"
-                        id="bName"
-                        class="col-ml-6 ml-4 mr-4"
-                        ngModel
-                        required minlength="4"
-                        name="bName"
-                        #bName="ngModel"
-                        required>
-                    </span>
-                    <span class="form-group">
-                        <label for="bPhone">Phone</label>
-                        <input
-                        type="number"
-                        id="bPhone"
-                        class="col-ml-6 ml-4"
-                        ngModel
-                        required minlength="4"
-                        name="bPhone"
-                        #bPhone="ngModel"
-                        required>
-                    </span> -->
-                    <h3 class="h3">Event Date</h3>
-                    <span class="form-group">
-                        <label for="sTime">Event Start Date</label>
-                        <input
-                            type="date"
-                            id="sTime"
-                            class="col-ml-6 ml-4 mr-4"
-                            ngModel
-                            name="sTime"
-                            required
-                            sTime
-                            #sTime="ngModel">
-                    </span>
-                    <span class="form-group">
-                        <label for="ssTime">Event Start Time</label>
-                        <input
-                            type="time"
-                            id="ssTime"
-                            class="col-ml-6 ml-4 mr-4"
-                            ngModel
-                            name="ssTime"
-                            required
-                            ssTime
-                            #ssTime="ngModel">
-                    </span>
-                    <span *ngIf='sTime.invalid && sTime.touched'>
-                        <div class="alert-warning" *ngIf='sTime.errors.required'>Evnet Start Date can not be empty</div>
-                    <!-- <div *ngIf='name.errors.minlength'>Title can not less than 4 characters</div> -->
-                    </span>
-                    <span *ngIf='ssTime.invalid && ssTime.touched'>
-                        <div class="alert-warning" *ngIf='ssTime.errors.required'>Evnet Start Time can not be empty</div>
-                    </span>
-                    <h3 class="h3"></h3>
-                    <span class="form-group">
-                        <label for="eTime">Event End Date</label>
-                        <input
-                        type="date"
-                        id="eTime" 
-                        class="col-ml-6 ml-4 mr-4"
-                        ngModel
-                        name="eTime"
-                        required
-                        eTime
-                        #eTime="ngModel">
-                    </span>
-                    <span class="form-group">
-                        <label for="eeTime">Event End Time</label>
-                        <input
-                            type="time"
-                            id="eeTime"
-                            class="col-ml-6 ml-4 mr-4"
-                            ngModel
-                            name="eeTime"
-                            required
-                            eeTime
-                            #eeTime="ngModel">
-                    </span>
-                    <span *ngIf='eTime.invalid && eTime.touched'>
-                        <div class="alert-warning" *ngIf='eTime.errors.required'>Evnet End Date can not be empty</div>
-                    <!-- <div *ngIf='name.errors.minlength'>Title can not less than 4 characters</div> -->
-                    </span>
-                    <span *ngIf='eeTime.invalid && eeTime.touched'>
-                        <div class="alert-warning" *ngIf='eeTime.errors.required'>Evnet End Time can not be empty</div>
-                    </span>
-                    <h3 class="h3">Event location</h3>
-                    <span class="form-group">
-                        <label for="city">City</label>
-                        <input
-                            type="string"
-                            id="city"
-                            class="col-ml-6 ml-4 mr-4"
-                            ngModel
-                            name="city"
-                            required
-                            city
-                            #city="ngModel">
-                    </span>
-                    <span class="form-group">
-                        <label for="street">Street</label>
-                        <input
-                            type="string"
-                            id="street"
-                            class="col-ml-6 ml-4 mr-4"
-                            ngModel
-                            name="street"
-                            required
-                            street
-                            #street="ngModel">
-                    </span>
-                    <span class="form-group">
-                        <label for="postCode">Postcode</label>
-                        <input
-                            type="string"
-                            id="postCode"
-                            class="col-ml-6 ml-4"
-                            ngModel
-                            name="postCode"
-                            required
-                            postCode
-                            #postCode="ngModel">
-                    </span>
-                    <span *ngIf='city.invalid && city.touched'>
-                        <div class="alert-warning" *ngIf='city.errors.required'>City can not be empty</div>
-                    </span>
-                    <span *ngIf='street.invalid && street.touched'>
-                        <div class="alert-warning" *ngIf='street.errors.required'>Street can not be empty</div>
-                    </span>
-                    <span *ngIf='postCode.invalid && postCode.touched'>
-                        <div class="alert-warning" *ngIf='postCode.errors.required'>Postcode can not be empty</div>
-                    </span>
-                    <!-- <div *ngIf='people.in valid && people.touched'>People number can not be empty</div> -->
-                    <h3 class="h3">Event description</h3>
-                    <div class="form-group">
-                        <label for="description"></label>
-                        <textarea
-                        id="description"
-                        class="col-sm-8"
-                        ngModel
-                        name="description"
-                        required
-                        description
-                        #description="ngModel"></textarea>
-                    </div>
-                    <span *ngIf='description.invalid && description.touched'>
-                        <div class="alert-warning" *ngIf='description.errors.required'>Description can not be empty</div>
-                    </span>
-                    <h3 class="h3">Event price</h3>
-                    <div class="form-group">
-                        <label for="price"></label>
-                        <input
-                        type="number"
-                        id="price"
-                        class="col-ml-6 ml-4"
-                        ngModel
-                        name="price"
-                        required
-                        price
-                        #price="ngModel">
-                    </div>
-                    <span *ngIf='price.invalid && price.touched'>
-                        <div class="alert-warning" *ngIf='price.errors.required'>Price can not be empty</div>
-                    </span>
-                </div>
-                <button
-                    class="btn btn-danger"
-                    type="submit" >Submit
-                </button>
-            </form>
+<div class="row text-center">
+    <div class="col-md-4">
+      <div class="btn-group">
+        <div
+          class="btn btn-primary"
+          mwlCalendarPreviousView
+          [view]="view"
+          [(viewDate)]="viewDate"
+          (viewDateChange)="closeOpenMonthViewDay()"
+        >
+          Previous
         </div>
+        <div
+          class="btn btn-outline-secondary"
+          mwlCalendarToday
+          [(viewDate)]="viewDate"
+        >
+          Today
+        </div>
+        <div
+          class="btn btn-primary"
+          mwlCalendarNextView
+          [view]="view"
+          [(viewDate)]="viewDate"
+          (viewDateChange)="closeOpenMonthViewDay()"
+        >
+          Next
+        </div>
+      </div>
     </div>
-    <!-- <div>
-        <button (click)="getAllEvents()">get all test</button>
-    </div> -->
-    <app-appt-booking-a-event
-    *ngFor="let e of events; let i = index"
-    [event]="e"
-    [id]="i"></app-appt-booking-a-event>
+    <div class="col-md-4">
+      <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+    </div>
+    <div class="col-md-4">
+      <div class="btn-group">
+        <div
+          class="btn btn-primary"
+          (click)="setView(CalendarView.Month)"
+          [class.active]="view === CalendarView.Month"
+        >
+          Month
+        </div>
+        <div
+          class="btn btn-primary"
+          (click)="setView(CalendarView.Week)"
+          [class.active]="view === CalendarView.Week"
+        >
+          Week
+        </div>
+        <div
+          class="btn btn-primary"
+          (click)="setView(CalendarView.Day)"
+          [class.active]="view === CalendarView.Day"
+        >
+          Day
+        </div>
+      </div>
+    </div>
   </div>
- <!--  -->
+  <br />
+  <div [ngSwitch]="view">
+    <mwl-calendar-month-view
+      *ngSwitchCase="CalendarView.Month"
+      [viewDate]="viewDate"
+      [events]="events"
+      [refresh]="refresh"
+      [activeDayIsOpen]="activeDayIsOpen"
+      (dayClicked)="dayClicked($event.day)"
+      (eventClicked)="handleEvent('Clicked', $event.event)"
+      (eventTimesChanged)="eventTimesChanged($event)"
+    >
+    </mwl-calendar-month-view>
+    <mwl-calendar-week-view
+      *ngSwitchCase="CalendarView.Week"
+      [viewDate]="viewDate"
+      [events]="events"
+      [refresh]="refresh"
+      (eventClicked)="handleEvent('Clicked', $event.event)"
+      (eventTimesChanged)="eventTimesChanged($event)"
+    >
+    </mwl-calendar-week-view>
+    <mwl-calendar-day-view
+      *ngSwitchCase="CalendarView.Day"
+      [viewDate]="viewDate"
+      [events]="events"
+      [refresh]="refresh"
+      (eventClicked)="handleEvent('Clicked', $event.event)"
+      (eventTimesChanged)="eventTimesChanged($event)"
+    >
+    </mwl-calendar-day-view>
+  </div>
+  
+  <!-- Everything you see below is just for the demo, you don't need to include it in your app -->
+  
+  <br /><br /><br />
+  
+  <h3>
+    Edit events
+    <button class="btn btn-danger float-right" (click)="deleteAllEvents()">
+        Delete All
+    </button>
+    <button class="btn btn-primary float-right" (click)="addEvent()">
+        Edit A New Event
+    </button>
+    <div class="clearfix"></div>
+  </h3>
+  
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <!-- <th>Primary color</th>
+          <th>Secondary color</th> -->
+          <th>Starts at</th>
+          <th>Ends at</th>
+          <th>City</th>
+          <th>Street</th>
+          <th>Postcode</th>
+          <th>Description</th>
+          <th>Price</th>
+          <th>Modify</th>
+          <th>Remove</th>
+        </tr>
+      </thead>
+  
+      <tbody>
+        <tr *ngFor="let event of events">
+          <td>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="event.title"
+              (keyup)="refresh.next()"
+            />
+          </td>
+          <td>
+            <input
+              class="form-control"
+              type="text"
+              mwlFlatpickr
+              [(ngModel)]="event.startTime"
+              (ngModelChange)="refresh.next()"
+              [altInput]="true"
+              [convertModelValue]="true"
+              [enableTime]="true"
+              dateFormat="Y-m-dTH:i"
+              altFormat="F j, Y H:i"
+              placeholder="Not set"
+            />
+          </td>
+          <td>
+            <input
+              class="form-control"
+              type="text"
+              mwlFlatpickr
+              [(ngModel)]="event.endTime"
+              (ngModelChange)="refresh.next()"
+              [altInput]="true"
+              [convertModelValue]="true"
+              [enableTime]="true"
+              dateFormat="Y-m-dTH:i"
+              altFormat="F j, Y H:i"
+              placeholder="Not set"
+            />
+        </td>
+        <td>
+            <input
+              type="text"
+              class="col-sm"
+              [(ngModel)]="event.location.city"
+              (change)="refresh.next()"
+            />
+          </td>
+          <td>
+            <input
+              type="text"
+              class="col-sm"
+              [(ngModel)]="event.location.street"
+              (change)="refresh.next()"
+            />
+          </td>
+          <td>
+            <input
+              type="number"
+              class="col-sm"
+              [(ngModel)]="event.location.postCode"
+              (change)="refresh.next()"
+            />
+          </td>
+          <td>
+            <input
+              type="text"
+              [(ngModel)]="event.description"
+              (change)="refresh.next()"
+            />
+          </td>
+          <td>
+            <input
+              type="text"
+              class="col-sm"
+              [(ngModel)]="event.price"
+              (change)="refresh.next()"
+            />
+          </td>
+        <td>
+          <button class="btn btn-success" (click)="modifyEvent(event)" *ngIf=!event.add>
+            Modify
+          </button>
+        </td>
+          <td>
+            <button class="btn btn-danger" (click)="deleteEvent(event)" *ngIf=!event.add>
+              Delete
+            </button>
+            <button class="btn btn-primary float-right" (click)="addEventConfirm(event)" *ngIf=event.add>
+                Add 
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <ng-template #modalContent let-close="close">
+    <div class="modal-header">
+      <h5 class="modal-title">Event action occurred</h5>
+      <button type="button" class="close" (click)="close()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div>
+        Action:
+        <pre>{{ modalData?.action }}</pre>
+      </div>
+      <div>
+        Event:
+        <pre>{{ modalData?.event | json }}</pre>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="close()">
+        OK
+      </button>
+    </div>
+  </ng-template>
+
+  <p></p>
+  
