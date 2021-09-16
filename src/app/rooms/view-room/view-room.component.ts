@@ -33,10 +33,7 @@ export class ViewRoomComponent implements OnInit {
     const result = await response.json();
 
     if (result.success) {
-      console.log(result);
       this.room = result.data;
-
-      console.log(result.data.images);
     } else {
       console.error('Error occurred while retrieving room:\n', result);
     }

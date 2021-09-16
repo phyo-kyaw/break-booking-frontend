@@ -37,6 +37,8 @@ import { ViewRoomComponent } from './rooms/view-room/view-room.component';
 import { RoomListComponent } from './rooms/room-list/room-list.component';
 import { DictionaryListComponent } from './dictionaries/dictionary-list/dictionary-list.component';
 import { ViewDictionaryComponent } from './dictionaries/view-dictionary/view-dictionary.component';
+import { BookRoomComponent } from './rooms/book-room/book-room.component';
+import { RoomBookCalendarComponent } from './rooms/book-room/calendar/calendar.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +58,9 @@ import { ViewDictionaryComponent } from './dictionaries/view-dictionary/view-dic
     ViewRoomComponent,
     RoomListComponent,
     DictionaryListComponent,
-    ViewDictionaryComponent
+    ViewDictionaryComponent,
+    BookRoomComponent,
+    RoomBookCalendarComponent
   ],
   imports: [
     CommonModule,

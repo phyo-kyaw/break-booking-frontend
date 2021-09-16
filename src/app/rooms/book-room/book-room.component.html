@@ -1,0 +1,24 @@
+<div class="container">
+  <form>
+    <input type="hidden" name="roomId" [value]="roomId" />
+
+    <div class="form-group">
+      <h1 class="h3">Your contact details</h1>
+
+      <label for="name">Your name</label>
+      <input class="form-control" type="text" name="name" id="name" />
+
+      <label for="email">Email</label>
+      <input class="form-control" type="email" name="email" id="email" />
+
+      <label for="phone">Phone</label>
+      <input class="form-control" type="number" name="phone" id="phone" />
+    </div>
+  </form>
+</div>
+<app-room-book-calendar
+  *ngIf="room"
+  [preBookedTimes]="room.bookedTime"
+  [dayStartTime]="7"
+  [dayEndTime]="17"
+></app-room-book-calendar>
