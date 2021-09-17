@@ -1,24 +1,68 @@
 <div class="container">
-  <form>
-    <input type="hidden" name="roomId" [value]="roomId" />
+  <div *ngIf="room; else noRoom">
+    {{ room.id }}
+    <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+      {{ form.value | json }}
+      <input type="hidden" name="roomId" [ngModel]="room.id" />
 
-    <div class="form-group">
-      <h1 class="h3">Your contact details</h1>
+      <div ngModelGroup="contact" class="form-group">
+        <h1 class="h3">Your contact details</h1>
 
-      <label for="name">Your name</label>
-      <input class="form-control" type="text" name="name" id="name" />
+        <label for="name">Your name</label>
+        <input class="form-control" type="text" name="name" id="name" ngModel />
 
-      <label for="email">Email</label>
-      <input class="form-control" type="email" name="email" id="email" />
+        <label for="email">Email</label>
+        <input
+          class="form-control"
+          type="email"
+          name="email"
+          id="email"
+          ngModel
+        />
 
-      <label for="phone">Phone</label>
-      <input class="form-control" type="number" name="phone" id="phone" />
-    </div>
-  </form>
+        <label for="mobile">Phone</label>
+        <input
+          class="form-control"
+          type="string"
+          name="mobile"
+          id="mobile"
+          ngModel
+        />
+      </div>
+      <app-room-book-calendar
+        [preBookedTimes]="room.bookedTime"
+        [dayStartTime]="0"
+        [dayEndTime]="24"
+        (mouseReleased)="onMouseReleased($event)"
+      ></app-room-book-calendar>
+
+      <div *ngIf="selectedTimes.length">
+        <input type="hidden" [ngModel]="selectedTimes" name="bookingTime" />
+        You have selected the following times:
+
+        <ol *ngFor="let time of selectedTimes">
+          <li>
+            <!-- {{new Date()}} -->
+          </li>
+        </ol>
+      </div>
+
+      <div class="form-group">
+        <label for="remark">Comments (optional)</label>
+        <textarea
+          class="form-control"
+          name="remark"
+          id="remark"
+          rows="4"
+          ngModel
+        ></textarea>
+      </div>
+
+      <input type="submit" value="Book room" class="btn btn-primary" />
+    </form>
+  </div>
+
+  <ng-template #noRoom>
+    <p>Loading...</p>
+  </ng-template>
 </div>
-<app-room-book-calendar
-  *ngIf="room"
-  [preBookedTimes]="room.bookedTime"
-  [dayStartTime]="7"
-  [dayEndTime]="17"
-></app-room-book-calendar>

@@ -1,18 +1,14 @@
 // https://stackblitz.com/edit/no-duplicate-events-angular-calendar?file=src%2Fapp%2Fapp.component.ts
 
-import { formatDate } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  Inject,
-  Injectable,
+  EventEmitter,
   Input,
-  LOCALE_ID,
   OnInit,
-  ViewEncapsulation,
   Output,
-  EventEmitter
+  ViewEncapsulation
 } from '@angular/core';
 import {
   CalendarEvent,
@@ -199,42 +195,9 @@ export class RoomBookCalendarComponent implements OnInit {
     });
 
     // Filter out the pre booked times
+    const newEvents = formattedEvents.slice(this.preBookedTimes.length);
 
-    const newEvents = formattedEvents.filter(event => {
-      // console.log('formatted event : ', event);
-      const index = this.preBookedTimes.findIndex(preBookedEvent => {
-        console.log(preBookedEvent.start, event.start);
-        if (
-          preBookedEvent.start === event.start &&
-          preBookedEvent.end === event.end
-        ) {
-          console.log(preBookedEvent);
-          return false;
-        } else {
-          return true;
-        }
-      });
-
-      if (index > -1) {
-        return true;
-      } else {
-        return false;
-      }
-    });
-
-    // let result = temp0.filter(e => {
-    //   if (
-    //     b.findIndex(ina => {
-    //       return ina.start === e.start;
-    //     })
-    //   ) {
-    //     return false;
-    //   }
-
-    //   return true;
-    // });
-    console.log(newEvents);
-    this.mouseReleased.emit(this.events);
+    this.mouseReleased.emit(newEvents);
   }
 
   validateEventTimesChanged = (
