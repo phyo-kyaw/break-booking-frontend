@@ -7,7 +7,7 @@
         <p>Event Description: {{event.description}}</p>
         <p>Event Location: {{event.location.street}}, {{event.location.city}}, {{event.location.postCode}}</p>
     </div>
-    <div *ngIf=modifyFlag>
+    <div *ngIf=modifyFlag> 
         <div class="pt-sm-4 text-center">
             <form  (ngSubmit)="onSubmit()"  #f="ngForm">
                 <div

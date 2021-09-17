@@ -109,21 +109,18 @@
     </h3>
     
     <div class="table-responsive">
+        <!-- <app-appt-booking-a-event
+        *ngFor="let event of DataEvents; let i = index"
+        [event]="event"
+        [id]="i"></app-appt-booking-a-event> -->
+    
         <table class="table table-bordered" *ngFor="let event of DataEvents">
         <thead>
             <tr>
             <th>Title</th>
-            <!-- <th>Primary color</th>
-            <th>Secondary color</th> -->
             <th>Starts Time</th>
             <th>Ends Time</th>
-            <th>City</th>
-            <th>Street</th>
-            <th>Postcode</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th>Modify</th>
-            <th>Remove</th>
+            <th>Details</th>
             </tr>
         </thead>
     
@@ -168,6 +165,28 @@
                 />
             </td>
             <td>
+                <button class="btn btn-success col-sm-12" (click)="showDetail()" *ngIf=detail>
+                    Show Detail
+                </button>
+                <button class="btn btn-success col-sm-12" (click)="showDetail()" *ngIf=!detail>
+                    Hidden Detail
+                </button>
+            </td>
+            </tr>
+        </tbody>
+
+        <thead  *ngIf=!detail>
+            <tr>
+            <th>City</th>
+            <th>Street</th>
+            <th>Postcode</th>
+            </tr>
+        </thead>
+    
+        <tbody  *ngIf=!detail>
+            <tr>
+
+            <td>
                 <input
                 type="text"
                 class="col-sm"
@@ -191,16 +210,28 @@
                 (change)="refresh.next()"
                 />
             </td>
+            </tr>
+        </tbody>
+
+        <thead  *ngIf=!detail>
+            <tr>
+            <th>Description</th>
+            <th>Price</th>
+            <th  *ngIf=!event.add>Modify && Remove</th>
+            <!-- <th  *ngIf=!event.add>Remove</th> -->
+            <th  *ngIf=event.add>Add</th>
+            </tr>
+        </thead>
+    
+        <tbody  *ngIf=!detail>
+            <tr>
+            
             <td>
-                <!-- <input
-                type="text"
-                [(ngModel)]="event.description"
-                (change)="refresh.next()"
-                /> -->
                 <textarea
                 type="text"
                 [(ngModel)]="event.description"
-                (change)="refresh.next()"></textarea>
+                (change)="refresh.next()"
+                class="col-sm-12"></textarea>
             </td>
             <td>
                 <input
@@ -211,17 +242,15 @@
                 />
             </td>
             <td>
-            <button class="btn btn-success" (click)="modifyEvent(event)" *ngIf=!event.add>
-                Modify
+            <button class="btn btn-success float-left col-sm-6" (click)="modifyEvent(event)" *ngIf=!event.add>
+                Modify Confirm
             </button>
-            </td>
-            <td>
-                <button class="btn btn-danger" (click)="deleteEvent(event)" *ngIf=!event.add>
+            <button class="btn btn-danger float-right col-sm-6" (click)="deleteEvent(event)" *ngIf=!event.add>
                 Delete
                 </button>
-                <button class="btn btn-primary float-right" (click)="addEventConfirm(event)" *ngIf=event.add>
-                    Add 
-                </button>
+            <button class="btn btn-primary float-right col-sm-12" (click)="addEventConfirm(event)" *ngIf=event.add>
+                Add Confirm
+            </button>
             </td>
             </tr>
         </tbody>

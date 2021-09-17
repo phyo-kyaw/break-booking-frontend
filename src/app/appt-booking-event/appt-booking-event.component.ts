@@ -49,6 +49,7 @@ export class ApptBookingEventComponent implements OnInit {
     event: CalendarEvent;
   };
 
+  detail=true
   // eventsS: Event[];
 
   actions: CalendarEventAction[] = [
@@ -280,5 +281,10 @@ export class ApptBookingEventComponent implements OnInit {
   // previous/today/next 
   closeOpenMonthViewDay() {
     this.activeDayIsOpen = false;
+  }
+
+  showDetail(){
+    this.detail=!this.detail
+    console.log('aaa',this.detail)
   }
 }
