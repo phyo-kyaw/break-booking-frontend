@@ -5,6 +5,13 @@ import { ApptBookingEventComponent } from '../appt-booking-event.component';
 import {Event} from '../event.model'
 import {EventsService} from '../event.service';
 
+import {
+  CalendarEvent,
+  CalendarEventAction,
+  CalendarEventTimesChangedEvent,
+  CalendarView,
+} from 'angular-calendar';
+
 @Component({
   selector: 'app-appt-booking-a-event',
   templateUrl: './appt-booking-a-event.component.html',
@@ -18,131 +25,165 @@ export class ApptBookingAEventComponent implements OnInit {
     city: string,street: string,postCode: string,
     price:number,location:any};
   @Input() id: number;
+  @Input() add:boolean;
 
-  @ViewChild('f', { static: false }) signupForm: NgForm;
+  // @ViewChild('f', { static: false }) signupForm: NgForm;
 
-  aevent={
-    title:'',
-    bEmail:'',
-    bName:'',
-    bPhone:'',
-    description:'',
-    sTime:'',
-    eTime:'',
-    city:'',
-    postCode:'',
-    street:'',
-    price:0,
-  }
+  detail=true
+
+  // aevent={
+  //   title:'',
+  //   bEmail:'',
+  //   bName:'',
+  //   bPhone:'',
+  //   description:'',
+  //   sTime:'',
+  //   eTime:'',
+  //   city:'',
+  //   postCode:'',
+  //   street:'',
+  //   price:0,
+  //   add:false
+  // }
 
   modifyFlag=false
   constructor(private eventsService:EventsService,private updateEvent:ApptBookingEventComponent) { }
 
   ngOnInit(): void {
-    console.log('aaa',this.event)
-    this.aevent.title=this.event.title
-    this.aevent.description = this.event.description;
-    this.aevent.price = this.event.price;
+    console.log('aaa!!',this.event)
+    console.log('add',this.add)
+    // this.aevent.title=this.event.title
+    // this.aevent.description = this.event.description;
+    // this.aevent.price = this.event.price;
 
-    // this.aevent.bEmail = this.event.bEmail;
-    // this.aevent.bName = this.event.bName;
-    // this.aevent.bPhone = this.event.bPhone;
+    // // this.aevent.bEmail = this.event.bEmail;
+    // // this.aevent.bName = this.event.bName;
+    // // this.aevent.bPhone = this.event.bPhone;
     
-    this.aevent.sTime = this.event.startTime;
-    this.aevent.eTime = this.event.endTime;
+    // this.aevent.sTime = this.event.startTime;
+    // this.aevent.eTime = this.event.endTime;
 
-    this.aevent.city = this.event.location.city;
-    this.aevent.postCode = this.event.location.postCode;
-    this.aevent.street = this.event.location.street;
+    // this.aevent.city = this.event.location.city;
+    // this.aevent.postCode = this.event.location.postCode;
+    // this.aevent.street = this.event.location.street;
 
-    console.log('hi',this.event)
+    // this.aevent.add = this.event.add;
+
+    // console.log('hi',this.event)
   }
 
-  goModify(){
-    this.modifyFlag=true
+  // goModify(){
+  //   this.modifyFlag=true
+  // }
+
+  // goDelete(){
+  //   this.eventsService.deleteEvent(this.event.eid).subscribe(() => {
+  //     // this.updateEvent.getAllEvents()
+  //   });
+  //   alert('Delete Successfully')
+  // }
+
+  // noModify(){
+  //   this.modifyFlag=false
+  // }
+
+  showDetail(){
+    this.detail=!this.detail
+    console.log('aaa',this.detail)
   }
 
-  goDelete(){
-    this.eventsService.deleteEvent(this.event.eid).subscribe(() => {
-      // this.updateEvent.getAllEvents()
-    });
-    alert('Delete Successfully')
-  }
-
-  noModify(){
-    this.modifyFlag=false
-  }
-
-  onSubmit(){
-    var now = new Date().toISOString();
-    now=now.slice(0,17)
-    now=now+'60Z'
-
-    var timeIssue=false
-    if(this.signupForm.value.eventData.title!=''){
-    this.aevent.title = this.signupForm.value.eventData.title
-    }
-    if(this.signupForm.value.eventData.description!=''){
-      this.aevent.description = this.signupForm.value.eventData.description;
-    }
-    if(this.signupForm.value.eventData.price!=''){
-      this.aevent.price = this.signupForm.value.eventData.price;
-    }
-
-    // this.aevent.bEmail = this.signupForm.value.eventData.bEmail;
-    // this.aevent.bName = this.signupForm.value.eventData.bName;
-    // this.aevent.bPhone = this.signupForm.value.eventData.bPhone;
-
-    if(this.signupForm.value.eventData.sTime!=''){
-      if(this.signupForm.value.eventData.ssTime!=''){
-        // timeIssue=false
-        this.aevent.sTime = this.signupForm.value.eventData.sTime+'T'+this.signupForm.value.eventData.ssTime+':30'+'Z';
-      }
-      else{
-        timeIssue=true
-        alert("Please choose a start time")
-      }
-    }
-    if(this.signupForm.value.eventData.eTime!=''){
-      if(this.signupForm.value.eventData.eeTime!=''){
-        // timeIssue=false
-        this.aevent.eTime = this.signupForm.value.eventData.eTime+'T'+this.signupForm.value.eventData.eeTime+':30'+'Z';
-      }
-      else{
-        timeIssue=true
-        alert("Please choose a end time")
-      }
-    }
-
-    if(this.aevent.sTime<now){
-      timeIssue=true
-      alert('This event cannot start before the current time')
-    }
-    else if(this.aevent.eTime<this.aevent.sTime){
-      timeIssue=true
+  modifyEvent(event){
+    console.log('hi modify',event)
+    if(event.startTime>event.endTime){
       alert("The end time cannot be earlier than the start time!")
+      this.updateEvent.getAllEvents()
+      return
     }
+    this.eventsService.modifyEvent(event.eid,event.title,event.price,event.startTime,event.endTime,
+      // this.event.bEmail,this.event.bName,this.event.bPhone,
+      event.location.city,event.location.postCode,event.location.street,
+      event.description).subscribe(()=>{
+        this.updateEvent.getAllEvents()
+      })
+  }
 
-    if(this.signupForm.value.eventData.city!=''){
-      this.aevent.city = this.signupForm.value.eventData.city;
+  addEventConfirm(event){
+    console.log('Add',event)
+    console.log('aasdsadsa',event.startTime)
+    if(event.startTime>event.endTime){
+      alert("The end time cannot be earlier than the start time!")
+      return
     }
-    if(this.signupForm.value.eventData.postCode!=''){
-      this.aevent.postCode = this.signupForm.value.eventData.postCode;
+    if(event.title==""){
+      alert("Event Title cannot be empty!")
+      return
     }
-    if(this.signupForm.value.eventData.street!=''){
-      this.aevent.street = this.signupForm.value.eventData.street;
+    let start,startM,startD,startH,startMi
+    let end,endM,endD,endH,endMi
+    if((event.startTime.getMonth()+1)<10){
+      startM='0'+(event.startTime.getMonth()+1)
     }
+    else{
+      startM=event.startTime.getMonth()+1
+    }
+    if((event.startTime.getDate())<10){
+      startD='0'+(event.startTime.getDate())
+    }
+    else{
+      startD=event.startTime.getDate()
+    }
+    if((event.startTime.getHours())<10){
+      startH='0'+(event.startTime.getHours())
+    }
+    else{
+      startH=event.startTime.getHours()
+    }
+    if((event.startTime.getMinutes())<10){
+      startMi='0'+(event.startTime.getMinutes())
+    }
+    else{
+      startMi=event.startTime.getMinutes()
+    }
+    start=event.startTime.getFullYear()+'-'+startM+'-'+startD+'T'+startH+':'+startD+':30'
 
-    if(!timeIssue){
-      this.eventsService.modifyEvent(this.event.eid,this.aevent.title,this.aevent.price,this.aevent.sTime,this.aevent.eTime,
-        // this.event.bEmail,this.event.bName,this.event.bPhone,
-        this.aevent.city,this.aevent.postCode,this.aevent.street,
-        this.aevent.description).subscribe(()=>{
-          // this.updateEvent.getAllEvents()
-        })
-  
-      this.signupForm.reset();
-      this.modifyFlag=false
+    if((event.endTime.getMonth()+1)<10){
+      endM='0'+(event.endTime.getMonth()+1)
     }
+    else{
+      endM=event.endTime.getMonth()+1
+    }
+    if((event.endTime.getDate())<10){
+      endD='0'+(event.endTime.getDate())
+    }
+    else{
+      endD=event.endTime.getDate()
+    }
+    if((event.endTime.getHours())<10){
+      endH='0'+(event.endTime.getHours())
+    }
+    else{
+      endH=event.endTime.getHours()
+    }
+    if((event.endTime.getMinutes())<10){
+      endMi='0'+(event.endTime.getMinutes())
+    }
+    else{
+      endMi=event.endTime.getMinutes()
+    }
+    end=event.endTime.getFullYear()+'-'+endM+'-'+endD+'T'+endH+':'+endMi+':30'
+    this.eventsService.addNewEvent(event.title,event.price,start,end,
+      // this.event.bEmail,this.event.bName,this.event.bPhone,
+      event.location.city,event.location.postCode,event.location.street,
+      event.description).subscribe(()=>{
+        this.updateEvent.getAllEvents()
+      })
+  }
+
+  deleteEvent(event,eventToDelete: CalendarEvent) {
+    console.log('hi Delete',event)
+    this.eventsService.deleteEvent(event.eid).subscribe(()=>{
+      this.updateEvent.getAllEvents()
+    })
+    this.updateEvent.events = this.updateEvent.events.filter((event) => event !== eventToDelete);
   }
 }

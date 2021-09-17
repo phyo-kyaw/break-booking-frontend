@@ -9,6 +9,7 @@ import { map, catchError, tap } from 'rxjs/operators';
 import { Subject, throwError } from 'rxjs';
 
 import { Event } from './event.model';
+import { add } from 'date-fns';
 
 @Injectable({ providedIn: 'root' })
 export class EventsService {
@@ -68,7 +69,7 @@ export class EventsService {
       price: price,
       startTime:startTime,
       // startTime:"2021-09-01T16:24:30",
-      title: title
+      title: title,
     }
     return this.http
       .post(

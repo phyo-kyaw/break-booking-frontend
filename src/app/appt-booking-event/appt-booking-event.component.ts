@@ -75,6 +75,8 @@ export class ApptBookingEventComponent implements OnInit {
 
   DataEvents=[]
 
+  lenEvent=false
+
   activeDayIsOpen: boolean = true;
 
   constructor(private modal: NgbModal,private http: HttpClient, private eventsService:EventsService) {}
@@ -89,6 +91,9 @@ export class ApptBookingEventComponent implements OnInit {
         console.log('hi,there,getall',posts)
         this.DataEvents=posts
         this.events=[]
+        if(this.DataEvents.length==0){
+          this.lenEvent=true
+        }
         for (let i = 0; i < this.DataEvents.length; i++) {
           console.log('hi',i)
           this.events = [
@@ -169,103 +174,9 @@ export class ApptBookingEventComponent implements OnInit {
         add:true
       },
     ];
+    this.lenEvent=false
   }
-  addEventConfirm(event){
-    console.log('Add',event)
-    console.log('aasdsadsa',event.startTime)
-    if(event.startTime>event.endTime){
-      alert("The end time cannot be earlier than the start time!")
-      return
-    }
-    if(event.title==""){
-      alert("Event Title cannot be empty!")
-      return
-    }
-    let start,startM,startD,startH,startMi
-    let end,endM,endD,endH,endMi
-    if((event.startTime.getMonth()+1)<10){
-      startM='0'+(event.startTime.getMonth()+1)
-    }
-    else{
-      startM=event.startTime.getMonth()+1
-    }
-    if((event.startTime.getDate())<10){
-      startD='0'+(event.startTime.getDate())
-    }
-    else{
-      startD=event.startTime.getDate()
-    }
-    if((event.startTime.getHours())<10){
-      startH='0'+(event.startTime.getHours())
-    }
-    else{
-      startH=event.startTime.getHours()
-    }
-    if((event.startTime.getMinutes())<10){
-      startMi='0'+(event.startTime.getMinutes())
-    }
-    else{
-      startMi=event.startTime.getMinutes()
-    }
-    start=event.startTime.getFullYear()+'-'+startM+'-'+startD+'T'+startH+':'+startD+':30'
-
-    if((event.endTime.getMonth()+1)<10){
-      endM='0'+(event.endTime.getMonth()+1)
-    }
-    else{
-      endM=event.endTime.getMonth()+1
-    }
-    if((event.endTime.getDate())<10){
-      endD='0'+(event.endTime.getDate())
-    }
-    else{
-      endD=event.endTime.getDate()
-    }
-    if((event.endTime.getHours())<10){
-      endH='0'+(event.endTime.getHours())
-    }
-    else{
-      endH=event.endTime.getHours()
-    }
-    if((event.endTime.getMinutes())<10){
-      endMi='0'+(event.endTime.getMinutes())
-    }
-    else{
-      endMi=event.endTime.getMinutes()
-    }
-    end=event.endTime.getFullYear()+'-'+endM+'-'+endD+'T'+endH+':'+endMi+':30'
-    this.eventsService.addNewEvent(event.title,event.price,start,end,
-      // this.event.bEmail,this.event.bName,this.event.bPhone,
-      event.location.city,event.location.postCode,event.location.street,
-      event.description).subscribe(()=>{
-        this.getAllEvents()
-      })
-  }
-
-  //delete
-  deleteEvent(event,eventToDelete: CalendarEvent) {
-    console.log('hi Delete',event)
-    this.eventsService.deleteEvent(event.eid).subscribe(()=>{
-      this.getAllEvents()
-    })
-    this.events = this.events.filter((event) => event !== eventToDelete);
-  }
-
-  modifyEvent(event){
-    console.log('hi modify',event)
-    if(event.startTime>event.endTime){
-      alert("The end time cannot be earlier than the start time!")
-      this.getAllEvents()
-      return
-    }
-    this.eventsService.modifyEvent(event.eid,event.title,event.price,event.startTime,event.endTime,
-      // this.event.bEmail,this.event.bName,this.event.bPhone,
-      event.location.city,event.location.postCode,event.location.street,
-      event.description).subscribe(()=>{
-        this.getAllEvents()
-      })
-  }
-
+  
   deleteAllEvents(){
     this.eventsService.deleteAll().subscribe(()=>{
       this.getAllEvents()
