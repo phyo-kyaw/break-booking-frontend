@@ -20,6 +20,7 @@ import { WeekViewHourSegment } from 'calendar-utils';
 import { addDays, addMinutes, endOfWeek, isSameDay } from 'date-fns';
 import { fromEvent, Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
+import * as dayjs from 'dayjs';
 
 // @Injectable()
 // export class CustomEventTitleFormatter extends CalendarEventTitleFormatter {
@@ -41,6 +42,7 @@ function floorToNearest(amount: number, precision: number) {
 function ceilToNearest(amount: number, precision: number) {
   return Math.ceil(amount / precision) * precision;
 }
+const dateFormat = 'YYYY-MM-DD[T]HH:mm:ss'; // example:  2021-09-19T06:00:00
 
 @Component({
   selector: 'app-room-book-calendar',
@@ -189,8 +191,8 @@ export class RoomBookCalendarComponent implements OnInit {
     // Format string to ISO 8601 without miliseconds
     const formattedEvents = this.events.map(event => {
       return {
-        start: event.start.toISOString().split('.')[0],
-        end: event.end.toISOString().split('.')[0]
+        start: dayjs(event.start).format(dateFormat),
+        end: dayjs(event.end).format(dateFormat)
       };
     });
 
