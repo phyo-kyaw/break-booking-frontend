@@ -78,8 +78,13 @@ export class RoomBookCalendarComponent implements OnInit {
     startWeekday: number;
   }[];
   data: any;
+
   constructor(private cdr: ChangeDetectorRef) {}
-  resetEvents = () => (this.events = this.createAlreadyBookedEvents());
+
+  resetEvents = () => {
+    this.mouseReleased.emit([]);
+    this.events = this.createAlreadyBookedEvents();
+  };
 
   ngOnInit() {
     this.events = this.createAlreadyBookedEvents();
@@ -244,7 +249,7 @@ export class RoomBookCalendarComponent implements OnInit {
   eventTimesChanged(
     eventTimesChangedEvent: CalendarEventTimesChangedEvent
   ): void {
-    console.log(eventTimesChangedEvent);
+    // console.log(eventTimesChangedEvent);
     delete eventTimesChangedEvent.event.cssClass;
     if (this.validateEventTimesChanged(eventTimesChangedEvent, true)) {
       const { event, newStart, newEnd } = eventTimesChangedEvent;

@@ -1,29 +1,32 @@
 <div class="row">
   <div class="col-md-6">
     <div class="btn-group">
-      <div
+      <button
         class="btn btn-primary"
         mwlCalendarPreviousView
         [view]="'week'"
         [(viewDate)]="viewDate"
+        type="button"
       >
-        Previous
-      </div>
-      <div
+        Previous week
+      </button>
+      <button
         class="btn btn-outline-secondary"
         mwlCalendarToday
         [(viewDate)]="viewDate"
+        type="button"
       >
-        Today
-      </div>
-      <div
+        Current week
+      </button>
+      <button
         class="btn btn-primary"
         mwlCalendarNextView
         [view]="'week'"
         [(viewDate)]="viewDate"
+        type="button"
       >
-        Next
-      </div>
+        Next week
+      </button>
     </div>
   </div>
   <div class="col-md-6 text-right">
@@ -69,6 +72,10 @@
 >
 </mwl-calendar-week-view>
 
-<button (click)="resetEvents()" class="btn btn-outline-primary mt-2">
+<button
+  *ngIf="events.length > preBookedTimes.length"
+  (click)="resetEvents()"
+  class="btn btn-outline-danger mt-2"
+>
   Clear calendar selection
 </button>
