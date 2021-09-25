@@ -13,14 +13,15 @@ import {
 import {
   CalendarEvent,
   CalendarEventTimesChangedEvent,
-  CalendarEventTitleFormatter
+  CalendarEventTitleFormatter,
+  CalendarWeekViewBeforeRenderEvent
 } from 'angular-calendar';
 import { colors } from 'app/appt-booking-utils/colors';
 import { WeekViewHourSegment } from 'calendar-utils';
 import { addDays, addMinutes, endOfWeek, isSameDay } from 'date-fns';
+import * as dayjs from 'dayjs';
 import { fromEvent, Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
-import * as dayjs from 'dayjs';
 
 // @Injectable()
 // export class CustomEventTitleFormatter extends CalendarEventTitleFormatter {
@@ -78,8 +79,25 @@ export class RoomBookCalendarComponent implements OnInit {
     startWeekday: number;
   }[];
   data: any;
+  minDate: Date = new Date();
 
   constructor(private cdr: ChangeDetectorRef) {}
+
+  dateIsValid(date: Date): boolean {
+    return date >= this.minDate;
+  }
+
+  beforeViewRender(body: CalendarWeekViewBeforeRenderEvent): void {
+    body.hourColumns.forEach(hourCol => {
+      hourCol.hours.forEach(hour => {
+        hour.segments.forEach(segment => {
+          if (!this.dateIsValid(segment.date)) {
+            segment.cssClass = 'cal-disabled';
+          }
+        });
+      });
+    });
+  }
 
   resetEvents = () => {
     this.mouseReleased.emit([]);
@@ -211,6 +229,8 @@ export class RoomBookCalendarComponent implements OnInit {
     { event, newStart, newEnd, allDay }: any,
     addCssClass = true
   ) => {
+    this.refresh();
+
     if (event.allDay) {
       return true;
     }
@@ -240,6 +260,11 @@ export class RoomBookCalendarComponent implements OnInit {
           this.eventOverlap = false;
         }, 2000);
       }
+      return false;
+    }
+
+    // Don't allow dragging to the past
+    if (!this.dateIsValid(newStart) || !this.dateIsValid(newEnd)) {
       return false;
     }
 

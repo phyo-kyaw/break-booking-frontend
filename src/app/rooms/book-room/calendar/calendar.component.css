@@ -1,0 +1,4 @@
+.cal-disabled {
+  background-color: #eee;
+  pointer-events: none;
+}
