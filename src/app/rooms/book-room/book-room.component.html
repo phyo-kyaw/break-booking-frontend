@@ -139,7 +139,7 @@
         ></textarea>
       </div>
 
-      <input type="submit" value="Book room" class="btn btn-primary" />
+      <input type="submit" value="Proceed to payment" class="btn btn-primary" />
     </form>
   </div>
 
@@ -147,12 +147,8 @@
     <p>There was an error while trying to get the room.</p>
   </ng-template>
 
-  <div class="loading" *ngIf="isLoading">
-    <div class="spinner-border text-primary" role="status">
-      <span class="sr-only"></span>
-    </div>
-    <span class="h4 mt-2">
-      {{ spinnerScreenText }}
-    </span>
-  </div>
+  <app-loading-screen
+    [isLoading]="isLoading"
+    [text]="spinnerScreenText"
+  ></app-loading-screen>
 </div>

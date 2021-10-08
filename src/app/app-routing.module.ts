@@ -13,6 +13,8 @@ import { RoomListComponent } from './rooms/room-list/room-list.component';
 import { DictionaryListComponent } from './dictionaries/dictionary-list/dictionary-list.component';
 import { ViewDictionaryComponent } from './dictionaries/view-dictionary/view-dictionary.component';
 import { BookRoomComponent } from './rooms/book-room/book-room.component';
+import { RoomPaymentComponent } from './rooms/book-room/room-payment/room-payment.component';
+import { PaymentSuccessComponent } from './rooms/book-room/payment-success/payment-success.component';
 
 const routes: Routes = [
   //{ path: 'select', component: CalendarSelComponent },
@@ -62,6 +64,14 @@ const routes: Routes = [
   {
     path: 'rooms/book/:id',
     component: BookRoomComponent
+  },
+  {
+    path: 'rooms/payment/:id',
+    component: RoomPaymentComponent
+  },
+  {
+    path: 'rooms/payment/success/:bookingId',
+    component: PaymentSuccessComponent
   }
 ];
 

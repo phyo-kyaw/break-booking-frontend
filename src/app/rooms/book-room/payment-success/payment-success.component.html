@@ -1,0 +1,36 @@
+<div class="container">
+  <div *ngIf="bookingDetails; else noBookingFound">
+    <h1>Your payment was successful</h1>
+
+    <h2 class="h3 mb-3">Here are your booking details:</h2>
+
+    <p>
+      <strong>Location:</strong> Room {{ bookingDetails.room.roomNumber }},
+      {{ bookingDetails.room.address }}, {{ bookingDetails.room.city }}
+    </p>
+
+    <p>
+      <strong>Booking duration:</strong>
+      {{ bookingDetails.totalHours }} hr{{
+        bookingDetails.totalHours > 1 ? 's' : ''
+      }}
+    </p>
+
+    <p>
+      <strong>
+        Booking start: {{ formatDate(bookingDetails.bookedTime) }}
+      </strong>
+    </p>
+
+    our comment for us: {{ bookingDetails.remark }}
+  </div>
+
+  <ng-template #noBookingFound>
+    {{ bookingStatus }}
+  </ng-template>
+
+  <app-loading-screen
+    [isLoading]="isLoading"
+    [text]="loadingText"
+  ></app-loading-screen>
+</div>

@@ -39,6 +39,9 @@ import { DictionaryListComponent } from './dictionaries/dictionary-list/dictiona
 import { ViewDictionaryComponent } from './dictionaries/view-dictionary/view-dictionary.component';
 import { BookRoomComponent } from './rooms/book-room/book-room.component';
 import { RoomBookCalendarComponent } from './rooms/book-room/calendar/calendar.component';
+import { RoomPaymentComponent } from './rooms/book-room/room-payment/room-payment.component';
+import { LoadingScreenComponent } from './misc/loading-screen/loading-screen.component';
+import { PaymentSuccessComponent } from './rooms/book-room/payment-success/payment-success.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +63,10 @@ import { RoomBookCalendarComponent } from './rooms/book-room/calendar/calendar.c
     DictionaryListComponent,
     ViewDictionaryComponent,
     BookRoomComponent,
-    RoomBookCalendarComponent
+    RoomBookCalendarComponent,
+    RoomPaymentComponent,
+    LoadingScreenComponent,
+    PaymentSuccessComponent
   ],
   imports: [
     CommonModule,

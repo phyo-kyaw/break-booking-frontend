@@ -403,19 +403,10 @@
   {{ gettingRoomInfo }}
 </ng-template>
 
-<div
-  class="
-    loading-screen
-    d-flex
-    flex-column
-    align-items-center
-    justify-content-center
-  "
-  [class.d-none]="!isLoading"
->
-  <div class="h1">{{ fetchStatusForUser }}</div>
-  <div class="spinner-border text-primary mt-4" role="status"></div>
-</div>
+<app-loading-screen
+  [isLoading]="isLoading"
+  [text]="fetchStatusForUser"
+></app-loading-screen>
 
 <ng-template #errorOccurredModal let-modal>
   <div class="modal-header">

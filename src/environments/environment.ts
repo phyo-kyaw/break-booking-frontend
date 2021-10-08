@@ -8,7 +8,8 @@ export const environment = {
   homeUrl: 'http://localhost:8080',
   roomsApi: `${baseApiUrl}:8081/api/v1/app/rooms`,
   dictApi: `${baseApiUrl}:8086/api/v1/dicts`, // dictionaries
-  roomBooking: `${baseApiUrl}:8081/api/v1/app/bookings` // room booking controller
+  roomBooking: `${baseApiUrl}:8081/api/v1/app/bookings`, // room booking controller
+  roomPayment: `${baseApiUrl}:8084/api/v1/payment`
   //backendhomeUrl: 'break-booking.online/api'
 };
 

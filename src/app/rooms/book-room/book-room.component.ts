@@ -76,10 +76,9 @@ export class BookRoomComponent implements OnInit {
   }
 
   onSubmit(f: NgForm) {
-    console.log(f.form.value);
     if (f.valid) {
       this.isLoading = true;
-      this.spinnerScreenText = 'Saving room...';
+      this.spinnerScreenText = 'Saving the booking...';
 
       fetch(`${env.roomBooking}/add`, {
         method: 'POST',
@@ -91,14 +90,16 @@ export class BookRoomComponent implements OnInit {
       })
         .then(response => response.json())
         .then(result => {
+          console.log(result);
           if (result.success) {
             this.spinnerScreenText = 'Booking successful. Redirecting...';
 
             setTimeout(() => {
-              this.router.navigateByUrl('/rooms');
+              this.router.navigateByUrl(`/rooms/payment/${result.data.id}`);
             }, 1500);
+          } else {
+            console.error('result of booking reservation', result);
           }
-          console.log('reuslt:', result);
         })
         .catch(error =>
           console.error(
