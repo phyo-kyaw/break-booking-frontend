@@ -17,6 +17,9 @@ export class BookRoomComponent implements OnInit {
   selectedTimes: BookedTime[] = [];
   spinnerScreenText = 'Loading...';
   isLoading = true;
+  error =
+    'Your booking is not saved. Please check the highlighted fields and fix problems before submitting again.';
+  isError = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -99,14 +102,22 @@ export class BookRoomComponent implements OnInit {
             }, 1500);
           } else {
             console.error('result of booking reservation', result);
+            this.isError = true;
+            this.error = result.message;
+            this.isLoading = false;
+            setTimeout(() => {
+              this.viewportScroller.scrollToAnchor('alert');
+            }, 0);
           }
         })
-        .catch(error =>
+        .catch(error => {
           console.error(
             'An error occurred while trying to connecet to the API to book the room',
             error
-          )
-        );
+          );
+          this.isError = true;
+          this.error = 'An error occurred on our end. Please try again later.';
+        });
     } else {
       // Not all fields are valid, tell user to fix the inputs
       setTimeout(() => {

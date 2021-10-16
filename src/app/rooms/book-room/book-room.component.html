@@ -4,10 +4,11 @@
       <div
         class="alert alert-danger"
         id="alert"
-        [class.d-block]="form.submitted && form.form.status === 'INVALID'"
+        [class.d-block]="
+          (form.submitted && form.form.status === 'INVALID') || isError
+        "
       >
-        Your booking is not saved. Please check the highlighted fields and fix
-        problems before submitting again.
+        {{ error }} If you think this is a mistake, please contact us.
       </div>
       <input type="hidden" name="roomId" [ngModel]="room.id" />
 

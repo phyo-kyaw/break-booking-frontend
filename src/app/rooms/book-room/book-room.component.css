@@ -5,6 +5,10 @@
 
 #alert {
   display: none;
+  text-transform: ;
+}
+#alert::first-letter {
+  text-transform: uppercase;
 }
 
 .user-input-notification {
