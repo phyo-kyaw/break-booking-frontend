@@ -3,6 +3,7 @@ import { create as createDropUI } from 'braintree-web-drop-in';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoomBookingService } from 'app/service/room-booking/room-booking.service';
 import { RoomPaymentService } from 'app/service/room-payment/room-payment.service';
+import { ViewportScroller } from '@angular/common';
 
 @Component({
   selector: 'app-room-payment',
@@ -10,7 +11,7 @@ import { RoomPaymentService } from 'app/service/room-payment/room-payment.servic
   styleUrls: ['./room-payment.component.css']
 })
 export class RoomPaymentComponent implements OnInit {
-  roomStatus: string = 'Getting payment information...';
+  paymentStatus: string = 'Getting payment information...';
   isLoading = true;
   loadingScreenText = 'Getting payment information...';
   bookingDetails = null;
@@ -20,13 +21,18 @@ export class RoomPaymentComponent implements OnInit {
   token: string;
   dropUiInstance = null;
   dropUiCreateError = null;
+  error = '';
+  isError = false;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private _bookingService: RoomBookingService,
-    private _paymentService: RoomPaymentService
-  ) {}
+    private _paymentService: RoomPaymentService,
+    private viewportScroller: ViewportScroller
+  ) {
+    this.viewportScroller.setOffset([0, 70]);
+  }
 
   ngOnInit(): void {
     this.getBookingDetails();
@@ -42,7 +48,7 @@ export class RoomPaymentComponent implements OnInit {
             this.bookingDetails = response.data;
           } else {
             // Something went wrong with getting the room
-            this.roomStatus =
+            this.paymentStatus =
               'Sorry, the booking you requested was not found. You may need to create a new booking.';
             console.error(
               'An error occurred while trying to fetch the room:\n',
@@ -52,7 +58,7 @@ export class RoomPaymentComponent implements OnInit {
         },
         error => {
           // Something went wrong when connecting to the API
-          this.roomStatus =
+          this.paymentStatus =
             'An error occurred on our end. Please try again later.';
           console.error(
             'An error occurred while trying to connecet to the API to get the room',
@@ -79,6 +85,10 @@ export class RoomPaymentComponent implements OnInit {
             (createErr, instance) => {
               if (createErr) {
                 console.error('Error occurred while initializing Drop UI');
+                this.isError = true;
+                this.error =
+                  'An error occurred while processing the payment form.';
+
                 return;
               }
 
@@ -87,13 +97,21 @@ export class RoomPaymentComponent implements OnInit {
             }
           );
         } else {
-          // Something went wrong with getting the room
-          this.roomStatus =
+          // Something is wrong with the payment details
+
+          this.isError = true;
+          this.error = response.message
+            ? response.message
+            : 'An error occurred while processing your payment.';
+          this.paymentStatus =
             'Sorry, an error occurred on our end. Please try again later.';
           console.error(
             'An error occurred while trying to get the payment token:\n',
             response
           );
+          setTimeout(() => {
+            this.viewportScroller.scrollToAnchor('alert');
+          }, 0);
         }
       },
       error => {
@@ -102,6 +120,13 @@ export class RoomPaymentComponent implements OnInit {
           'An error occurred while trying to connect to the API for the payment token:\n',
           error
         );
+        this.isError = true;
+        this.error = error.message
+          ? error.message
+          : 'An error occurred while processing your payment.';
+        setTimeout(() => {
+          this.viewportScroller.scrollToAnchor('alert');
+        }, 0);
       },
       () => {
         this.isLoading = false;
@@ -127,6 +152,11 @@ export class RoomPaymentComponent implements OnInit {
             'An error occurred with payment methods\n',
             requestPaymentMethodErr
           );
+          this.isError = true;
+          this.error = 'An error occurred while processing your payment.';
+          setTimeout(() => {
+            this.viewportScroller.scrollToAnchor('alert');
+          }, 0);
           return;
         }
 
@@ -153,13 +183,17 @@ export class RoomPaymentComponent implements OnInit {
                   );
                 }, 1500);
               } else {
-                // Something went wrong with getting the room
-                this.roomStatus =
+                // Something went wrong with getting the paymen info
+                this.isError = true;
+                this.error =
                   'Sorry, an error occurred on our end. Please try again later.';
                 console.error(
                   'An error occurred while trying to get the payment token:\n',
                   response
                 );
+                setTimeout(() => {
+                  this.viewportScroller.scrollToAnchor('alert');
+                }, 0);
               }
             },
             error => {

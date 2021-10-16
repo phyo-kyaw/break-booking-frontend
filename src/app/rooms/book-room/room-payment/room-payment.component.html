@@ -1,6 +1,8 @@
-<script src="https://js.braintreegateway.com/web/dropin/1.31.2/js/dropin.min.js"></script>
-
 <div class="container">
+  <div class="alert alert-danger" id="alert" [class.d-block]="isError">
+    {{ error }} If you think this is a mistake, please contact us.
+  </div>
+
   <div *ngIf="bookingDetails; else noBookingDetailsFound">
     <h1>Payment for your booking reservation</h1>
     <p>You must pay within 10 minutes or risk losing your booking.</p>
