@@ -1,6 +1,6 @@
 <div class="container">
   <div *ngIf="room !== null; else roomNotFound">
-    <div class="row align-items-center mb-3">
+    <div class="row align-items-center mb-2">
       <h1 class="col-10 room-title mb-0">
         {{ room.title }}
       </h1>
@@ -12,47 +12,38 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="col">
-        <address>
-          <span *ngIf="isNumber(room.floor)">Floor {{ 1 }},</span>
-          Room {{ room.roomNumber }}, {{ room.address
-          }}<span *ngIf="room.city.trim().length">, {{ room.city }}</span>
-        </address>
+    <div class="row mb-3">
+      <div class="col d-flex room-details">
+        <span class="d-flex align-items-center">
+          <mat-icon
+            aria-hidden="false"
+            aria-label="User rating"
+            class="tiny text-success"
+            >star_rate</mat-icon
+          >
+          {{ room.rating }}
+        </span>
+
+        <span class="ml-2 d-flex align-items-center">
+          <mat-icon
+            aria-hidden="false"
+            aria-label="Room location"
+            class="tiny text-success"
+            >room</mat-icon
+          >
+          <address class="mb-0">
+            <span *ngIf="isNumber(room.floor)">Floor {{ room.floor }},</span>
+            Room {{ room.roomNumber }}, {{ room.address
+            }}<span *ngIf="room.city.trim().length">, {{ room.city }}</span>
+          </address>
+        </span>
       </div>
     </div>
 
-    <div class="row" *ngIf="room.description.trim().length">
-      <div class="col">
-        <p>Description: {{ room.description }}</p>
-      </div>
-    </div>
-
-    <div class="row" *ngIf="room.price">
-      <div class="col">
-        <p><strong>Price:</strong> ${{ room.price }}/hr</p>
-      </div>
-    </div>
-
-    <div class="row" *ngIf="room.size">
-      <div class="col">
-        <p><strong>Size:</strong> {{ room.size }}m&#xB2;</p>
-      </div>
-    </div>
-
-    <div class="row" *ngIf="room.maxPeople">
-      <div class="col">
-        <p><strong>Max people in room</strong>: {{ room.maxPeople }}</p>
-      </div>
-    </div>
-
-    <div class="row" *ngIf="room.rating">
-      <div class="col">
-        <p>Rating: {{ room.rating }}</p>
-      </div>
-    </div>
-
-    <div class="row" *ngIf="room.images !== null && room.images.length">
+    <div
+      class="row mb-3 carousel"
+      *ngIf="room.images !== null && room.images.length"
+    >
       <div class="col">
         <ngb-carousel>
           <ng-template *ngFor="let image of room.images" ngbSlide>
@@ -63,9 +54,113 @@
         </ngb-carousel>
       </div>
     </div>
+
+    <div class="row" *ngIf="room.description.trim().length">
+      <div class="col">
+        <p class="description h4">{{ room.description }}</p>
+      </div>
+    </div>
+
+    <div class="row mt-2">
+      <div class="col d-flex align-items-center">
+        <mat-icon
+          aria-hidden="false"
+          aria-label="Availability"
+          title="Room availability"
+          class="mr-3 larger text-success"
+          >{{ outputRoomTypeIcon(room.type) }}</mat-icon
+        >
+        <p class="mb-0">
+          {{ room.type }}
+        </p>
+      </div>
+    </div>
+
+    <div class="row mt-2">
+      <div class="col d-flex align-items-center">
+        <mat-icon
+          aria-hidden="false"
+          aria-label="Price"
+          title="Price"
+          class="mr-3 larger text-success"
+          >attach_money</mat-icon
+        >
+        <p class="mb-0">{{ formatPrice(room.price) }} / hour</p>
+      </div>
+    </div>
+
+    <div class="row mt-2">
+      <div class="col d-flex align-items-center">
+        <mat-icon
+          aria-hidden="false"
+          aria-label="Availability"
+          title="Room availability"
+          class="mr-3 larger text-success"
+          >event</mat-icon
+        >
+        <p class="mb-0">
+          {{ availTypeToWords(room.availableType) }} availability
+        </p>
+      </div>
+    </div>
+
+    <div class="row mt-2">
+      <div class="col d-flex align-items-center">
+        <mat-icon
+          aria-hidden="false"
+          aria-label="Max people in room"
+          title="Max people in room"
+          class="mr-3 larger text-success"
+          >people</mat-icon
+        >
+        <p class="mb-0">{{ room.maxPeople }} people in room</p>
+      </div>
+    </div>
+
+    <div class="row mt-2">
+      <div class="col d-flex align-items-center">
+        <mat-icon
+          aria-hidden="false"
+          aria-label="Room size"
+          title="Room size"
+          class="mr-3 larger text-success"
+          >straighten</mat-icon
+        >
+        <p class="mb-0">{{ room.size }} m&#178; room size</p>
+      </div>
+    </div>
+
+    <div class="row mt-2" *ngIf="room.facilities.length > 0">
+      <div class="col d-flex align-items-center">
+        <mat-icon
+          aria-hidden="false"
+          aria-label="Facilities"
+          title="Facilities"
+          class="mr-3 larger text-success"
+          >room_preferences</mat-icon
+        >
+        <p class="mb-0">
+          Facilities:
+          <span *ngFor="let item of room.facilities; let i = index"
+            >{{ item }}{{ i + 1 < room.facilities.length ? ', ' : '' }}
+          </span>
+        </p>
+      </div>
+    </div>
   </div>
 
   <ng-template #roomNotFound>
     {{ roomFetchStatus }}
   </ng-template>
+
+  <div *ngIf="isError">
+    <h1 class="h3">
+      {{ errorText }}
+    </h1>
+  </div>
+
+  <app-loading-screen
+    [isLoading]="isLoading"
+    [text]="loadingText"
+  ></app-loading-screen>
 </div>
