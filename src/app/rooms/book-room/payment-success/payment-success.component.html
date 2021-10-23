@@ -10,19 +10,22 @@
     </p>
 
     <p>
-      <strong>Booking duration:</strong>
+      <strong>Total hours booked:</strong>
       {{ bookingDetails.totalHours }} hr{{
-        bookingDetails.totalHours > 1 ? 's' : ''
+        pluralHours(bookingDetails.totalHours)
       }}
     </p>
 
-    <p>
-      <strong>
-        Booking start: {{ formatDate(bookingDetails.bookedTime) }}
-      </strong>
-    </p>
+    <strong>Booking details:</strong>
+    <ul>
+      <li *ngFor="let time of bookingDetails.bookedTime">
+        {{ formatDate(time) }}
+      </li>
+    </ul>
 
-    our comment for us: {{ bookingDetails.remark }}
+    <p *ngIf="bookingDetails.remark">
+      <strong>Your comment for us:</strong> {{ bookingDetails.remark }}
+    </p>
   </div>
 
   <ng-template #noBookingFound>

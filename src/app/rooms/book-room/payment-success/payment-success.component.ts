@@ -63,4 +63,8 @@ export class PaymentSuccessComponent implements OnInit {
       dayjs(times.end).format('ha')
     );
   }
+
+  pluralHours(hours: number) {
+    if (hours > 1) return 's';
+  }
 }
