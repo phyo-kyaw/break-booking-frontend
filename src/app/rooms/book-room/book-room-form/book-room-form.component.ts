@@ -3,16 +3,16 @@ import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoomService } from 'app/service/rooms/room.service';
 import { environment as env } from 'environments/environment';
-import { Room } from '../model/room';
+import { Room } from '../../model/room';
 import * as dayjs from 'dayjs';
 import { ViewportScroller } from '@angular/common';
 
 @Component({
   selector: 'app-book-room',
-  templateUrl: './book-room.component.html',
-  styleUrls: ['./book-room.component.css']
+  templateUrl: './book-room-form.component.html',
+  styleUrls: ['./book-room-form.component.css']
 })
-export class BookRoomComponent implements OnInit {
+export class BookRoomFormComponent implements OnInit {
   room: Room;
   selectedTimes: BookedTime[] = [];
   spinnerScreenText = 'Loading...';

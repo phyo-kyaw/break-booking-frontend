@@ -37,11 +37,11 @@ import { ViewRoomComponent } from './rooms/view-room/view-room.component';
 import { RoomListComponent } from './rooms/room-list/room-list.component';
 import { DictionaryListComponent } from './dictionaries/dictionary-list/dictionary-list.component';
 import { ViewDictionaryComponent } from './dictionaries/view-dictionary/view-dictionary.component';
-import { BookRoomComponent } from './rooms/book-room/book-room.component';
 import { RoomBookCalendarComponent } from './rooms/book-room/calendar/calendar.component';
 import { RoomPaymentComponent } from './rooms/book-room/room-payment/room-payment.component';
 import { LoadingScreenComponent } from './misc/loading-screen/loading-screen.component';
 import { PaymentSuccessComponent } from './rooms/book-room/payment-success/payment-success.component';
+import { BookRoomFormComponent } from './rooms/book-room/book-room-form/book-room-form.component';
 
 @NgModule({
   declarations: [
@@ -62,11 +62,11 @@ import { PaymentSuccessComponent } from './rooms/book-room/payment-success/payme
     RoomListComponent,
     DictionaryListComponent,
     ViewDictionaryComponent,
-    BookRoomComponent,
     RoomBookCalendarComponent,
     RoomPaymentComponent,
     LoadingScreenComponent,
-    PaymentSuccessComponent
+    PaymentSuccessComponent,
+    BookRoomFormComponent
   ],
   imports: [
     CommonModule,
