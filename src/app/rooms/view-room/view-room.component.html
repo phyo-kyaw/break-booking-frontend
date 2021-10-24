@@ -1,15 +1,9 @@
 <div class="container">
   <div *ngIf="room !== null; else roomNotFound">
-    <div class="row align-items-center mb-2">
+    <div class="row mb-2">
       <h1 class="col-10 room-title mb-0">
         {{ room.title }}
       </h1>
-
-      <div class="col-2">
-        <a [routerLink]="['/rooms/book', room.id]" class="btn btn-primary"
-          >Book now</a
-        >
-      </div>
     </div>
 
     <div class="row mb-3">
@@ -19,6 +13,7 @@
             aria-hidden="false"
             aria-label="User rating"
             class="tiny text-success"
+            title="User rating"
             >star_rate</mat-icon
           >
           {{ room.rating }}
@@ -55,96 +50,122 @@
       </div>
     </div>
 
-    <div class="row" *ngIf="room.description.trim().length">
-      <div class="col">
-        <p class="description h4">{{ room.description }}</p>
-      </div>
-    </div>
+    <div class="row">
+      <div class="col-8">
+        <div class="row" *ngIf="room.description.trim().length">
+          <div class="col">
+            <p class="description h4">{{ room.description }}</p>
+          </div>
+        </div>
 
-    <div class="row mt-2">
-      <div class="col d-flex align-items-center">
-        <mat-icon
-          aria-hidden="false"
-          aria-label="Availability"
-          title="Room availability"
-          class="mr-3 larger text-success"
-          >{{ outputRoomTypeIcon(room.type) }}</mat-icon
-        >
-        <p class="mb-0">
-          {{ room.type }}
-        </p>
-      </div>
-    </div>
+        <div class="row mt-2">
+          <div class="col d-flex align-items-center">
+            <mat-icon
+              aria-hidden="false"
+              aria-label="Availability"
+              title="Room availability"
+              class="mr-3 larger text-success"
+              >{{ outputRoomTypeIcon(room.type) }}</mat-icon
+            >
+            <p class="mb-0">
+              {{ room.type }}
+            </p>
+          </div>
+        </div>
 
-    <div class="row mt-2">
-      <div class="col d-flex align-items-center">
-        <mat-icon
-          aria-hidden="false"
-          aria-label="Price"
-          title="Price"
-          class="mr-3 larger text-success"
-          >attach_money</mat-icon
-        >
-        <p class="mb-0">{{ formatPrice(room.price) }} / hour</p>
-      </div>
-    </div>
+        <div class="row mt-2">
+          <div class="col d-flex align-items-center">
+            <mat-icon
+              aria-hidden="false"
+              aria-label="Availability"
+              title="Room availability"
+              class="mr-3 larger text-success"
+              >event</mat-icon
+            >
+            <p class="mb-0">
+              {{ availTypeToWords(room.availableType) }} availability
+            </p>
+          </div>
+        </div>
 
-    <div class="row mt-2">
-      <div class="col d-flex align-items-center">
-        <mat-icon
-          aria-hidden="false"
-          aria-label="Availability"
-          title="Room availability"
-          class="mr-3 larger text-success"
-          >event</mat-icon
-        >
-        <p class="mb-0">
-          {{ availTypeToWords(room.availableType) }} availability
-        </p>
-      </div>
-    </div>
+        <div class="row mt-2">
+          <div class="col d-flex align-items-center">
+            <mat-icon
+              aria-hidden="false"
+              aria-label="Max people in room"
+              title="Max people in room"
+              class="mr-3 larger text-success"
+              >people</mat-icon
+            >
+            <p class="mb-0">{{ room.maxPeople }} people fit in room</p>
+          </div>
+        </div>
 
-    <div class="row mt-2">
-      <div class="col d-flex align-items-center">
-        <mat-icon
-          aria-hidden="false"
-          aria-label="Max people in room"
-          title="Max people in room"
-          class="mr-3 larger text-success"
-          >people</mat-icon
-        >
-        <p class="mb-0">{{ room.maxPeople }} people in room</p>
-      </div>
-    </div>
+        <div class="row mt-2">
+          <div class="col d-flex align-items-center">
+            <mat-icon
+              aria-hidden="false"
+              aria-label="Room size"
+              title="Room size"
+              class="mr-3 larger text-success"
+              >straighten</mat-icon
+            >
+            <p class="mb-0">{{ room.size }} m&#178; room size</p>
+          </div>
+        </div>
 
-    <div class="row mt-2">
-      <div class="col d-flex align-items-center">
-        <mat-icon
-          aria-hidden="false"
-          aria-label="Room size"
-          title="Room size"
-          class="mr-3 larger text-success"
-          >straighten</mat-icon
-        >
-        <p class="mb-0">{{ room.size }} m&#178; room size</p>
+        <div class="row mt-2" *ngIf="room.facilities.length > 0">
+          <div class="col d-flex align-items-center">
+            <mat-icon
+              aria-hidden="false"
+              aria-label="Facilities"
+              title="Facilities"
+              class="mr-3 larger text-success"
+              >room_preferences</mat-icon
+            >
+            <p class="mb-0">
+              Facilities:
+              <span *ngFor="let item of room.facilities; let i = index"
+                >{{ item }}{{ i + 1 < room.facilities.length ? ', ' : '' }}
+              </span>
+            </p>
+          </div>
+        </div>
       </div>
-    </div>
+      <div class="col-4">
+        <div class="card p-3">
+          <div class="row">
+            <div class="col">
+              <span class="h5"
+                ><strong>
+                  {{ formatPrice(room.price) }} AUD / hour</strong
+                ></span
+              >
+            </div>
+            <div class="col-4 flex-shrink-1 d-flex justify-content-end">
+              <span class="d-flex align-items-center">
+                <mat-icon
+                  aria-hidden="false"
+                  aria-label="User rating"
+                  title="User rating"
+                  class="tiny text-success"
+                  >star_rate</mat-icon
+                >
+                {{ room.rating }}
+              </span>
+            </div>
+          </div>
 
-    <div class="row mt-2" *ngIf="room.facilities.length > 0">
-      <div class="col d-flex align-items-center">
-        <mat-icon
-          aria-hidden="false"
-          aria-label="Facilities"
-          title="Facilities"
-          class="mr-3 larger text-success"
-          >room_preferences</mat-icon
-        >
-        <p class="mb-0">
-          Facilities:
-          <span *ngFor="let item of room.facilities; let i = index"
-            >{{ item }}{{ i + 1 < room.facilities.length ? ', ' : '' }}
-          </span>
-        </p>
+          <div class="row mt-4">
+            <div class="col d-flex">
+              <a
+                [routerLink]="['/rooms/book', room.id]"
+                class="btn btn-primary flex-grow-1"
+                ><span class="h5">Book now</span>
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
