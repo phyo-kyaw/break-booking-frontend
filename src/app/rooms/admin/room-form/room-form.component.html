@@ -378,13 +378,16 @@
   <div class="form-group">
     <label for="images">Images</label>
     <input
+      (change)="onFileSelected($event)"
       #images="ngModel"
       [(ngModel)]="room.images"
       [class.is-invalid]="images.invalid && images.touched"
       class="form-control"
-      type="text"
+      type="file"
+      accept="image/*"
       id="images"
       name="images"
+      multiple
     />
     <small
       class="text-danger user-input-notification"

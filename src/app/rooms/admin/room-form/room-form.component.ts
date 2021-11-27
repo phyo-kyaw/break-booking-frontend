@@ -5,6 +5,7 @@ import { ViewportScroller } from '@angular/common';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RoomService } from 'app/service/rooms/room.service';
+import { ImagesService } from 'app/service/images/images.service';
 import { DictionaryService } from 'app/service/dictionaries/dictionary.service';
 import { environment as env } from 'environments/environment';
 
@@ -38,13 +39,15 @@ export class RoomFormComponent implements OnInit {
   roomFacilities: { value: string; checked: boolean }[] = [];
   cityStatus = 'Getting cities...';
   showCityLink = false;
+  image: File = null;
 
   constructor(
     private viewportScroller: ViewportScroller,
     private router: Router,
     private modalService: NgbModal,
     private _roomService: RoomService,
-    private _dictionaryService: DictionaryService
+    private _dictionaryService: DictionaryService,
+    private _imagesService: ImagesService
   ) {
     this.viewportScroller.setOffset([0, 70]);
   }
@@ -79,18 +82,25 @@ export class RoomFormComponent implements OnInit {
    *
    * @param {NgForm} f form instance
    */
-  onSubmit(f: NgForm): void {
+  async onSubmit(f: NgForm): Promise<void> {
     // Check if all the fields are valid
     if (f.valid) {
       // Show loading screen
       this.isLoading = true;
 
-      const formData = this.prepareForm(f);
+      const uploadResponse = await this.uploadImages();
 
-      if (this.roomId.trim().length) {
-        this.editRoom(formData);
+      if (uploadResponse.success) {
+        const formData = this.prepareForm(f, uploadResponse.imageSrc);
+
+        this.fetchStatusForUser = 'Saving room...';
+        if (this.roomId.trim().length) {
+          this.editRoom(formData);
+        } else {
+          this.addRoom(formData);
+        }
       } else {
-        this.addRoom(formData);
+        console.error('Error occurred while uploading images.');
       }
     } else {
       // Not all fields are valid, tell user to fix the inputs
@@ -222,13 +232,9 @@ export class RoomFormComponent implements OnInit {
    * @param {NgForm} f - form instance
    * @return JSON string
    */
-  prepareForm(f: NgForm): string {
+  prepareForm(f: NgForm, imageUrl: string): string {
     const formBody = {
       ...f.form.value,
-      images:
-        typeof f.form.value.images === 'string'
-          ? f.form.value.images.split(',')
-          : f.form.value.images,
       facilities:
         typeof f.form.value.facilities === 'string'
           ? f.form.value.facilities.split(',')
@@ -236,12 +242,41 @@ export class RoomFormComponent implements OnInit {
       reservedDates:
         typeof f.form.value.reservedDates === 'string'
           ? f.form.value.reservedDates.split(',')
-          : f.form.value.reservedDates
+          : f.form.value.reservedDates,
+      images: [imageUrl]
     };
 
-    console.log(formBody);
-
     return JSON.stringify(formBody);
+  }
+
+  onFileSelected(event) {
+    this.image = event.target.files[0];
+  }
+
+  uploadImages(): Promise<{ success: boolean; imageSrc?: string }> {
+    return new Promise((resolve, reject) => {
+      this.fetchStatusForUser = 'Uploading image...';
+
+      this._imagesService.uploadImages(this.image).subscribe(
+        (response: any) => {
+          if (response.success) {
+            resolve({ success: true, imageSrc: response.data.url });
+          } else {
+            // Something went wrong with upload
+            console.error('Error occured while uploading image:\n', response);
+            reject({ success: false });
+          }
+        },
+        error => {
+          // Request error when uploading form
+          console.error(
+            'An error occurred while connecting to the API for uploading images',
+            error
+          );
+          reject({ success: false });
+        }
+      );
+    });
   }
 
   /**
