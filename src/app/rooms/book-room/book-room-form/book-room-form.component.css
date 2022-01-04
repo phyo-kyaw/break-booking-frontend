@@ -1,7 +1,3 @@
-pre {
-  white-space: break-spaces;
-}
-
 .required label::after {
   content: ' *';
   color: red;
@@ -9,8 +5,12 @@ pre {
 
 #alert {
   display: none;
+  text-transform: ;
+}
+#alert::first-letter {
+  text-transform: uppercase;
 }
 
-small {
+.user-input-notification {
   display: none;
 }

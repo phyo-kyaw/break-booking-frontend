@@ -37,6 +37,12 @@ import { ViewRoomComponent } from './rooms/view-room/view-room.component';
 import { RoomListComponent } from './rooms/room-list/room-list.component';
 import { DictionaryListComponent } from './dictionaries/dictionary-list/dictionary-list.component';
 import { ViewDictionaryComponent } from './dictionaries/view-dictionary/view-dictionary.component';
+import { RoomBookCalendarComponent } from './rooms/book-room/calendar/calendar.component';
+import { RoomPaymentComponent } from './rooms/book-room/room-payment/room-payment.component';
+import { LoadingScreenComponent } from './misc/loading-screen/loading-screen.component';
+import { PaymentSuccessComponent } from './rooms/book-room/payment-success/payment-success.component';
+import { BookRoomFormComponent } from './rooms/book-room/book-room-form/book-room-form.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -56,7 +62,12 @@ import { ViewDictionaryComponent } from './dictionaries/view-dictionary/view-dic
     ViewRoomComponent,
     RoomListComponent,
     DictionaryListComponent,
-    ViewDictionaryComponent
+    ViewDictionaryComponent,
+    RoomBookCalendarComponent,
+    RoomPaymentComponent,
+    LoadingScreenComponent,
+    PaymentSuccessComponent,
+    BookRoomFormComponent
   ],
   imports: [
     CommonModule,
@@ -74,7 +85,8 @@ import { ViewDictionaryComponent } from './dictionaries/view-dictionary/view-dic
     KeycloakAngularModule,
     BrowserAnimationsModule,
     NgxMaterialTimepickerModule,
-    NgbModule
+    NgbModule,
+    MatIconModule
   ],
   providers: [
     // {provide: HTTP_INTERCEPTORS, useClass: HttpIntercepterService, multi: true}

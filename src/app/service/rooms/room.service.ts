@@ -65,4 +65,8 @@ export class RoomService {
   deleteRoom(id: string) {
     return this._http.delete(`${this._url}/delete/${id}`);
   }
+
+  getRoomWithBookedTime(id: string) {
+    return this._http.get(`${this._url}/withBookedTime/${id}`);
+  }
 }
