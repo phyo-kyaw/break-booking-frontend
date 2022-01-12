@@ -178,9 +178,9 @@
     <input #reservedDates="ngModel" [(ngModel)]="room.reservedDates" class="form-control date" [class.is-invalid]="
         (reservedDates.invalid && reservedDates.touched) ||
         (roomForm.submitted && reservedDates.invalid)
-      " autocomplete="off" type="text" id="reservedDates" name="reservedDates" (click)="refocus()"
+      " autocomplete="off" type="text" id="reservedDates" name="reservedDates" (click)="showDatePicker()"
       (focus)="showDatePicker()" />
-    <!-- <small
+    <!-- <smallF
       class="text-danger user-input-notification"
       [class.d-block]="
         (reservedDates.invalid && reservedDates.touched) ||
@@ -220,7 +220,7 @@
   <div class="form-group">
     <label for="images">Images</label>
     <input (change)="onFileSelected($event)" #images="ngModel" [(ngModel)]="room.images"
-      [class.is-invalid]="images.invalid && images.touched" class="form-control" type="file" accept="image/x-png,image/gif,image/jpeg"
+      [class.is-invalid]="images.invalid && images.touched" class="form-control" type="file" accept="image/*"
       id="images" name="images" multiple />
     <small class="text-danger user-input-notification" [class.d-none]="facilities.valid || facilities.untouched">
       Images must be letters, numbers, commas or spaces.

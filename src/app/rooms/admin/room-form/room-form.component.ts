@@ -10,11 +10,11 @@ import { DictionaryService } from 'app/service/dictionaries/dictionary.service';
 import { environment as env } from 'environments/environment';
 
 declare let $: any
+
 interface uploadResponse {
   success: boolean;
   imageSrc?: string
 }
-
 
 @Component({
   selector: 'app-room-form',
@@ -57,9 +57,6 @@ export class RoomFormComponent implements OnInit {
     private _imagesService: ImagesService
   ) {
     this.viewportScroller.setOffset([0, 70]);
-
-
-
   }
 
   /**
@@ -67,7 +64,6 @@ export class RoomFormComponent implements OnInit {
    * the given ID and binds it to itself. Otherwise it creates an empty form.
    */
   async ngOnInit(): Promise<void> {
-
     // // Get all possible facilities from API
     // // this.fetchFacilities();
     const dictionariesResolved = await this.fetchFacilities();
@@ -89,21 +85,12 @@ export class RoomFormComponent implements OnInit {
 
   /**
    * Triger Datepicker for thr reserved date field
-   * refocus to ensure datepicker can appear normally
    */
-  refocus = () => {
-    $('.date').focusout()
-    $('.date').focus()
-  }
-
-  showDatePicker = () => {
+  showDatePicker(): void{
     $('.date').datepicker({
       multidate: true,
       format: 'yyyy-mm-dd'
     });
-  }
-  return(){
-    return
   }
 
   /**
@@ -122,10 +109,9 @@ export class RoomFormComponent implements OnInit {
       //check if image need upload to S3 first
       const formImage = f.form.value.images
       let uploadResponse: uploadResponse = { success: true, imageSrc: formImage[0] }
-      if (typeof(formImage) === 'string') {
+      if (typeof (formImage) === 'string') {
         uploadResponse = await this.uploadImages();
       }
-
 
       if (uploadResponse.success) {
         const formData = this.prepareForm(f, uploadResponse.imageSrc);
@@ -270,7 +256,6 @@ export class RoomFormComponent implements OnInit {
    * @return JSON string
    */
   prepareForm(f: NgForm, imageUrl: string): string {
-
     const reservedDates = $('.date').val()
     const formBody = {
       ...f.form.value,
@@ -282,7 +267,6 @@ export class RoomFormComponent implements OnInit {
       ,
       images: [imageUrl]
     };
-    console.log(formBody)
     return JSON.stringify(formBody);
   }
 
