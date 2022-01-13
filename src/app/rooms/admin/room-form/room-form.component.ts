@@ -85,7 +85,12 @@ export class RoomFormComponent implements OnInit {
 
   /**
    * Triger Datepicker for thr reserved date field
+   * refocus to ensure datepicker can appear normally
    */
+   refocus = () => {
+    $('.date').focusout()
+    $('.date').focus()
+  }
   showDatePicker(): void{
     $('.date').datepicker({
       multidate: true,

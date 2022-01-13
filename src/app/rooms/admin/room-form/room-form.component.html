@@ -178,7 +178,7 @@
     <input #reservedDates="ngModel" [(ngModel)]="room.reservedDates" class="form-control date" [class.is-invalid]="
         (reservedDates.invalid && reservedDates.touched) ||
         (roomForm.submitted && reservedDates.invalid)
-      " autocomplete="off" type="text" id="reservedDates" name="reservedDates" (click)="showDatePicker()"
+      " autocomplete="off" type="text" id="reservedDates" name="reservedDates" (click)="refocus()"
       (focus)="showDatePicker()" />
     <!-- <smallF
       class="text-danger user-input-notification"
