@@ -50,6 +50,7 @@
       type="text"
       id="title"
       name="title"
+      required
     />
     <small
       class="text-danger user-input-notification"
@@ -58,61 +59,31 @@
         (roomForm.submitted && title.invalid)
       "
     >
-      Room title is required
+      Room Name is required
     </small>
   </div>
 
-  <div class="form-group">
-    <label for="reservedDates">Set unavailable dates</label>
+  <div class="form-group required">
+    <label for="description">Description</label>
     <input
-      #reservedDates="ngModel"
-      [(ngModel)]="room.reservedDates"
+      #description="ngModel"
+      [(ngModel)]="room.description"
       class="form-control"
-      [class.is-invalid]="
-        (reservedDates.invalid && reservedDates.touched) ||
-        (roomForm.submitted && reservedDates.invalid)
-      "
+      [class.is-invalid]="description.invalid && description.touched"
       type="text"
-      id="reservedDates"
-      name="reservedDates"
+      id="description"
+      name="description"
+      required
     />
     <!-- <small
       class="text-danger user-input-notification"
-      [class.d-block]="
-        (reservedDates.invalid && reservedDates.touched) ||
-        (roomForm.submitted && reservedDates.invalid)
-      "
+      [class.d-none]="description.valid || description.untouched"
     >
-      reservedDates is not in a good format
+      Description is required
     </small> -->
   </div>
 
   <div class="form-group required">
-    <label for="address">Address</label>
-    <input
-      #address="ngModel"
-      [(ngModel)]="room.address"
-      class="form-control"
-      [class.is-invalid]="
-        (address.invalid && address.touched) ||
-        (roomForm.submitted && address.invalid)
-      "
-      type="text"
-      id="address"
-      name="address"
-    />
-    <small
-      class="text-danger user-input-notification"
-      [class.d-block]="
-        (address.invalid && address.touched) ||
-        (roomForm.submitted && address.invalid)
-      "
-    >
-      Address is required
-    </small>
-  </div>
-
-  <div class="form-group">
     <label for="city">City</label>
 
     <select
@@ -122,6 +93,7 @@
       #city="ngModel"
       [(ngModel)]="room.city"
       place
+      required
     >
       <option value="" selected>Please select a city</option>
       <option *ngFor="let city of allCities" [attr.value]="city">
@@ -148,6 +120,32 @@
   </div>
 
   <div class="form-group required">
+    <label for="address">Address</label>
+    <input
+      #address="ngModel"
+      [(ngModel)]="room.address"
+      class="form-control"
+      [class.is-invalid]="
+        (address.invalid && address.touched) ||
+        (roomForm.submitted && address.invalid)
+      "
+      type="text"
+      id="address"
+      name="address"
+      required
+    />
+    <small
+      class="text-danger user-input-notification"
+      [class.d-block]="
+        (address.invalid && address.touched) ||
+        (roomForm.submitted && address.invalid)
+      "
+    >
+      Address is required
+    </small>
+  </div>
+
+  <div class="form-group required">
     <label for="roomNumber">Room number</label>
     <input
       #roomNumber="ngModel"
@@ -161,6 +159,7 @@
       id="roomNumber"
       name="roomNumber"
       min="1"
+      required
     />
     <small
       class="text-danger user-input-notification"
@@ -173,26 +172,7 @@
     </small>
   </div>
 
-  <div class="form-group">
-    <label for="description">Description</label>
-    <input
-      #description="ngModel"
-      [(ngModel)]="room.description"
-      class="form-control"
-      [class.is-invalid]="description.invalid && description.touched"
-      type="text"
-      id="description"
-      name="description"
-    />
-    <small
-      class="text-danger user-input-notification"
-      [class.d-none]="description.valid || description.untouched"
-    >
-      Description is required
-    </small>
-  </div>
-
-  <div class="form-group">
+  <div class="form-group required">
     <label for="type">Type of room</label>
     <select
       #type="ngModel"
@@ -201,6 +181,7 @@
       [class.is-invalid]="type.invalid && type.touched"
       id="type"
       name="type"
+      required
     >
       <option selected disabled>Select a room type</option>
       <option value="Party room">Party room</option>
@@ -215,29 +196,7 @@
     </small>
   </div>
 
-  <div class="form-group">
-    <label for="availableType">Availability</label>
-    <select
-      #availableType="ngModel"
-      [(ngModel)]="room.availableType"
-      class="form-control"
-      [class.is-invalid]="availableType.invalid && availableType.touched"
-      id="availableType"
-      name="availableType"
-    >
-      <option selected disabled>Select room availability</option>
-      <option [value]="0">Weekends</option>
-      <option [value]="1">Weekdays</option>
-    </select>
-    <small
-      class="text-danger user-input-notification"
-      [class.d-none]="type.valid || type.untouched"
-    >
-      Room type is required
-    </small>
-  </div>
-
-  <div class="form-group">
+  <div class="form-group required">
     <label for="floor">Floor number</label>
     <input
       #floor="ngModel"
@@ -248,6 +207,7 @@
       min="1"
       id="floor"
       name="floor"
+      required
     />
     <small
       class="text-danger user-input-notification"
@@ -269,12 +229,9 @@
       name="size"
       min="1"
     />
-    <small
-      class="text-danger user-input-notification"
-      [class.d-none]="size.valid || size.untouched"
-    >
+    <!-- <small class="text-danger user-input-notification" [class.d-none]="size.valid || size.untouched">
       Room size is required and must be a positive number.
-    </small>
+    </small> -->
   </div>
 
   <div class="form-group">
@@ -289,12 +246,9 @@
       name="maxPeople"
       min="1"
     />
-    <small
-      class="text-danger user-input-notification"
-      [class.d-none]="maxPeople.valid || maxPeople.untouched"
-    >
+    <!-- <small class="text-danger user-input-notification" [class.d-none]="maxPeople.valid || maxPeople.untouched">
       Maximum people in room is required and must be a positive number.
-    </small>
+    </small> -->
   </div>
 
   <div class="form-group">
@@ -309,12 +263,9 @@
       name="price"
       min="0"
     />
-    <small
-      class="text-danger user-input-notification"
-      [class.d-none]="price.valid || price.untouched"
-    >
+    <!-- <small class="text-danger user-input-notification" [class.d-none]="price.valid || price.untouched">
       Price is required and must be a number.
-    </small>
+    </small> -->
   </div>
 
   <div class="form-group">
@@ -338,8 +289,62 @@
   </div>
 
   <div class="form-group">
-    <label for="facilities">Facilities</label>
+    <label for="availableType">Availability</label>
+    <select
+      #availableType="ngModel"
+      [(ngModel)]="room.availableType"
+      class="form-control"
+      [class.is-invalid]="availableType.invalid && availableType.touched"
+      id="availableType"
+      name="availableType"
+    >
+      <option selected disabled>Select room availability</option>
+      <option [value]="0">Weekends</option>
+      <option [value]="1">Weekdays</option>
+    </select>
+    <!-- <small class="text-danger user-input-notification" [class.d-none]="type.valid || type.untouched">
+      Room type is required
+    </small> -->
+  </div>
 
+  <div class="form-group">
+    <label for="reservedDates">Set unavailable dates</label>
+    <div class="input-group">
+      <input
+        class="form-control"
+        autocomplete="off"
+        autoClose="false"
+        id="reservedDates"
+        name="reservedDates"
+        [value]="checkInitialReserved()"
+        ngbDatepicker
+        #d2="ngbDatepicker"
+        (dateSelect)="onDateSelect($event)"
+        [footerTemplate]="footerTemplate"
+      />
+
+      <div class="input-group-append">
+        <button
+          class="btn btn-outline-secondary calendar"
+          (click)="d2.toggle()"
+          type="button"
+        ></button>
+      </div>
+
+      <ng-template #footerTemplate>
+        <hr class="my-0" />
+        <button
+          class="btn btn-primary btn-sm m-2 float-left"
+          (click)="room.reservedDates = []; d2.close()"
+        >
+          Clear
+        </button>
+      </ng-template>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="facilities">Facilities</label>
     <div *ngIf="facilities.length; else noFacilities">
       <div *ngFor="let facility of roomFacilities; let i = index">
         <label [attr.for]="'facility-' + i">

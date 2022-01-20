@@ -3,11 +3,16 @@ import { NgForm } from '@angular/forms';
 import { Room } from '../../model/room';
 import { ViewportScroller } from '@angular/common';
 import { Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { RoomService } from 'app/service/rooms/room.service';
 import { ImagesService } from 'app/service/images/images.service';
 import { DictionaryService } from 'app/service/dictionaries/dictionary.service';
 import { environment as env } from 'environments/environment';
+
+interface uploadResponse {
+  success: boolean;
+  imageSrc?: string;
+}
 
 @Component({
   selector: 'app-room-form',
@@ -88,7 +93,15 @@ export class RoomFormComponent implements OnInit {
       // Show loading screen
       this.isLoading = true;
 
-      const uploadResponse = await this.uploadImages();
+      //check if image need upload to S3 first
+      const formImage = f.form.value.images;
+      let uploadResponse: uploadResponse = {
+        success: true,
+        imageSrc: formImage[0]
+      };
+      if (typeof formImage === 'string') {
+        uploadResponse = await this.uploadImages();
+      }
 
       if (uploadResponse.success) {
         const formData = this.prepareForm(f, uploadResponse.imageSrc);
@@ -233,19 +246,16 @@ export class RoomFormComponent implements OnInit {
    * @return JSON string
    */
   prepareForm(f: NgForm, imageUrl: string): string {
+    console.log(f.form.value);
     const formBody = {
       ...f.form.value,
       facilities:
         typeof f.form.value.facilities === 'string'
           ? f.form.value.facilities.split(',')
           : this.prepareFacilities(),
-      reservedDates:
-        typeof f.form.value.reservedDates === 'string'
-          ? f.form.value.reservedDates.split(',')
-          : f.form.value.reservedDates,
+      reservedDates: this.room.reservedDates,
       images: [imageUrl]
     };
-
     return JSON.stringify(formBody);
   }
 
@@ -253,7 +263,7 @@ export class RoomFormComponent implements OnInit {
     this.image = event.target.files[0];
   }
 
-  uploadImages(): Promise<{ success: boolean; imageSrc?: string }> {
+  uploadImages(): Promise<uploadResponse> {
     return new Promise((resolve, reject) => {
       this.fetchStatusForUser = 'Uploading image...';
 
@@ -464,5 +474,36 @@ export class RoomFormComponent implements OnInit {
     });
 
     return promise;
+  }
+
+  /**
+   * Whenever user select a date, push it into room.reservedDates
+   */
+  onDateSelect(event: NgbDateStruct): void {
+    // 1 -> 01
+    const Dateformatter = (month_or_day: number): string => {
+      if (month_or_day < 10) return `0${month_or_day}`;
+      return month_or_day.toString();
+    };
+    //format: 2022/01/01
+    const selectedDate = `${event.year}-${Dateformatter(
+      event.month
+    )}-${Dateformatter(event.day)}`;
+
+    if (this.room.reservedDates) {
+      this.room.reservedDates = [...this.room.reservedDates, selectedDate];
+    } else {
+      this.room.reservedDates = [selectedDate];
+    }
+  }
+
+  /**
+   * if reserved date is undefined. then return an empty array
+   */
+  checkInitialReserved() {
+    if (!this.room.reservedDates) {
+      return [];
+    }
+    return this.room.reservedDates;
   }
 }
