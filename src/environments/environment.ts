@@ -4,8 +4,10 @@
 
 const baseApiUrl = 'http://15.206.126.5';
 export const environment = {
+ // production: false,
   production: false,
-  homeUrl: 'http://localhost:8080',
+  homeUrl: '${HOME_URL}',
+  //homeUrl: 'http://localhost:8080',
   roomsApi: `${baseApiUrl}:8081/api/v1/app/rooms`,
   dictApi: `${baseApiUrl}:8086/api/v1/dicts`, // dictionaries
   roomBooking: `${baseApiUrl}:8081/api/v1/app/bookings`, // room booking controller
