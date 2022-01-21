@@ -5,9 +5,9 @@ WORKDIR /app
 COPY package.json .
 RUN npm cache clean --force
 RUN rm -rf node_modules package-lock.json
-RUN npm install
+RUN npm install --save-dev
 COPY . .
-RUN npm run build 
+RUN npm run build
 
 # stage 2
 FROM nginx:alpine
