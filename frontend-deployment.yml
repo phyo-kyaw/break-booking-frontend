@@ -16,10 +16,10 @@ spec:
         - name: springboot
           image: pkdocker3383/break-booking-frontend:v1
           ports:
-            - containerPort: 8080
+            - containerPort: 80
           env:
-            - name: PORT
-              value: "8080"
+            - name: HOME_URL
+              value: "http://localhost"
 ---
 apiVersion: v1
 kind: Service
