@@ -64,7 +64,7 @@ export class DictionaryService {
    *
    */
   getFacilities() {
-    const facilityId = '61428091776a6d086d5acc2b';
+    const facilityId = '61ddfc47c8df99074a403261';
 
     return this.getValues(facilityId);
   }
@@ -74,7 +74,7 @@ export class DictionaryService {
    *
    */
   getCities() {
-    const citiesId = '6141ecdd776a6d086d5acc2a';
+    const citiesId = '61dc11a686a7ae7650989fdd';
 
     return this.getValues(citiesId);
   }
