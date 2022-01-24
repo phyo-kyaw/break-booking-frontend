@@ -4,8 +4,8 @@ export function initializeKeycloak(keycloak: KeycloakService): () => Promise<boo
     return () =>
         keycloak.init({
             config: {
-                // url: 'https://break-booking.online:8443/auth',
-                url: 'http://localhost:8181/auth',
+                //url: 'https://break-booking.online:8443/auth',
+                url: 'http://120.159.30.85:9191/auth',
                 realm: 'break-booking',
                 clientId: 'break-booking-frontend-client',
             },
@@ -13,6 +13,6 @@ export function initializeKeycloak(keycloak: KeycloakService): () => Promise<boo
                 checkLoginIframe: true,
                 checkLoginIframeInterval: 25
             },
-            loadUserProfileAtStartUp: true
+            loadUserProfileAtStartUp: false
         });
 }
