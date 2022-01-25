@@ -44,7 +44,8 @@ export class RoomFormComponent implements OnInit {
   roomFacilities: { value: string; checked: boolean }[] = [];
   cityStatus = 'Getting cities...';
   showCityLink = false;
-  image: File = null;
+  images: File[] = null;
+  previews = [];
 
   constructor(
     private viewportScroller: ViewportScroller,
@@ -92,28 +93,33 @@ export class RoomFormComponent implements OnInit {
     if (f.valid) {
       // Show loading screen
       this.isLoading = true;
-
+      const formImage: string | string[] = f.form.value.images;
+      let uploadResponse: uploadResponse[] | string[] = [];
       //check if image need upload to S3 first
-      const formImage = f.form.value.images;
-      let uploadResponse: uploadResponse = {
-        success: true,
-        imageSrc: formImage[0]
-      };
+      //if images not uploaded yet (formImage as string: file path of local mechine)
       if (typeof formImage === 'string') {
-        uploadResponse = await this.uploadImages();
-      }
-
-      if (uploadResponse.success) {
-        const formData = this.prepareForm(f, uploadResponse.imageSrc);
-
-        this.fetchStatusForUser = 'Saving room...';
-        if (this.roomId.trim().length) {
-          this.editRoom(formData);
-        } else {
-          this.addRoom(formData);
+        try {
+          uploadResponse = await this.uploadImages();
+          uploadResponse = uploadResponse
+            .filter(result => {
+              if (!result.success)
+                console.error('some file did not upload successfully');
+              return result.success;
+            })
+            .map(result => result.imageSrc);
+        } catch (err) {
+          console.error(`Error occurred while uploading images : ${err}`);
         }
       } else {
-        console.error('Error occurred while uploading images.');
+        uploadResponse = formImage;
+      }
+
+      const formData = this.prepareForm(f, uploadResponse as string[]);
+      this.fetchStatusForUser = 'Saving room...';
+      if (this.roomId.trim().length) {
+        this.editRoom(formData);
+      } else {
+        this.addRoom(formData);
       }
     } else {
       // Not all fields are valid, tell user to fix the inputs
@@ -132,7 +138,7 @@ export class RoomFormComponent implements OnInit {
         if (response.success) {
           // Room fetching was good, bind it to component
           this.room = response.data;
-
+          this.previews = response.data.images;
           // Check checkboxes
           this.checkInitialFacilities(response.data);
         } else {
@@ -245,8 +251,7 @@ export class RoomFormComponent implements OnInit {
    * @param {NgForm} f - form instance
    * @return JSON string
    */
-  prepareForm(f: NgForm, imageUrl: string): string {
-    console.log(f.form.value);
+  prepareForm(f: NgForm, imageUrls: string[]): string {
     const formBody = {
       ...f.form.value,
       facilities:
@@ -254,40 +259,79 @@ export class RoomFormComponent implements OnInit {
           ? f.form.value.facilities.split(',')
           : this.prepareFacilities(),
       reservedDates: this.room.reservedDates,
-      images: [imageUrl]
+      images: imageUrls
     };
     return JSON.stringify(formBody);
   }
 
+  /**
+   * Store file to images variable and preview selected files
+   *
+   * @param event - file input
+   */
   onFileSelected(event) {
-    this.image = event.target.files[0];
+    this.images = event.target.files;
+    this.previews = [];
+    if (this.images && this.images[0]) {
+      const numberOfFiles = this.images.length;
+      for (let i = 0; i < numberOfFiles; i++) {
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+          this.previews.push(e.target.result);
+        };
+        reader.readAsDataURL(this.images[i]);
+      }
+    }
   }
 
-  uploadImages(): Promise<uploadResponse> {
-    return new Promise((resolve, reject) => {
-      this.fetchStatusForUser = 'Uploading image...';
-
-      this._imagesService.uploadImages(this.image).subscribe(
-        (response: any) => {
-          if (response.success) {
-            resolve({ success: true, imageSrc: response.data.url });
-          } else {
-            // Something went wrong with upload
-            console.error('Error occured while uploading image:\n', response);
-            reject({ success: false });
-          }
-        },
-        error => {
-          // Request error when uploading form
-          console.error(
-            'An error occurred while connecting to the API for uploading images',
-            error
-          );
-          reject({ success: false });
-        }
-      );
-    });
+  /**
+   * Delete uploaded file
+   *
+   * @param i - index of a file to be deleted
+   */
+  deleteImage(i) {
+    console.log(this.images);
+    //if file not saved yet
+    if (this.images) {
+      let newIMGList = [...this.images];
+      this.previews.splice(i, 1);
+      newIMGList.splice(i, 1);
+      this.images = newIMGList;
+    } else {
+      this.room.images.splice(i, 1);
+    }
   }
+
+  uploadImages(): Promise<uploadResponse[]> {
+    this.fetchStatusForUser = 'Uploading image...';
+    return this._imagesService.uploadImages(this.images).toPromise();
+  }
+
+  // uploadImages(): Promise<uploadResponse> {
+  //   return new Promise((resolve, reject) => {
+  //     this.fetchStatusForUser = 'Uploading image...';
+
+  //     this._imagesService.uploadImages(this.images).subscribe(
+  //       (response: any) => {
+  //         if (response.success) {
+  //           resolve({ success: true, imageSrc: response.data.url });
+  //         } else {
+  //           // Something went wrong with upload
+  //           console.error('Error occured while uploading image:\n', response);
+  //           reject({ success: false });
+  //         }
+  //       },
+  //       error => {
+  //         // Request error when uploading form
+  //         console.error(
+  //           'An error occurred while connecting to the API for uploading images',
+  //           error
+  //         );
+  //         reject({ success: false });
+  //       }
+  //     );
+  //   });
+  // }
 
   /**
    * Opens a modal
