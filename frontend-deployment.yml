@@ -13,13 +13,14 @@ spec:
         app: break-booking-frontend
     spec:
       containers:
-        - name: springboot
+        - name: break-booking-frontend
           image: pkdocker3383/break-booking-frontend:v1
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
           env:
             - name: HOME_URL
-              value: "http://120.159.30.85"
+              value: "http://120.159.30.85:8888"
 ---
 apiVersion: v1
 kind: Service
