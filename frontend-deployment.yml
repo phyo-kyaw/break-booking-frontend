@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: break-booking-frontend
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: break-booking-frontend
