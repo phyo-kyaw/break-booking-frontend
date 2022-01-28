@@ -20,7 +20,7 @@ spec:
             - containerPort: 80
           env:
             - name: HOME_URL
-              value: "http://120.159.30.85:8888"
+              value: "http://120.159.30.85"
 ---
 apiVersion: v1
 kind: Service
