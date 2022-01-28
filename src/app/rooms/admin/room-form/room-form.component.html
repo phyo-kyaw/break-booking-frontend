@@ -402,6 +402,24 @@
     </small>
   </div>
 
+  <div class="d-flex flex-wrap mb-3">
+    <div
+      class="position-relative ml-1"
+      *ngFor="let preview of previews; let i = index"
+    >
+      <ng-container *ngIf="preview">
+        <img [src]="preview" width="300" height="210" />
+        <button
+          type="button"
+          class="btn btn-sm btn-danger position-absolute bottom-0 start-0"
+          (click)="deleteImage(i)"
+        >
+          Delete
+        </button>
+      </ng-container>
+    </div>
+  </div>
+
   <div class="form-group">
     <app-form-buttons [isEditForm]="!!roomId"></app-form-buttons>
   </div>
