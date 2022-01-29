@@ -5,7 +5,7 @@ WORKDIR /app
 COPY package.json .
 RUN npm cache clean --force
 RUN rm -rf node_modules package-lock.json
-RUN npm install --save-dev
+RUN RUN echo n | npm install --silent --save-dev
 COPY . .
 RUN npm run build
 
