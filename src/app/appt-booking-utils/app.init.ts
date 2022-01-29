@@ -12,9 +12,9 @@ export function initializeKeycloak(keycloak: KeycloakService): () => Promise<boo
                 clientId: 'break-booking-frontend-client',
             },
             initOptions: {
-                checkLoginIframe: false,
+                checkLoginIframe: true,
                 checkLoginIframeInterval: 25
             },
-            loadUserProfileAtStartUp: false
+            loadUserProfileAtStartUp: true
         });
 }
