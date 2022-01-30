@@ -3,9 +3,8 @@ FROM node:14-alpine as node
 WORKDIR /app
 
 COPY package.json .
-RUN npm cache clean --force
 RUN rm -rf node_modules package-lock.json
-RUN echo n | npm install --silent --save-dev
+RUN npm install --silent
 COPY . .
 RUN npm run build
 

@@ -11,6 +11,9 @@
   },
   "private": true,
   "dependencies": {
+    "@angular/cli": "~10.2.3",
+    "@angular/compiler-cli": "~10.2.5",
+    "@angular/language-service": "~10.2.3",
     "@angular/animations": "~10.2.3",
     "@angular/cdk": "^10.2.3",
     "@angular/common": "~10.2.3",
@@ -41,9 +44,6 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.1002.1",
-    "@angular/cli": "~10.2.3",
-    "@angular/compiler-cli": "~10.2.5",
-    "@angular/language-service": "~10.2.3",
     "@types/braintree-web-drop-in": "^1.22.4",
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "~2.0.3",
