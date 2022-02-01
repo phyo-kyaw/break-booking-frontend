@@ -503,6 +503,8 @@ export class ApptBookingComponent  implements OnInit, OnDestroy {
             eventCopy.apptBookingEntityName = this.apptBookingEntity.title_1;
             eventCopy.apptBookingEntityGid = this.apptBookingEntity.gid;
 
+            console.log('create eventCopy ' + eventCopy);
+
             this.bookingService.createBooking(eventCopy).subscribe(
               response => {
                 this.events = this.events.map((iEvent) => {
@@ -517,13 +519,14 @@ export class ApptBookingComponent  implements OnInit, OnDestroy {
                     iEvent.apptBookerEmail = eventCopy.apptBookerName;
                     iEvent.apptBookingEntityGid = eventCopy.apptBookingEntityName;
                     iEvent.apptBookingEntityName = eventCopy.apptBookingEntityGid;
+                    console.log('create iEvent ' + iEvent);
 
                   }
                   //console.log('iEvent ' );
-                  console.log(iEvent);
+
                   return iEvent;
                 });
-                console.log('event clicked!');
+                console.log('create event clicked!');
                 console.log(response);
                 this.updateWithBackEndData();
               },
@@ -531,17 +534,20 @@ export class ApptBookingComponent  implements OnInit, OnDestroy {
                 console.log(error);
               }
             );
-            console.log('Event clicked', event);
+            console.log('Final create event clicked', event);
           }
           return value;  //keycloak log in
         }
-        else if ( ( JSON.stringify(event.color) === JSON.stringify(colors.yellow ) ) &&
+        else if ( ( JSON.stringify(event.color) === JSON.stringify(colors.red ) ) &&
                   ( event.apptBookerEmail != null || "" ) &&
                   ( event.apptBookerEmail === this.userProfile.email ) ) {
           if (confirm("Cancel booking?")) {
             var eventCopy = event;
             eventCopy.color = colors.green;
             eventCopy.id = event.id;
+
+            console.log('delete eventCopy ' + eventCopy);
+
             this.bookingService.deleteBooking(event.id).subscribe(
               response => {
                 this.events = this.events.map((iEvent) => {
@@ -556,11 +562,12 @@ export class ApptBookingComponent  implements OnInit, OnDestroy {
                     iEvent.apptBookerName = null;
                     iEvent.apptBookingEntityGid = eventCopy.apptBookingEntityGid;
                     iEvent.apptBookingEntityName = null;
+                    console.log('delete iEvent ' + iEvent);
 
                   }
                   return iEvent;
                 });
-
+                console.log('delete event clicked!');
                 console.log(response);
                 this.updateWithBackEndData();
               },
@@ -568,7 +575,7 @@ export class ApptBookingComponent  implements OnInit, OnDestroy {
                 console.log(error);
               }
             );
-            console.log('Event clicked', event);
+            console.log('Final delete event clicked', event);
           }
           return value; //keycloak log in
         }
