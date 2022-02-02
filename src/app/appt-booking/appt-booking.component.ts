@@ -503,7 +503,8 @@ export class ApptBookingComponent  implements OnInit, OnDestroy {
             eventCopy.apptBookingEntityName = this.apptBookingEntity.title_1;
             eventCopy.apptBookingEntityGid = this.apptBookingEntity.gid;
 
-            console.log('create eventCopy ' + eventCopy);
+            console.log('create eventCopy ');
+            console.log(eventCopy);
 
             this.bookingService.createBooking(eventCopy).subscribe(
               response => {
@@ -546,7 +547,8 @@ export class ApptBookingComponent  implements OnInit, OnDestroy {
             eventCopy.color = colors.green;
             eventCopy.id = event.id;
 
-            console.log('delete eventCopy ' + eventCopy);
+            console.log('delete eventCopy ');
+            console.log(eventCopy);
 
             this.bookingService.deleteBooking(event.id).subscribe(
               response => {
