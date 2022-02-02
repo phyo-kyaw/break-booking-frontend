@@ -360,12 +360,12 @@ export class ApptBookingComponent  implements OnInit, OnDestroy {
                 console.log("iii " + iEvent.start.getTime() + " - " + Date.parse(event.start + ".000Z"));
 
                 iEvent.color = colors.red;
-                console.log(event.apptBookerEmail);
+                console.log(event.bookerEmail);
                 console.log(this.userProfile);
-                if ((event.apptBookerEmail != null || "") && (this.userProfile != null || "") ) {
-                  if (( event.apptBookerEmail === this.userProfile.email )) {
+                if ((event.bookerEmail != null || "") && (this.userProfile != null || "") ) {
+                  if (( event.bookerEmail === this.userProfile.email )) {
                     iEvent.color = colors.yellow; //event.color;
-                    console.log(event.apptBookerEmail);
+                    console.log(event.bookerEmail);
                   }
                 }
 
@@ -377,16 +377,16 @@ export class ApptBookingComponent  implements OnInit, OnDestroy {
                     iEvent.meta.email = event.meta.email;
                   }
                 }
-                if (event.apptBookerEmail != null) {
-                    iEvent.apptBookerEmail = event.apptBookerEmail;
+                if (event.bookerEmail != null) {
+                    iEvent.bookerEmail = event.bookerEmail;
                 }
-                if (event.apptBookerName != null) {
-                  iEvent.apptBookerName = event.apptBookerName;
-                  iEvent.title = event.apptBookerName;
+                if (event.bookerName != null) {
+                  iEvent.bookerName = event.bookerName;
+                  iEvent.title = event.bookerName;
               }
 
-                iEvent.apptBookingEntityGid = this.apptBookingEntity.gid;
-                iEvent.apptBookingEntityName = this.apptBookingEntity.title_1;
+                iEvent.bookingEntityGid = this.apptBookingEntity.gid;
+                iEvent.bookingEntityGid = this.apptBookingEntity.title_1;
               }
               return iEvent;
             });
@@ -438,7 +438,7 @@ export class ApptBookingComponent  implements OnInit, OnDestroy {
               start: addMinutes(i, j),
               end: addMinutes(i, j + this.sessionTaken),
               color: colors.green,
-              apptBookingEntityGid: this.apptBookingEntity.gid,
+              bookingEntityGid: this.apptBookingEntity.gid,
               meta: {
                 incrementsBadgeTotal: true,
               },
@@ -456,7 +456,7 @@ export class ApptBookingComponent  implements OnInit, OnDestroy {
               start: addMinutes(i, j),
               end: addMinutes(i, j + this.sessionTaken),
               color: colors.green,
-              apptBookingEntityGid: this.apptBookingEntity.gid,
+              bookingEntityGid: this.apptBookingEntity.gid,
               meta: {
                 incrementsBadgeTotal: true,
               },
@@ -498,10 +498,10 @@ export class ApptBookingComponent  implements OnInit, OnDestroy {
           if (confirm("Confirm booking?")) {
             var eventCopy = event;
             eventCopy.color = colors.red;
-            eventCopy.apptBookerEmail = this.userProfile.email;
-            eventCopy.apptBookerName = this.userProfile.firstName + " " + this.userProfile.lastName;
-            eventCopy.apptBookingEntityName = this.apptBookingEntity.title_1;
-            eventCopy.apptBookingEntityGid = this.apptBookingEntity.gid;
+            eventCopy.bookerEmail = this.userProfile.email;
+            eventCopy.bookerName = this.userProfile.firstName + " " + this.userProfile.lastName;
+            eventCopy.bookingEntityName = this.apptBookingEntity.title_1;
+            eventCopy.bookingEntityGid = this.apptBookingEntity.gid;
 
             console.log('create eventCopy ');
             console.log(eventCopy);
@@ -516,10 +516,10 @@ export class ApptBookingComponent  implements OnInit, OnDestroy {
                     iEvent.color = eventCopy.color;
                     iEvent.meta.incrementsBadgeTotal = false;
 
-                    iEvent.apptBookerEmail = eventCopy.apptBookerEmail;
-                    iEvent.apptBookerEmail = eventCopy.apptBookerName;
-                    iEvent.apptBookingEntityGid = eventCopy.apptBookingEntityName;
-                    iEvent.apptBookingEntityName = eventCopy.apptBookingEntityGid;
+                    iEvent.bookerEmail = eventCopy.bookerEmail;
+                    iEvent.bookerName = eventCopy.bookerName;
+                    iEvent.bookingEntityGid = eventCopy.bookingEntityGid;
+                    iEvent.bookingEntityName = eventCopy.bookingEntityName;
                     console.log('create iEvent ' + iEvent);
 
                   }
@@ -540,8 +540,8 @@ export class ApptBookingComponent  implements OnInit, OnDestroy {
           return value;  //keycloak log in
         }
         else if ( ( JSON.stringify(event.color) === JSON.stringify(colors.red ) ) &&
-                  ( event.apptBookerEmail != null || "" ) &&
-                  ( event.apptBookerEmail === this.userProfile.email ) ) {
+                  ( event.bookerEmail != null || "" ) &&
+                  ( event.bookerEmail === this.userProfile.email ) ) {
           if (confirm("Cancel booking?")) {
             var eventCopy = event;
             eventCopy.color = colors.green;
@@ -560,11 +560,12 @@ export class ApptBookingComponent  implements OnInit, OnDestroy {
                     iEvent.id = null;
                     iEvent.meta.incrementsBadgeTotal = true;
 
-                    iEvent.apptBookerEmail = null;
-                    iEvent.apptBookerName = null;
-                    iEvent.apptBookingEntityGid = eventCopy.apptBookingEntityGid;
-                    iEvent.apptBookingEntityName = null;
-                    console.log('delete iEvent ' + iEvent);
+                    iEvent.bookerEmail = null;
+                    iEvent.bookerName = null;
+                    iEvent.bookingEntityGid = eventCopy.bookingEntityGid;
+                    iEvent.bookingEntityName = null;
+                    console.log('delete iEvent ');
+                    console.log( iEvent);
 
                   }
                   return iEvent;
