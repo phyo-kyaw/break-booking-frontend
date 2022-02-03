@@ -382,7 +382,7 @@ export class ApptBookingComponent  implements OnInit, OnDestroy {
                 }
                 if (event.bookerName != null) {
                   iEvent.bookerName = event.bookerName;
-                  iEvent.title = event.bookerName;
+                  //iEvent.title = event.bookerName;
               }
 
                 iEvent.bookingEntityGid = this.apptBookingEntity.gid;
@@ -539,7 +539,7 @@ export class ApptBookingComponent  implements OnInit, OnDestroy {
           }
           return value;  //keycloak log in
         }
-        else if ( ( JSON.stringify(event.color) === JSON.stringify(colors.red ) ) &&
+        else if ( ( JSON.stringify(event.color) === JSON.stringify(colors.yellow ) ) &&
                   ( event.bookerEmail != null || "" ) &&
                   ( event.bookerEmail === this.userProfile.email ) ) {
           if (confirm("Cancel booking?")) {
