@@ -75,14 +75,14 @@ export class BookingPaymentComponent implements OnInit {
   getTokenAndInitDropUI() {
     this._paymentService.getToken().subscribe(
       (response: any) => {
-        if (response.success) {
+        if (response.token != null ) {
           // Getting token was good, bind it to component
-          this.token = response.data.token;
+          this.token = response.token;
 
           // Init DropUI
           createDropUI(
             {
-              authorization: response.data.token,
+              authorization: response.token,
               container: document.getElementById('dropin-container')
             },
             (createErr, instance) => {
@@ -103,9 +103,10 @@ export class BookingPaymentComponent implements OnInit {
           // Something is wrong with the payment details
 
           this.isError = true;
-          this.error = response.message
-            ? response.message
-            : 'An error occurred while processing your payment.';
+          // this.error = response.message
+          //   ? response.message
+          //   :
+          this.error =  'An error occurred while processing your payment.';
           this.paymentStatus =
             'Sorry, an error occurred on our end. Please try again later.';
           console.error(
@@ -124,9 +125,10 @@ export class BookingPaymentComponent implements OnInit {
           error
         );
         this.isError = true;
-        this.error = error.message
-          ? error.message
-          : 'An error occurred while processing your payment.';
+        // this.error = error.message
+        //   ? error.message
+        //   :
+        this.error =  'An error occurred while processing your payment.';
         setTimeout(() => {
           this.viewportScroller.scrollToAnchor('alert');
         }, 0);
@@ -169,15 +171,15 @@ export class BookingPaymentComponent implements OnInit {
         // Submit payload.nonce to your server
         this._paymentService
           .pay(
-            this.bookingDetails.id,
-            this.bookingDetails.totalAmount,
+            this.bookingDetails.bookingEntityGid,
+            25, //this.bookingDetails.totalAmount,
             1,
             payload.nonce
           )
           .subscribe(
             (response: any) => {
               console.log(response);
-              if (response.success) {
+              if (response != null) {
                 this.loadingScreenText = 'Payment successful. NOOOOO  Redirecting...';
 
                 // setTimeout(() => {
