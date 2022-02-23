@@ -43,6 +43,7 @@ import { LoadingScreenComponent } from './misc/loading-screen/loading-screen.com
 import { PaymentSuccessComponent } from './rooms/book-room/payment-success/payment-success.component';
 import { BookRoomFormComponent } from './rooms/book-room/book-room-form/book-room-form.component';
 import { MatIconModule } from '@angular/material/icon';
+import { BookingPaymentComponent } from './booking-payment/booking-payment.component';
 
 @NgModule({
   declarations: [
@@ -67,7 +68,8 @@ import { MatIconModule } from '@angular/material/icon';
     RoomPaymentComponent,
     LoadingScreenComponent,
     PaymentSuccessComponent,
-    BookRoomFormComponent
+    BookRoomFormComponent,
+    BookingPaymentComponent
   ],
   imports: [
     CommonModule,
