@@ -5,7 +5,7 @@ export const environment = {
  // production: false,
   production: true,
   homeUrl: '${HOME_URL}',
-  bookingPayment: '${HOME_URL}:8084/api/v1/payment',
+  bookingPayment: '${HOME_URL}/api/paymentBooking',
   //homeUrl: 'http://localhost:8080',
   roomsApi: `${baseApiUrl}:8081/api/v1/app/rooms`,
   dictApi: `${baseApiUrl}:8086/api/v1/dicts`, // dictionaries
