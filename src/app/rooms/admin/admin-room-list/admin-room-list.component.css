@@ -1,0 +1,7 @@
+.room-name::first-letter {
+  text-transform: uppercase;
+}
+
+.room-row--deleted {
+  display: none;
+}

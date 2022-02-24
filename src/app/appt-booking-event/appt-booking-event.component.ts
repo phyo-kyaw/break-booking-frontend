@@ -1,10 +1,4 @@
-import {
-  Component,
-  OnInit,
-  ChangeDetectionStrategy,
-  ViewChild,
-  TemplateRef,
-} from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import {
   startOfDay,
   endOfDay,
@@ -13,7 +7,7 @@ import {
   endOfMonth,
   isSameDay,
   isSameMonth,
-  addHours,
+  addHours
 } from 'date-fns';
 import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -21,13 +15,13 @@ import {
   CalendarEvent,
   CalendarEventAction,
   CalendarEventTimesChangedEvent,
-  CalendarView,
+  CalendarView
 } from 'angular-calendar';
 
 import { HttpClient } from '@angular/common/http';
 
-import {Event} from './event.model'
-import {EventsService} from './event.service';
+import { Event } from './event.model';
+import { EventsService } from './event.service';
 import { NgForm } from '@angular/forms';
 
 @Component({
@@ -49,7 +43,7 @@ export class ApptBookingEventComponent implements OnInit {
     event: CalendarEvent;
   };
 
-  detail=true
+  detail = true;
   // eventsS: Event[];
 
   actions: CalendarEventAction[] = [
@@ -58,62 +52,96 @@ export class ApptBookingEventComponent implements OnInit {
       a11yLabel: 'Edit',
       onClick: ({ event }: { event: CalendarEvent }): void => {
         this.handleEvent('Edited', event);
-      },
+      }
     },
     {
       label: '<i class="fas fa-fw fa-trash-alt"></i>',
       a11yLabel: 'Delete',
       onClick: ({ event }: { event: CalendarEvent }): void => {
-        console.log('delete',event)
-      },
-    },
+        console.log('delete', event);
+      }
+    }
   ];
 
   refresh: Subject<any> = new Subject();
 
-  events: CalendarEvent[] = [];
+  events: CalendarEvent<Event>[] = [];
 
-  DataEvents=[]
+  DataEvents = [];
 
-  lenEvent=false
+  lenEvent = false;
 
   activeDayIsOpen: boolean = true;
 
-  constructor(private modal: NgbModal,private http: HttpClient, private eventsService:EventsService) {}
+  event: Event;
+
+  constructor(
+    private modal: NgbModal,
+    private http: HttpClient,
+    private eventsService: EventsService,
+    private modalService: NgbModal // private modalRef: NgbModalRef
+  ) {}
 
   ngOnInit(): void {
-    this.getAllEvents()
+    this.getAllEvents();
   }
 
-  getAllEvents(){
-    this.eventsService.getAllevents().subscribe(
-      posts=>{
-        console.log('hi,there,getall',posts)
-        this.DataEvents=posts
-        this.events=[]
-        if(this.DataEvents.length==0){
-          this.lenEvent=true
+  getAllEvents() {
+    // this.eventsService.getAllevents().subscribe(posts => {
+    //   console.log('hi,there,getall', posts);
+    //   this.DataEvents = posts;
+    //   this.events = [];
+    //   if (this.DataEvents.length == 0) {
+    //     this.lenEvent = true;
+    //   }
+    //   for (let i = 0; i < this.DataEvents.length; i++) {
+    //     console.log('hi', i);
+    //     this.events = [
+    //       ...this.events,
+    //       {
+    //         title: this.DataEvents[i].title,
+    //         start: startOfDay(new Date(this.DataEvents[i].startTime)),
+    //         end: endOfDay(new Date(this.DataEvents[i].endTime)),
+    //         // color: colors.red,
+    //         draggable: true,
+    //         resizable: {
+    //           beforeStart: true,
+    //           afterEnd: true
+    //         }
+    //       }
+    //     ];
+    //   }
+    //   console.log('add1111', this.events);
+    // });
+    this.events = [
+      {
+        title: 'Event1',
+        start: startOfDay(new Date()),
+        end: endOfDay(new Date()),
+        // color: colors.red,
+        draggable: true,
+        resizable: {
+          beforeStart: true,
+          afterEnd: true
         }
-        for (let i = 0; i < this.DataEvents.length; i++) {
-          console.log('hi',i)
-          this.events = [
-            ...this.events,
-            {
-              title: this.DataEvents[i].title,
-              start: startOfDay(new Date(this.DataEvents[i].startTime)),
-              end: endOfDay(new Date(this.DataEvents[i].endTime)),
-              // color: colors.red,
-              draggable: true,
-              resizable: {
-                beforeStart: true,
-                afterEnd: true,
-              },
-            },
-          ];
-        }
-        console.log('add1111',this.events)
       }
-    )
+    ];
+    this.DataEvents = [
+      {
+        title: 'Event1',
+        startTime: startOfDay(new Date()),
+        endTime: endOfDay(new Date()),
+        // color: colors.red,
+        description: 'Good event1 description'
+      },
+      {
+        title: 'Event2',
+        startTime: startOfDay(new Date()),
+        endTime: endOfDay(new Date()),
+        // color: colors.red,
+        description: 'Good event2 description'
+      }
+    ];
   }
 
   // 月中点击天
@@ -135,14 +163,14 @@ export class ApptBookingEventComponent implements OnInit {
   eventTimesChanged({
     event,
     newStart,
-    newEnd,
+    newEnd
   }: CalendarEventTimesChangedEvent): void {
-    this.events = this.events.map((iEvent) => {
+    this.events = this.events.map(iEvent => {
       if (iEvent === event) {
         return {
           ...event,
           start: newStart,
-          end: newEnd,
+          end: newEnd
         };
       }
       return iEvent;
@@ -161,27 +189,27 @@ export class ApptBookingEventComponent implements OnInit {
     this.DataEvents = [
       ...this.DataEvents,
       {
-        description: "Description", 
-        endTime: "No",
+        description: 'Description',
+        endTime: 'No',
         location: {
-          city: "City",
-          postCode:1234,
-          street: "Street"
+          city: 'City',
+          postCode: 1234,
+          street: 'Street'
         },
         price: 0,
-        startTime:"No",
-        title: "New Event",
-        add:true
-      },
+        startTime: 'No',
+        title: 'New Event',
+        add: true
+      }
     ];
-    this.lenEvent=false
+    this.lenEvent = false;
   }
-  
-  deleteAllEvents(){
-    this.eventsService.deleteAll().subscribe(()=>{
-      this.getAllEvents()
-    })
-    alert('Delete Successfully')
+
+  deleteAllEvents() {
+    this.eventsService.deleteAll().subscribe(() => {
+      this.getAllEvents();
+    });
+    alert('Delete Successfully');
   }
 
   // 看是month/day/year
@@ -189,13 +217,27 @@ export class ApptBookingEventComponent implements OnInit {
     this.view = view;
   }
 
-  // previous/today/next 
+  // previous/today/next
   closeOpenMonthViewDay() {
     this.activeDayIsOpen = false;
   }
 
-  showDetail(){
-    this.detail=!this.detail
-    console.log('aaa',this.detail)
+  showDetail() {
+    this.detail = !this.detail;
+    console.log('aaa', this.detail);
+  }
+
+  open(content, item = null) {
+    let option = { ariaLabelledBy: 'New Event', size: 'lg', centered: true };
+
+    if (item !== null) {
+      option.ariaLabelledBy = 'Edit Event';
+      this.event = this.DataEvents[item];
+    }
+    this.modalService.open(content, option);
+  }
+
+  closeModel(): void {
+    this.event = null;
   }
 }

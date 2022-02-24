@@ -1,0 +1,97 @@
+version: '3.8'
+services:
+  mongodb:
+    image: mongo:4.4.6
+    container_name: mongodb
+    ports:
+     - "27017:27017"
+    volumes:
+      - "mongo-data:/data/db"
+      - "./users_init.sh:/docker-entrypoint-initdb.d/users_init.sh:ro"
+    networks:
+      - db-network
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: pk
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: admin
+      dbUser: pk
+      dbPwd: password
+
+  postgres:
+    image: postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: password
+    networks:
+      - db-network
+
+  booking-api:
+    image: pkdocker3383/booking-api-local:v2
+    container_name: booking-api-local
+    ports:
+     - "8080:8080"
+    networks:
+      - api-network
+        #ipv4_address: 172.30.102.11
+      - db-network
+    depends_on:
+      - mongodb
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:13.0.1
+    volumes:
+      - "./break-booking-realm-export.json:/var/break-booking-realm-export.json"
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: postgres
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_SCHEMA: public
+      DB_PASSWORD: password
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: P6ssw0rd
+      KEYCLOAK_HTTP_PORT: 8080
+      KEYCLOAK_HTTPS_PORT: 8443
+      KEYCLOAK_IMPORT: /var/break-booking-realm-export.json
+
+    ports:
+      - 8181:8080
+      - 8443:8443
+      - 9990:9990
+    networks:
+      - api-network
+      - db-network
+    depends_on:
+      - postgres
+
+  break-booking:
+    image: "pkdocker3383/break-booking-local:v1"
+    container_name: break-booking-local
+    ports:
+        - "80:80"
+    environment:
+      HOME_URL: http://localhost
+    networks:
+      - api-network
+      - db-network
+    depends_on:
+      - booking-api
+      - keycloak
+
+networks:
+  db-network:
+    driver: "bridge"
+  api-network:
+    driver: "bridge"
+
+
+volumes:
+  mongo-data:
+    driver: local
+  postgres-data:
+    driver: local
+  keycloak-data:
+    driver: local

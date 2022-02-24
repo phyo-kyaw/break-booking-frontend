@@ -1,6 +1,4 @@
-
-export interface Event
-{
+export interface Event {
   // booking: {
   //   bookerEmail: string,
   //   bookerName: string,
@@ -9,15 +7,15 @@ export interface Event
   //   id: string,
   //   // userId: string
   // },
-  description: string,
+  description: string;
   // eid: string,
-  endTime: string,
+  endTime: string;
   location: {
-    city: string,
-    postCode:string,
-    street: string
-  },
-  price: number,
-  startTime:string,
-  title: string,
+    city: string;
+    postCode: string;
+    street: string;
+  };
+  price: number;
+  startTime: string;
+  title: string;
 }

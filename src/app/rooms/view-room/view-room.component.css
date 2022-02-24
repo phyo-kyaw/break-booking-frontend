@@ -1,0 +1,35 @@
+.room-title::first-letter {
+  text-transform: uppercase;
+}
+
+.room-details > span + span::before {
+  content: '.';
+  position: relative;
+  top: -4px;
+}
+
+mat-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tiny {
+  font-size: 1.3rem;
+}
+
+.larger {
+  font-size: 2rem;
+}
+
+.carousel img {
+  width: 100%;
+}
+
+.picsum-img-wrapper {
+  max-height: 50vh;
+}
+
+.description::first-letter {
+  text-transform: uppercase;
+}

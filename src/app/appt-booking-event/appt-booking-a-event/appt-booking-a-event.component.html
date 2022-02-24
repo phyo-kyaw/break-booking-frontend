@@ -1,53 +1,51 @@
-<b>ID: {{id+1}}</b>
-<div *ngIf=add>* Event details will <span>NOT</span> be saved before "SUBMIT".</div>
-<table class="table table-bordered" >
-        <thead>
-            <tr>
-            <th>Title</th>
-            <th>Starts Time</th>
-            <th>Ends Time</th>
-            <th>Details</th>
-            </tr>
-        </thead>
-    
-        <tbody>
-            <tr>
-            <td>
-                <input
-                type="text"
-                class="form-control"
-                [(ngModel)]="event.title"
-                />
-            </td>
-            <td>
-                <input
-                class="form-control"
-                type="text"
-                mwlFlatpickr
-                [(ngModel)]="event.startTime"
-                [altInput]="true"
-                [convertModelValue]="true"
-                [enableTime]="true"
-                dateFormat="Y-m-dTH:i"
-                altFormat="F j, Y H:i"
-                placeholder="Not set"
-                />
-            </td>
-            <td>
-                <input
-                class="form-control"
-                type="text"
-                mwlFlatpickr
-                [(ngModel)]="event.endTime"
-                [altInput]="true"
-                [convertModelValue]="true"
-                [enableTime]="true"
-                dateFormat="Y-m-dTH:i"
-                altFormat="F j, Y H:i"
-                placeholder="Not set"
-                />
-            </td>
-            <td *ngIf=!add>
+<b>ID: {{ id + 1 }}</b>
+<div *ngIf="add">
+  * Event details will <span>NOT</span> be saved before "SUBMIT".
+</div>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Starts Time</th>
+      <th>Ends Time</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        <input type="text" class="form-control" [(ngModel)]="event.title" />
+      </td>
+      <td>
+        <input
+          class="form-control"
+          type="text"
+          mwlFlatpickr
+          [(ngModel)]="event.startTime"
+          [altInput]="true"
+          [convertModelValue]="true"
+          [enableTime]="true"
+          dateFormat="Y-m-dTH:i"
+          altFormat="F j, Y H:i"
+          placeholder="Not set"
+        />
+      </td>
+      <td>
+        <input
+          class="form-control"
+          type="text"
+          mwlFlatpickr
+          [(ngModel)]="event.endTime"
+          [altInput]="true"
+          [convertModelValue]="true"
+          [enableTime]="true"
+          dateFormat="Y-m-dTH:i"
+          altFormat="F j, Y H:i"
+          placeholder="Not set"
+        />
+      </td>
+      <!-- <td *ngIf=!add>
                 <button class="btn btn-success col-sm-12" (click)="showDetail()" *ngIf=detail>
                     Show Detail
                 </button>
@@ -62,79 +60,82 @@
                 <button class="btn btn-success col-sm-12" (click)="showDetail()" *ngIf=!detail>
                     Add Later
                 </button>
-            </td>
-            </tr>
-        </tbody>
+            </td> -->
+    </tr>
+  </tbody>
 
-        <thead  *ngIf=!detail>
-            <tr>
-            <th>City</th>
-            <th>Street</th>
-            <th>Postcode</th>
-            </tr>
-        </thead>
-    
-        <tbody  *ngIf=!detail>
-            <tr>
-            <td>
-                <input
-                type="text"
-                class="col-sm"
-                [(ngModel)]="event.location.city"
-                />
-            </td>
-            <td>
-                <input
-                type="text"
-                class="col-sm"
-                [(ngModel)]="event.location.street"
-                />
-            </td>
-            <td>
-                <input
-                type="number"
-                class="col-sm"
-                [(ngModel)]="event.location.postCode"
-                />
-            </td>
-            </tr>
-        </tbody>
+  <!-- <thead  *ngIf=!detail> -->
+  <thead>
+    <tr>
+      <th>City</th>
+      <th>Street</th>
+      <th>Postcode</th>
+    </tr>
+  </thead>
 
-        <thead  *ngIf=!detail>
-            <tr>
-            <th>Description</th>
-            <th>Price</th>
-            <th  *ngIf=!event.add>Modify && Remove</th>
-            <th  *ngIf=event.add>Add</th>
-            </tr>
-        </thead>
-    
-        <tbody  *ngIf=!detail>
-            <tr>
-            <td>
-                <textarea
-                type="text"
-                [(ngModel)]="event.description"
-                class="col-sm-12"></textarea>
-            </td>
-            <td>
-                <input
-                type="text"
-                class="col-sm"
-                [(ngModel)]="event.price"
-                />
-            </td>
-            <td>
-            <button class="btn btn-success float-left col-sm-6" (click)="modifyEvent(event)" *ngIf=!event.add>
-                Modify
-            </button>
-            <button class="btn btn-danger float-right col-sm-6" (click)="deleteEvent(event)" *ngIf=!event.add>
-                Delete
-                </button>
-            <button class="btn btn-primary float-right col-sm-12" (click)="addEventConfirm(event)" *ngIf=event.add>
-                SUBMIT
-            </button>
-            </td>
-            </tr>
-        </tbody>
-    </table> 
+  <!-- <tbody  *ngIf=!detail> -->
+  <tbody>
+    <tr>
+      <td>
+        <input type="text" class="col-sm" [(ngModel)]="event.location.city" />
+      </td>
+      <td>
+        <input type="text" class="col-sm" [(ngModel)]="event.location.street" />
+      </td>
+      <td>
+        <input
+          type="number"
+          class="col-sm"
+          [(ngModel)]="event.location.postCode"
+        />
+      </td>
+    </tr>
+  </tbody>
+
+  <thead *ngIf="!detail">
+    <thead>
+      <tr>
+        <th>Description</th>
+        <th>Price</th>
+        <th *ngIf="!event.add">Modify && Remove</th>
+        <th *ngIf="event.add">Add</th>
+      </tr>
+    </thead>
+  </thead>
+
+  <!-- <tbody *ngIf="!detail"> -->
+  <tbody>
+    <tr>
+      <td>
+        <textarea
+          type="text"
+          [(ngModel)]="event.description"
+          class="col-sm-12"
+        ></textarea>
+      </td>
+      <td>
+        <input type="text" class="col-sm" [(ngModel)]="event.price" />
+      </td>
+      <td>
+        <!-- <button
+          class="btn btn-success float-left col-sm-6"
+          (click)="modifyEvent(event)"
+          *ngIf="!event.add"
+        > -->
+        <button class="btn btn-success float-left col-sm-6">Modify</button>
+        <!-- <button
+          class="btn btn-danger float-right col-sm-6"
+          (click)="deleteEvent(event)"
+          *ngIf="!event.add"
+        > -->
+        <button class="btn btn-danger float-right col-sm-6">Delete</button>
+        <!-- <button
+          class="btn btn-primary float-right col-sm-12"
+          (click)="addEventConfirm(event)"
+          *ngIf="event.add"
+        > -->
+        <button class="btn btn-primary float-right col-sm-12">SUBMIT</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
