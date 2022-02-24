@@ -172,21 +172,21 @@ export class BookingPaymentComponent implements OnInit {
         this._paymentService
           .pay(
             this.bookingDetails.bookingEntityGid,
-            25, //this.bookingDetails.totalAmount,
-            1,
+            2500, //this.bookingDetails.totalAmount,
+            2,
             payload.nonce
           )
           .subscribe(
             (response: any) => {
               console.log(response);
               if (response != null) {
-                this.loadingScreenText = 'Payment successful. NOOOOO  Redirecting...';
+                this.loadingScreenText = 'Payment successful. Redirecting. Thank you... =)';
 
-                // setTimeout(() => {
-                //   this.router.navigateByUrl(
-                //     `/rooms/payment/success/${this.bookingDetails.id}`
-                //   );
-                // }, 1500);
+                setTimeout(() => {
+                  this.router.navigateByUrl(
+                    `/list`
+                  );
+                }, 1500);
 
 
               } else {
