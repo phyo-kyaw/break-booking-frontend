@@ -27,7 +27,7 @@ import { colors } from '../appt-booking-utils/colors';
 import { Subject, timer } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { ActivatedRoute, UrlSegment } from '@angular/router';
+import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import {
   startOfDay,
   endOfDay,
@@ -158,6 +158,8 @@ export class ApptBookingComponent  implements OnInit, OnDestroy {
 
   apptBookingEntity: ApptBookingEntity;
 
+  spinnerScreenText = "";
+
 
   dayStartHour=9
   dayStartMinute=0
@@ -236,6 +238,7 @@ export class ApptBookingComponent  implements OnInit, OnDestroy {
     private bookingService: ApptBookingDataService,
     private bookingEntityDataService: ApptBookingEntityDataService,
     protected readonly keycloakService: KeycloakService,
+    private router: Router,
     private route: ActivatedRoute
   ) {}
 
@@ -529,6 +532,11 @@ export class ApptBookingComponent  implements OnInit, OnDestroy {
                 });
                 console.log('create event clicked!');
                 console.log(response);
+                this.spinnerScreenText = 'Booking successful. Redirecting...';
+
+                setTimeout(() => {
+                  this.router.navigateByUrl(`/booking/payment/${this.apptBookingEntity.gid}`);
+                }, 1500);
                 this.updateWithBackEndData();
               },
               error => {

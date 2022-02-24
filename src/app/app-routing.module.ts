@@ -15,6 +15,7 @@ import { ViewDictionaryComponent } from './dictionaries/view-dictionary/view-dic
 import { RoomPaymentComponent } from './rooms/book-room/room-payment/room-payment.component';
 import { PaymentSuccessComponent } from './rooms/book-room/payment-success/payment-success.component';
 import { BookRoomFormComponent } from './rooms/book-room/book-room-form/book-room-form.component';
+import { BookingPaymentComponent } from './booking-payment/booking-payment.component';
 
 const routes: Routes = [
   //{ path: 'select', component: CalendarSelComponent },
@@ -28,12 +29,16 @@ const routes: Routes = [
     path: 'entity/:gid',
     component: ApptBookingEntityComponent,
     canActivate: [AuthGuard],
-    data: { roles: ['booking-admin'] }
+    data: { roles: ['booking-admin', 'manage-account'] }
   },
   { path: 'book', component: ListApptBookingEntityComponent },
   { path: 'list', component: ListApptBookingEntityComponent },
   { path: 'select/:gid', component: ApptBookingComponent },
   { path: 'admin', component: ApptBookingAdminComponent },
+  {
+    path: 'booking/payment/:id',
+    component: BookingPaymentComponent
+  },
   {
     path: 'rooms/all',
     component:
