@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ApptBookingEntity } from 'app/appt-booking-entity/models';
-import { ApptBookingEntityDataService } from 'app/service/data/appt-booking-entity-data.service';
+import { ApptBookingEntity } from 'app/service-booking/appt-booking-entity/models';
+import { ApptBookingEntityDataService } from 'app/service/appt-booking-entity/appt-booking-entity-data.service';
 
 @Component({
   selector: 'app-list-appt-booking-entity',

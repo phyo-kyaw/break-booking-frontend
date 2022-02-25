@@ -14,7 +14,7 @@ import { ApptBookingUtilsModule } from './appt-booking-utils/module';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ApptBookingComponent } from './appt-booking/appt-booking.component';
+import { ApptBookingComponent } from './service-booking/appt-booking/appt-booking.component';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 import { initializeKeycloak } from './appt-booking-utils/app.init';
@@ -23,10 +23,10 @@ import { initializeKeycloak } from './appt-booking-utils/app.init';
 import { environment } from '../environments/environment';
 import { MenuComponent } from './menu/menu.component';
 import { FooterComponent } from './footer/footer.component';
-import { ApptBookingEntityComponent } from './appt-booking-entity/appt-booking-entity.component';
+import { ApptBookingEntityComponent } from './service-booking/appt-booking-entity/appt-booking-entity.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ListApptBookingEntityComponent } from './list-appt-booking-entity/list-appt-booking-entity.component';
-import { ApptBookingAdminComponent } from './appt-booking-admin/appt-booking-admin.component';
+import { ListApptBookingEntityComponent } from './service-booking/list-appt-booking-entity/list-appt-booking-entity.component';
+import { ApptBookingAdminComponent } from './service-booking/appt-booking-admin/appt-booking-admin.component';
 import { AdminRoomListComponent } from './rooms/admin/admin-room-list/admin-room-list.component';
 import { RoomFormComponent } from './rooms/admin/room-form/room-form.component';
 import { FormButtonsComponent } from './rooms/admin/room-form/form-buttons/form-buttons.component';

@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
-import { ApptBookingData } from '../../appt-booking/event-data';
+import { ApptBookingData } from '../../service-booking/appt-booking/event-data';
 import { environment } from '../../../environments/environment';
 
 @Injectable({

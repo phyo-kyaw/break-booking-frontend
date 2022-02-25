@@ -19,10 +19,10 @@ import {
 } from 'angular-calendar';
 import {  KeycloakService } from 'keycloak-angular';
 import { WeekDay, WeekViewHourSegment, WeekViewHourColumn, EventAction, EventColor } from 'calendar-utils';
-import { CalendarHeaderComponent } from '../appt-booking-utils/calendar-header.component';
-import { CustomEventTitleFormatter } from '../appt-booking-utils/custom-event-title-formatter.provider';
-import { CustomDateFormatter } from '../appt-booking-utils/custom-date-formatter.provider';
-import { colors } from '../appt-booking-utils/colors';
+import { CalendarHeaderComponent } from '../../appt-booking-utils/calendar-header.component';
+import { CustomEventTitleFormatter } from '../../appt-booking-utils/custom-event-title-formatter.provider';
+import { CustomDateFormatter } from '../../appt-booking-utils/custom-date-formatter.provider';
+import { colors } from '../../appt-booking-utils/colors';
 //import { BookingEvent } from '../appt-booking-utils/event-b';
 import { Subject, timer } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -47,12 +47,12 @@ import {
   startOfHour,
   isAfter,
 } from 'date-fns';
-import { ApptBookingDataService } from '../service/data/appt-booking-data.service';
+import { ApptBookingDataService } from '../../service/appt-booking/appt-booking-data.service';
 import { ApptBookingData } from './event-data';
 import { KeycloakProfile } from 'keycloak-js';
 import { createElementCssSelector } from '@angular/compiler';
-import { ApptBookingEntityDataService } from 'app/service/data/appt-booking-entity-data.service';
-import { WorkSession, ApptBookingEntity } from 'app/appt-booking-entity/models';
+import { ApptBookingEntityDataService } from 'app/service/appt-booking-entity/appt-booking-entity-data.service';
+import { WorkSession, ApptBookingEntity } from 'app/service-booking/appt-booking-entity/models';
 
 
 @Component({

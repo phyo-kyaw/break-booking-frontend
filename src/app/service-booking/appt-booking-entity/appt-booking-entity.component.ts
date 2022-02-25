@@ -6,7 +6,7 @@ import { TimeFormatterPipe } from 'ngx-material-timepicker/src/app/material-time
 import { TimeM, DurationM, Break, ApptBookingEntity, WorkSession, WorkSessionCheckBox } from './models'
 import { Guid } from "guid-typescript";
 
-import { ApptBookingEntityDataService } from 'app/service/data/appt-booking-entity-data.service';
+import { ApptBookingEntityDataService } from 'app/service/appt-booking-entity/appt-booking-entity-data.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({

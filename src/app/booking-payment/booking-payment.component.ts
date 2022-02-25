@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 //import { RoomBookingService } from 'app/service/room-booking/room-booking.service';
 //import { RoomPaymentService } from 'app/service/room-payment/room-payment.service';
 import { ViewportScroller } from '@angular/common';
-import { ApptBookingDataService } from 'app/service/data/appt-booking-data.service';
+import { ApptBookingDataService } from 'app/service/appt-booking/appt-booking-data.service';
 import { BookingPaymentService } from 'app/service/payment/booking-payment.service';
 
 @Component({

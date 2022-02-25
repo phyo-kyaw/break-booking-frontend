@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
-import { ApptBookingData } from '../../appt-booking/event-data';
-import { TimeM, DurationM, Break, ApptBookingEntity } from '../../appt-booking-entity/models'
+import { ApptBookingData } from '../../service-booking/appt-booking/event-data';
+import { TimeM, DurationM, Break, ApptBookingEntity } from '../../service-booking/appt-booking-entity/models'
 import { environment } from '../../../environments/environment';
 
 @Injectable({

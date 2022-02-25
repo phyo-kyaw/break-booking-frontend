@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { ApptBookingAdminComponent } from './appt-booking-admin/appt-booking-admin.component';
-import { ApptBookingEntityComponent } from './appt-booking-entity/appt-booking-entity.component';
-import { ApptBookingComponent } from './appt-booking/appt-booking.component';
+import { ApptBookingAdminComponent } from './service-booking/appt-booking-admin/appt-booking-admin.component';
+import { ApptBookingEntityComponent } from './service-booking/appt-booking-entity/appt-booking-entity.component';
+import { ApptBookingComponent } from './service-booking/appt-booking/appt-booking.component';
 import { AuthGuard } from './appt-booking-utils/app.guard';
-import { ListApptBookingEntityComponent } from './list-appt-booking-entity/list-appt-booking-entity.component';
+import { ListApptBookingEntityComponent } from './service-booking/list-appt-booking-entity/list-appt-booking-entity.component';
 import { AdminRoomListComponent } from './rooms/admin/admin-room-list/admin-room-list.component';
 import { AddRoomComponent } from './rooms/admin/add-room/add-room.component';
 import { EditRoomComponent } from './rooms/admin/edit-room/edit-room.component';
