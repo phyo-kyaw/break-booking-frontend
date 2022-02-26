@@ -1,0 +1,162 @@
+<form
+  #eventForm="ngForm"
+  (ngSubmit)="onSubmit(eventForm)"
+  *ngIf="event !== null"
+>
+  <div
+    class="alert alert-danger"
+    id="alert"
+    [class.d-block]="eventForm.submitted && eventForm.form.status === 'INVALID'"
+  >
+    Please check the highlighted fields and fix problems before submitting
+    again.
+  </div>
+
+  <div class="form-group required">
+    <label for="title">Event Title</label>
+    <input
+      #title="ngModel"
+      id="title"
+      name="title"
+      class="form-control"
+      [class.is-invalid]="title.invalid && title.touched"
+      type="text"
+      [(ngModel)]="event.title"
+      placeholder="Name of the event"
+      required
+    />
+    <!-- <small
+      class="text-danger user-input-notification"
+      [class.d-block]="
+        (title.invalid && title.touched) ||
+        (eventForm.submitted && title.invalid)
+      "
+    >
+      Title is required
+    </small> -->
+  </div>
+
+  <div class="form-group required">
+    <label for="startTime">Starts Time</label>
+    <input
+      #startTime="ngModel"
+      id="startTime"
+      name="startTime"
+      class="form-control"
+      [class.is-invalid]="startTime.invalid && startTime.touched"
+      type="text"
+      mwlFlatpickr
+      [(ngModel)]="event.startTime"
+      [altInput]="true"
+      [convertModelValue]="true"
+      [enableTime]="true"
+      dateFormat="Y-m-dTH:i"
+      altFormat="F j, Y H:i"
+      placeholder="start time"
+      required
+    />
+    <small
+      class="text-danger user-input-notification"
+      [class.d-none]="startTime.valid || startTime.untouched"
+    >
+      Start Time is required
+    </small>
+  </div>
+
+  <div class="form-group required">
+    <label for="endTime">Ends Time</label>
+    <input
+      #endTime="ngModel"
+      id="endTime"
+      name="endTime"
+      class="form-control"
+      [class.is-invalid]="endTime.invalid && endTime.touched"
+      type="text"
+      mwlFlatpickr
+      [(ngModel)]="event.endTime"
+      [altInput]="true"
+      [convertModelValue]="true"
+      [enableTime]="true"
+      dateFormat="Y-m-dTH:i"
+      altFormat="F j, Y H:i"
+      placeholder="Not set"
+      required
+    />
+    <small
+      class="text-danger user-input-notification"
+      [class.d-none]="endTime.valid || endTime.untouched"
+    >
+      End Time Time is required
+    </small>
+  </div>
+
+  <div class="form-group">
+    <label for="description">Description</label>
+    <input
+      #description="ngModel"
+      id="description"
+      name="description"
+      [(ngModel)]="event.description"
+      class="form-control"
+      [class.is-invalid]="description.invalid && description.touched"
+      type="text"
+    />
+  </div>
+
+  <div class="form-group">
+    <label for="price">Price</label>
+    <input
+      #price="ngModel"
+      name="price"
+      [(ngModel)]="event.price"
+      class="form-control"
+      [class.is-invalid]="price.invalid && price.touched"
+      type="number"
+      min="1"
+    />
+  </div>
+
+  <div class="form-group">
+    <label for="city">City</label>
+    <input
+      #city="ngModel"
+      name="city"
+      [(ngModel)]="event.location.city"
+      class="form-control"
+      [class.is-invalid]="city.invalid && city.touched"
+      type="text"
+    />
+  </div>
+
+  <div class="form-group">
+    <label for="street">Street</label>
+    <input
+      #street="ngModel"
+      name="street"
+      [(ngModel)]="event.location.street"
+      class="form-control"
+      [class.is-invalid]="street.invalid && street.touched"
+      type="text"
+    />
+  </div>
+
+  <div class="form-group">
+    <label for="postCode">PostCode</label>
+    <input
+      #postCode="ngModel"
+      name="postCode"
+      [(ngModel)]="event.location.postCode"
+      class="form-control"
+      [class.is-invalid]="postCode.invalid && postCode.touched"
+      type="text"
+    />
+  </div>
+
+  <div class="modal-footer">
+    <input type="submit" class="btn btn-success" />
+  </div>
+</form>
+
+<!-- <button class="btn btn-lg btn-outline-primary" (click)="open(content)">
+  New Event
+</button> -->

@@ -16,6 +16,7 @@ import { RoomPaymentComponent } from './rooms/book-room/room-payment/room-paymen
 import { PaymentSuccessComponent } from './rooms/book-room/payment-success/payment-success.component';
 import { BookRoomFormComponent } from './rooms/book-room/book-room-form/book-room-form.component';
 import { BookingPaymentComponent } from './booking-payment/booking-payment.component';
+import { CalenderComponent } from './events/calender/calender.component'
 
 const routes: Routes = [
   //{ path: 'select', component: CalendarSelComponent },
@@ -56,6 +57,11 @@ const routes: Routes = [
   },
   { path: 'rooms/view/:id', component: ViewRoomComponent },
   { path: 'rooms', component: RoomListComponent },
+  {
+    path: 'event/all',
+    component:
+    CalenderComponent /*, canActivate: [AuthGuard] , data: { roles: ['room-provider'] } */
+  },
   {
     path: 'dictionaries',
     component:

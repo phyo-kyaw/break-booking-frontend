@@ -44,6 +44,8 @@ import { PaymentSuccessComponent } from './rooms/book-room/payment-success/payme
 import { BookRoomFormComponent } from './rooms/book-room/book-room-form/book-room-form.component';
 import { MatIconModule } from '@angular/material/icon';
 import { BookingPaymentComponent } from './booking-payment/booking-payment.component';
+import { CalenderComponent } from './events/calender/calender.component';
+import { EventFormComponent } from './events/admin/event-form/event-form.component';
 
 @NgModule({
   declarations: [
@@ -69,7 +71,9 @@ import { BookingPaymentComponent } from './booking-payment/booking-payment.compo
     LoadingScreenComponent,
     PaymentSuccessComponent,
     BookRoomFormComponent,
-    BookingPaymentComponent
+    BookingPaymentComponent,
+    CalenderComponent,
+    EventFormComponent
   ],
   imports: [
     CommonModule,
