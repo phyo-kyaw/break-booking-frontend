@@ -18,6 +18,7 @@ import { BookRoomFormComponent } from './rooms/book-room/book-room-form/book-roo
 import { BookingPaymentComponent } from './booking-payment/booking-payment.component';
 import { CalenderComponent } from './events/calender/calender.component';
 import { BookEventFormComponent } from './events/book-event/book-event-form/book-event-form.component';
+import { EventFormComponent } from './events/admin/event-form/event-form.component';
 
 const routes: Routes = [
   //{ path: 'select', component: CalendarSelComponent },
@@ -36,11 +37,13 @@ const routes: Routes = [
   { path: 'book', component: ListApptBookingEntityComponent },
   { path: 'list', component: ListApptBookingEntityComponent },
   { path: 'select/:gid', component: ApptBookingComponent },
-  { path: 'admin', component: ApptBookingAdminComponent },
+  { path: 'admin/appt', component: ApptBookingAdminComponent },
   {
     path: 'booking/payment/:id',
     component: BookingPaymentComponent
   },
+  { path: 'admin/event', component: EventFormComponent },
+  { path: 'event', component: CalenderComponent },
   {
     path: 'rooms/all',
     component:

@@ -20,7 +20,7 @@ export class ApptBookingAdminComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    confirm("admin username: break.booking.561 password: P6ssw0rd")
+    //confirm("admin username: break.booking.561 password: P6ssw0rd")
     console.log("In booking entity list init" );
     this.apptBookingEntityDataService.retrieveAllBookingEntities().subscribe(
       response => {
