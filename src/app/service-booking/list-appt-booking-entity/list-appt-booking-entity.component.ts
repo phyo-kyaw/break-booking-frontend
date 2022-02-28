@@ -19,7 +19,7 @@ export class ListApptBookingEntityComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    confirm("test username: linuxzen.561@gmail.com password: P6ssw0rd")
+    //confirm("test username: linuxzen.561@gmail.com password: P6ssw0rd")
     console.log("In booking entity list init" );
     this.bookingEntityDataService.retrieveAllBookingEntities().subscribe(
       response => {
