@@ -86,7 +86,8 @@ export class CalenderComponent implements OnInit {
 
   
   getAllEvents() {
-    // this.eventsService.getAllevents().subscribe(posts => {
+    this.eventsService.getAllevents().subscribe(posts => {
+      console.log(posts)
     //   console.log('hi,there,getall', posts);
     //   this.DataEvents = posts;
     //   this.events = [];
@@ -111,7 +112,7 @@ export class CalenderComponent implements OnInit {
     //     ];
     //   }
     //   console.log('add1111', this.events);
-    // });
+    });
     this.events = [
       {
         title: 'Event1',

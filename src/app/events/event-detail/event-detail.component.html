@@ -1,0 +1,9 @@
+<div class="container" *ngIf="event !== null">
+  <h4>{{ event.title }}</h4>
+  <p>Start: {{ event.startTime }} End: {{ event.endTime }}</p>
+  <p>Description: {{ event.description }}</p>
+  <p>Price: {{ event.price }}</p>
+  <p>City: {{ event.location?.city }}</p>
+  <p>Street: {{ event.location?.street }}</p>
+  <p>Post Code: {{ event.location?.postCode }}</p>
+</div>

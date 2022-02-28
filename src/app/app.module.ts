@@ -46,6 +46,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { BookingPaymentComponent } from './booking-payment/booking-payment.component';
 import { CalenderComponent } from './events/calender/calender.component';
 import { EventFormComponent } from './events/admin/event-form/event-form.component';
+import { EventDetailComponent } from './events/event-detail/event-detail.component';
+import { BookEventFormComponent } from './events/book-event/book-event-form/book-event-form.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +75,9 @@ import { EventFormComponent } from './events/admin/event-form/event-form.compone
     BookRoomFormComponent,
     BookingPaymentComponent,
     CalenderComponent,
-    EventFormComponent
+    EventFormComponent,
+    EventDetailComponent,
+    BookEventFormComponent
   ],
   imports: [
     CommonModule,

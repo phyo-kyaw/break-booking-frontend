@@ -18,7 +18,7 @@ export class EventBookingService {
 
   error = new Subject<string>();
 
-  addr='http://localhost:8080/api/v1/'
+  addr='http://localhost:8081/api/v1/'
   constructor(private http: HttpClient) {}
 
   getAllevents(){
