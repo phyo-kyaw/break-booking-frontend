@@ -138,7 +138,7 @@
           <th>Title</th>
           <th>Start</th>
           <th>End</th>
-          <th>Description</th>
+          <!-- <th>Description</th> -->
           <th>Action</th>
         </tr>
       </thead>
@@ -154,9 +154,9 @@
           <td>
             {{ event.endTime }}
           </td>
-          <td>
+          <!-- <td>
             {{ event.description }}
-          </td>
+          </td> -->
 
           <td>
             <button
@@ -208,13 +208,7 @@
 
   <ng-template #adminContent let-modal>
     <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Event</h4>
-      <!-- <button
-          type="button"
-          class="btn-close"
-          aria-label="Close"
-          (click)="modal.dismiss('Cross click')"
-        ></button> -->
+      <h4 class="modal-title">{{ event?.title || 'New Event' }}</h4>
       <button
         type="button"
         class="btn-close"
@@ -222,6 +216,7 @@
         (click)="modal.dismiss('Cross click'); closeModel()"
       ></button>
     </div>
+
     <div class="modal-body">
       <app-event-form [event]="event"></app-event-form>
     </div>
@@ -229,13 +224,7 @@
 
   <ng-template #userContent let-modal>
     <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Event</h4>
-      <!-- <button
-          type="button"
-          class="btn-close"
-          aria-label="Close"
-          (click)="modal.dismiss('Cross click')"
-        ></button> -->
+      <h4 class="modal-title">Booking - {{ event?.title }}</h4>
       <button
         type="button"
         class="btn-close"
@@ -243,15 +232,17 @@
         (click)="modal.dismiss('Cross click'); closeModel()"
       ></button>
     </div>
+
     <div class="modal-body">
       <app-event-detail [event]="event"></app-event-detail>
     </div>
+
     <div class="modal-footer">
       <!-- <button type="submit" class="btn btn-primary">Book</button> -->
       <a
         [routerLink]="['/event/payment/', 1]"
         class="btn btn-outline-primary mr-2"
-        (click)="modal.dismiss('Cross click')"
+        (click)="modal.dismiss('Cross click'); closeModel()"
         >Book</a
       >
     </div>

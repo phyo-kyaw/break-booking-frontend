@@ -74,48 +74,59 @@ export class CalenderComponent implements OnInit {
   activeDayIsOpen: boolean = true;
 
   event: Event;
-  constructor(    private modal: NgbModal,
+  constructor(
+    private modal: NgbModal,
     private http: HttpClient,
     private eventsService: EventBookingService,
-    private modalService: NgbModal){} 
+    private modalService: NgbModal
+  ) {}
 
   ngOnInit(): void {
     this.getAllEvents();
   }
 
-
-  
   getAllEvents() {
     this.eventsService.getAllevents().subscribe(posts => {
-      console.log(posts)
-    //   console.log('hi,there,getall', posts);
-    //   this.DataEvents = posts;
-    //   this.events = [];
-    //   if (this.DataEvents.length == 0) {
-    //     this.lenEvent = true;
-    //   }
-    //   for (let i = 0; i < this.DataEvents.length; i++) {
-    //     console.log('hi', i);
-    //     this.events = [
-    //       ...this.events,
-    //       {
-    //         title: this.DataEvents[i].title,
-    //         start: startOfDay(new Date(this.DataEvents[i].startTime)),
-    //         end: endOfDay(new Date(this.DataEvents[i].endTime)),
-    //         // color: colors.red,
-    //         draggable: true,
-    //         resizable: {
-    //           beforeStart: true,
-    //           afterEnd: true
-    //         }
-    //       }
-    //     ];
-    //   }
-    //   console.log('add1111', this.events);
+      console.log(posts);
+      //   console.log('hi,there,getall', posts);
+      //   this.DataEvents = posts;
+      //   this.events = [];
+      //   if (this.DataEvents.length == 0) {
+      //     this.lenEvent = true;
+      //   }
+      //   for (let i = 0; i < this.DataEvents.length; i++) {
+      //     console.log('hi', i);
+      //     this.events = [
+      //       ...this.events,
+      //       {
+      //         title: this.DataEvents[i].title,
+      //         start: startOfDay(new Date(this.DataEvents[i].startTime)),
+      //         end: endOfDay(new Date(this.DataEvents[i].endTime)),
+      //         // color: colors.red,
+      //         draggable: true,
+      //         resizable: {
+      //           beforeStart: true,
+      //           afterEnd: true
+      //         }
+      //       }
+      //     ];
+      //   }
+      //   console.log('add1111', this.events);
     });
     this.events = [
       {
         title: 'Event1',
+        start: startOfDay(new Date()),
+        end: endOfDay(new Date()),
+        // color: colors.red,
+        draggable: true,
+        resizable: {
+          beforeStart: true,
+          afterEnd: true
+        }
+      },
+      {
+        title: 'Event2',
         start: startOfDay(new Date()),
         end: endOfDay(new Date()),
         // color: colors.red,
@@ -131,15 +142,25 @@ export class CalenderComponent implements OnInit {
         title: 'Event1',
         startTime: startOfDay(new Date()),
         endTime: endOfDay(new Date()),
-        // color: colors.red,
-        description: 'Good event1 description'
+        description: 'We are holding a new event to share....',
+        price: 250,
+        location: {
+          city: 'Melbourne',
+          postCode: '6000',
+          street: 'Alexandra '
+        }
       },
       {
         title: 'Event2',
         startTime: startOfDay(new Date()),
         endTime: endOfDay(new Date()),
-        // color: colors.red,
-        description: 'Good event2 description'
+        description: 'In order to help more people who are suffered from....',
+        price: 500,
+        location: {
+          city: 'Sydney',
+          postCode: '7000',
+          street: 'Macarthur'
+        }
       }
     ];
   }
@@ -228,17 +249,18 @@ export class CalenderComponent implements OnInit {
   }
 
   open(content, item = null) {
-    let option = { ariaLabelledBy: 'New Event', size: 'lg', centered: true };
-
     if (item !== null) {
-      option.ariaLabelledBy = 'Edit Event';
       this.event = this.DataEvents[item];
     }
-    this.modalService.open(content, option);
+
+    this.modalService.open(content, {
+      size: 'lg',
+      centered: true,
+      backdrop: 'static'
+    });
   }
 
   closeModel(): void {
     this.event = null;
   }
-
 }
