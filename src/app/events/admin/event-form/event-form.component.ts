@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { Event } from '../../Types/event';
 import { ViewportScroller } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { EventBookingService } from '../../../service/event-booking/event-booking.service';
 
 @Component({
   selector: 'app-event-form',
@@ -25,7 +26,10 @@ export class EventFormComponent implements OnInit {
 
   @Input() event: Event;
 
-  constructor(private modalService: NgbModal) {}
+  constructor(
+    private modalService: NgbModal,
+    private eventsService: EventBookingService
+  ) {}
 
   ngOnInit(): void {
     this.event = { ...this._defaultEvent, ...(this.event ?? {}) };
@@ -38,7 +42,12 @@ export class EventFormComponent implements OnInit {
     if (event.valid) {
       console.log('valid');
     } else {
+      console.log('invalid');
     }
+
+    this.eventsService
+      .addNewEvent(event.form.value)
+      .subscribe(res => console.log(res));
     this.modalService.dismissAll();
   }
 }

@@ -88,30 +88,29 @@ export class CalenderComponent implements OnInit {
   getAllEvents() {
     this.eventsService.getAllevents().subscribe(posts => {
       console.log(posts);
-      //   console.log('hi,there,getall', posts);
-      //   this.DataEvents = posts;
-      //   this.events = [];
-      //   if (this.DataEvents.length == 0) {
-      //     this.lenEvent = true;
-      //   }
-      //   for (let i = 0; i < this.DataEvents.length; i++) {
-      //     console.log('hi', i);
-      //     this.events = [
-      //       ...this.events,
-      //       {
-      //         title: this.DataEvents[i].title,
-      //         start: startOfDay(new Date(this.DataEvents[i].startTime)),
-      //         end: endOfDay(new Date(this.DataEvents[i].endTime)),
-      //         // color: colors.red,
-      //         draggable: true,
-      //         resizable: {
-      //           beforeStart: true,
-      //           afterEnd: true
-      //         }
-      //       }
-      //     ];
-      //   }
-      //   console.log('add1111', this.events);
+
+      this.DataEvents = posts;
+      this.events = [];
+      if (this.DataEvents.length == 0) {
+        this.lenEvent = true;
+      }
+      for (let i = 0; i < this.DataEvents.length; i++) {
+        console.log('hi', i);
+        this.events = [
+          ...this.events,
+          {
+            title: this.DataEvents[i].title,
+            start: startOfDay(new Date(this.DataEvents[i].startTime)),
+            end: endOfDay(new Date(this.DataEvents[i].endTime)),
+            // color: colors.red,
+            draggable: true,
+            resizable: {
+              beforeStart: true,
+              afterEnd: true
+            }
+          }
+        ];
+      }
     });
     this.events = [
       {
@@ -206,24 +205,25 @@ export class CalenderComponent implements OnInit {
   }
 
   // add
-  addEvent(): void {
-    this.DataEvents = [
-      ...this.DataEvents,
-      {
-        description: 'Description',
-        endTime: 'No',
-        location: {
-          city: 'City',
-          postCode: 1234,
-          street: 'Street'
-        },
-        price: 0,
-        startTime: 'No',
-        title: 'New Event',
-        add: true
-      }
-    ];
-    this.lenEvent = false;
+  addEvent(props): void {
+    // this.eventsService.addNewEvent().subscribe(res => console.log(res));
+    // this.DataEvents = [
+    //   ...this.DataEvents,
+    //   {
+    //     description: 'Description',
+    //     endTime: 'No',
+    //     location: {
+    //       city: 'City',
+    //       postCode: 1234,
+    //       street: 'Street'
+    //     },
+    //     price: 0,
+    //     startTime: 'No',
+    //     title: 'New Event',
+    //     add: true
+    //   }
+    // ];
+    // this.lenEvent = false;
   }
 
   deleteAllEvents() {

@@ -48,6 +48,7 @@ import { CalenderComponent } from './events/calender/calender.component';
 import { EventFormComponent } from './events/admin/event-form/event-form.component';
 import { EventDetailComponent } from './events/event-detail/event-detail.component';
 import { BookEventFormComponent } from './events/book-event/book-event-form/book-event-form.component';
+import { FlatpickrModule } from 'angularx-flatpickr';
 
 @NgModule({
   declarations: [
@@ -82,6 +83,7 @@ import { BookEventFormComponent } from './events/book-event/book-event-form/book
   imports: [
     CommonModule,
     BrowserModule,
+    FlatpickrModule.forRoot(),
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory
