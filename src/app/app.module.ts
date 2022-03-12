@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
@@ -90,6 +91,8 @@ import { FlatpickrModule } from 'angularx-flatpickr';
     }),
     ApptBookingUtilsModule,
     //SchedulerModule.forRoot({ locale: 'en', headerDateFormat: 'daysRange' }),
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,

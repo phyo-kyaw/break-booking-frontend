@@ -83,12 +83,7 @@ export class EventBookingService {
       startTime: props.startTime,
       title: props.title
     };
-    return this._http.post(`${this.addr}events/new`, {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: postData
-    });
+    return this._http.post(`${this.addr}events/new`, postData);
   }
 
   deleteEvent(eid: string) {
