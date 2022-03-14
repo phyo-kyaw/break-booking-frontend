@@ -3,7 +3,6 @@
   "compilerOptions": {
     //"baseUrl": "./",
     "baseUrl": "src",
-    "skipLibCheck": true,
     "downlevelIteration": true,
     "importHelpers": true,
     "outDir": "./dist/out-tsc",
