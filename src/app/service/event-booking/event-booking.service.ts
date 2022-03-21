@@ -1,14 +1,9 @@
 import { Injectable } from '@angular/core';
-import {
-  HttpClient,
-  HttpHeaders,
-  HttpParams,
-  HttpEventType
-} from '@angular/common/http';
-import { map, catchError, tap } from 'rxjs/operators';
-import { Subject, throwError } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
-import { Event } from '../../events/Types/event';
+import { Event, Booking } from '../../events/Types/event';
 import { add } from 'date-fns';
 
 @Injectable({
@@ -125,7 +120,27 @@ export class EventBookingService {
       startTime: startTime,
       title: title
     };
-    console.log('aaaModify:', postData);
+
     return this._http.put(`${this.addr}events/update/${eid}`, postData);
+  }
+
+  getAllBookings() {
+    return this._http.get(`${this.addr}bookings/list`);
+  }
+
+  getBookingByID(id) {
+    return this._http.get(`${this.addr}bookings/find/${id}`);
+  }
+
+  getBookingByEvent(eid) {
+    return this._http.get(`${this.addr}bookings/event/${eid}`);
+  }
+
+  deleteBooking(id: string) {
+    return this._http.delete(`${this.addr}bookings/delete/${id}`);
+  }
+
+  deleteAllBookings() {
+    return this._http.delete(`${this.addr}bookings/deleteDb`);
   }
 }

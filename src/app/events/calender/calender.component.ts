@@ -1,14 +1,5 @@
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
-import {
-  startOfDay,
-  endOfDay,
-  subDays,
-  addDays,
-  endOfMonth,
-  isSameDay,
-  isSameMonth,
-  addHours
-} from 'date-fns';
+import { startOfDay, endOfDay, isSameDay, isSameMonth } from 'date-fns';
 import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
@@ -17,12 +8,10 @@ import {
   CalendarEventTimesChangedEvent,
   CalendarView
 } from 'angular-calendar';
-
-import { HttpClient } from '@angular/common/http';
-
-import { Event } from '../Types/event';
+// import { HttpClient } from '@angular/common/http';
+import { Event, Booking } from '../Types/event';
 import { EventBookingService } from '../../service/event-booking/event-booking.service';
-import { NgForm } from '@angular/forms';
+import { KeycloakService } from 'keycloak-angular';
 
 @Component({
   selector: 'app-calender',
@@ -67,35 +56,50 @@ export class CalenderComponent implements OnInit {
 
   events: CalendarEvent<Event>[] = [];
 
+  bookings: Booking[] = [];
+
   DataEvents = [];
 
   lenEvent = false;
 
   activeDayIsOpen: boolean = true;
 
+  isLoggedIn: boolean = false;
+
+  userProfile: any = '';
+
+  userRoles: string[] = [];
+
   event: Event;
+
+  searchByEvent: '';
+
   constructor(
     private modal: NgbModal,
-    private http: HttpClient,
+
     private eventsService: EventBookingService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    protected readonly keycloakService: KeycloakService
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.getAllEvents();
+    this.getAllBookings();
+    this.isLoggedIn = await this.keycloakService.isLoggedIn();
+    if (this.isLoggedIn) {
+      this.userProfile = await this.keycloakService.loadUserProfile();
+      this.userRoles = await this.keycloakService.getUserRoles();
+    }
   }
 
   getAllEvents() {
     this.eventsService.getAllevents().subscribe(posts => {
-      console.log(posts);
-
       this.DataEvents = posts;
       this.events = [];
       if (this.DataEvents.length == 0) {
         this.lenEvent = true;
       }
       for (let i = 0; i < this.DataEvents.length; i++) {
-        console.log('hi', i);
         this.events = [
           ...this.events,
           {
@@ -112,56 +116,75 @@ export class CalenderComponent implements OnInit {
         ];
       }
     });
-    this.events = [
-      {
-        title: 'Event1',
-        start: startOfDay(new Date()),
-        end: endOfDay(new Date()),
-        // color: colors.red,
-        draggable: true,
-        resizable: {
-          beforeStart: true,
-          afterEnd: true
-        }
-      },
-      {
-        title: 'Event2',
-        start: startOfDay(new Date()),
-        end: endOfDay(new Date()),
-        // color: colors.red,
-        draggable: true,
-        resizable: {
-          beforeStart: true,
-          afterEnd: true
-        }
-      }
-    ];
-    this.DataEvents = [
-      {
-        title: 'Event1',
-        startTime: startOfDay(new Date()),
-        endTime: endOfDay(new Date()),
-        description: 'We are holding a new event to share....',
-        price: 250,
-        location: {
-          city: 'Melbourne',
-          postCode: '6000',
-          street: 'Alexandra '
-        }
-      },
-      {
-        title: 'Event2',
-        startTime: startOfDay(new Date()),
-        endTime: endOfDay(new Date()),
-        description: 'In order to help more people who are suffered from....',
-        price: 500,
-        location: {
-          city: 'Sydney',
-          postCode: '7000',
-          street: 'Macarthur'
-        }
-      }
-    ];
+    // this.events = [
+    //   {
+    //     title: 'Event1',
+    //     start: startOfDay(new Date()),
+    //     end: endOfDay(new Date()),
+    //     // color: colors.red,
+    //     draggable: true,
+    //     resizable: {
+    //       beforeStart: true,
+    //       afterEnd: true
+    //     }
+    //   },
+    //   {
+    //     title: 'Event2',
+    //     start: startOfDay(new Date()),
+    //     end: endOfDay(new Date()),
+    //     // color: colors.red,
+    //     draggable: true,
+    //     resizable: {
+    //       beforeStart: true,
+    //       afterEnd: true
+    //     }
+    //   }
+    // ];
+    // this.DataEvents = [
+    //   {
+    //     title: 'Event1',
+    //     startTime: startOfDay(new Date()),
+    //     endTime: endOfDay(new Date()),
+    //     description: 'We are holding a new event to share....',
+    //     price: 250,
+    //     location: {
+    //       city: 'Melbourne',
+    //       postCode: '6000',
+    //       street: 'Alexandra '
+    //     }
+    //   },
+    //   {
+    //     title: 'Event2',
+    //     startTime: startOfDay(new Date()),
+    //     endTime: endOfDay(new Date()),
+    //     description: 'In order to help more people who are suffered from....',
+    //     price: 500,
+    //     location: {
+    //       city: 'Sydney',
+    //       postCode: '7000',
+    //       street: 'Macarthur'
+    //     }
+    //   }
+    // ];
+  }
+
+  getAllBookings() {
+    this.eventsService.getAllBookings().subscribe((res: Booking[]) => {
+      this.bookings = res;
+      console.log(res);
+    });
+  }
+
+  deleteAllBookings() {
+    this.eventsService.deleteAllBookings().subscribe(res => {
+      console.log(res);
+    });
+  }
+
+  deleteBooking(id) {
+    this.eventsService.deleteBooking(id).subscribe(res => {
+      console.log(res);
+    });
   }
 
   // 月中点击天
