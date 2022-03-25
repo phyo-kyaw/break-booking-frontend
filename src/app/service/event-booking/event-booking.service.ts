@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
-import { Event, Booking } from '../../events/Types/event';
-import { add } from 'date-fns';
+import { Event } from '../../events/Types/event';
+// import { add } from 'date-fns';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +29,10 @@ export class EventBookingService {
         return postsArray;
       })
     );
+  }
+
+  getEventbyID(id: string) {
+    return this._http.get(`${this.addr}events/find/${id}`);
   }
 
   deleteAll() {
@@ -142,5 +146,19 @@ export class EventBookingService {
 
   deleteAllBookings() {
     return this._http.delete(`${this.addr}bookings/deleteDb`);
+  }
+
+  getToken() {
+    return this._http.get(`${this.addr}/getToken`);
+  }
+  pay(eid: string, amount: number, type: number, nonce: string) {
+    const params = new HttpParams()
+      .set('eid', eid)
+      .set('amount', amount.toString())
+      .set('type', type.toString());
+
+    return this._http.get(`${this.addr}/pay/${nonce}`, {
+      params: params
+    });
   }
 }
