@@ -1,3 +1,5 @@
+import { CalendarEvent } from 'angular-calendar';
+
 export interface Event {
   // booking: {
   //   bookerEmail: string,

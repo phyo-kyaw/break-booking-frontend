@@ -113,15 +113,19 @@
     </div>
   </form>
 
-  <div id="dropin-container"></div>
+  <!-- <div id="dropin-container"></div>
 
   <button
     class="btn btn-primary"
     id="pay-btn"
     type="button"
-    (click)="onSubmit()"
+    (click)="onSubmit(form)"
   >
     Pay
+  </button> -->
+
+  <button class="btn btn-primary" type="button" (click)="onSubmit(form)">
+    Book
   </button>
 
   <a

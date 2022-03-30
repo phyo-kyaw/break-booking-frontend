@@ -37,13 +37,13 @@ export class EventFormComponent implements OnInit {
   }
 
   onSubmit(event) {
-    console.log('valid?', event.valid);
-    console.log('event?', event.form.value);
-    if (event.valid) {
-      console.log('valid');
-    } else {
-      console.log('invalid');
-    }
+    // console.log('valid?', event.valid);
+    // console.log('event?', event.form.value);
+    // if (event.valid) {
+    //   console.log('valid');
+    // } else {
+    //   console.log('invalid');
+    // }
 
     this.eventsService
       .addNewEvent(event.form.value)

@@ -2,10 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-
 import { Event } from '../../events/Types/event';
-// import { add } from 'date-fns';
 
+type NewEventProps = Record<keyof Event | 'city' | 'postCode' | 'street', any>;
 @Injectable({
   providedIn: 'root'
 })
@@ -42,35 +41,8 @@ export class EventBookingService {
     });
   }
 
-  // addNewEvent(
-  //   title: string,
-  //   price: number,
-  //   startTime: string,
-  //   endTime: string,
-  //   city: string,
-  //   postCode: string,
-  //   street: string,
-  //   description: string
-  // ) {
-  //   console.log('sss', startTime);
-  //   const postData: Event = {
-  //     description: description,
-  //     endTime: endTime,
-  //     location: {
-  //       city: city,
-  //       postCode: postCode,
-  //       street: street
-  //     },
-  //     price: price,
-  //     startTime: startTime,
-  //     title: title
-  //   };
-  //   return this.http.post(`${this.addr}events/new`, postData);
-  // }
-
-  addNewEvent(props: any) {
-    console.log('add event', props);
-    const postData: Event = {
+  addNewEvent(props: NewEventProps) {
+    const data: Event = {
       description: props.description,
       endTime: props.endTime,
       location: {
@@ -82,7 +54,7 @@ export class EventBookingService {
       startTime: props.startTime,
       title: props.title
     };
-    return this._http.post(`${this.addr}events/new`, postData);
+    return this._http.post(`${this.addr}events/new`, data);
   }
 
   deleteEvent(eid: string) {
@@ -98,21 +70,12 @@ export class EventBookingService {
     price: number,
     startTime: string,
     endTime: string,
-    // bookerEmail:string,bookerName:string,bookerPhone:string,
     city: string,
     postCode: string,
     street: string,
     description: string
   ) {
     const postData: Event = {
-      // booking: {
-      //   bookerEmail: bookerEmail,
-      //   bookerName: bookerName,
-      //   bookerPhone: bookerPhone,
-      //   // eventEid: string,
-      //   id: '2',
-      //   // userId: string
-      // },
       description: description,
       endTime: endTime,
       location: {
@@ -126,6 +89,10 @@ export class EventBookingService {
     };
 
     return this._http.put(`${this.addr}events/update/${eid}`, postData);
+  }
+
+  addNewBooking(data) {
+    return this._http.post(`${this.addr}bookings/new`, data);
   }
 
   getAllBookings() {

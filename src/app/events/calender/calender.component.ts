@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
-import { startOfDay, endOfDay, isSameDay, isSameMonth } from 'date-fns';
+import { isSameDay, isSameMonth } from 'date-fns';
 import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
@@ -33,7 +33,6 @@ export class CalenderComponent implements OnInit {
   };
 
   detail = true;
-  // eventsS: Event[];
 
   actions: CalendarEventAction[] = [
     {
@@ -47,7 +46,8 @@ export class CalenderComponent implements OnInit {
       label: '<i class="fas fa-fw fa-trash-alt"></i>',
       a11yLabel: 'Delete',
       onClick: ({ event }: { event: CalendarEvent }): void => {
-        console.log('delete', event);
+        this.events = this.events.filter(iEvent => iEvent !== event);
+        this.handleEvent('Deleted', event);
       }
     }
   ];
@@ -58,9 +58,10 @@ export class CalenderComponent implements OnInit {
 
   bookings: Booking[] = [];
 
-  DataEvents = [];
+  DataEvents: Event[] = [];
+  restoreDataEvents: Event[] = [];
 
-  lenEvent = false;
+  // lenEvent = false;
 
   activeDayIsOpen: boolean = true;
 
@@ -93,79 +94,26 @@ export class CalenderComponent implements OnInit {
   }
 
   getAllEvents() {
-    this.eventsService.getAllevents().subscribe(posts => {
-      this.DataEvents = posts;
-      this.events = [];
-      if (this.DataEvents.length == 0) {
-        this.lenEvent = true;
-      }
-      for (let i = 0; i < this.DataEvents.length; i++) {
-        this.events = [
-          ...this.events,
-          {
-            title: this.DataEvents[i].title,
-            start: startOfDay(new Date(this.DataEvents[i].startTime)),
-            end: endOfDay(new Date(this.DataEvents[i].endTime)),
-            // color: colors.red,
-            draggable: true,
-            resizable: {
-              beforeStart: true,
-              afterEnd: true
-            }
+    this.eventsService.getAllevents().subscribe((res: Event[]) => {
+      this.DataEvents = [...res];
+      this.restoreDataEvents = [...res];
+
+      //server response startTime,  endTime while calendar only accepts keyd start, end
+      this.events = res.map(event => {
+        return {
+          title: event.title,
+          start: new Date(event.startTime),
+          end: new Date(event.endTime),
+          price: event.price,
+          actions: this.actions,
+          draggable: true,
+          resizable: {
+            beforeStart: true,
+            afterEnd: true
           }
-        ];
-      }
+        };
+      });
     });
-    // this.events = [
-    //   {
-    //     title: 'Event1',
-    //     start: startOfDay(new Date()),
-    //     end: endOfDay(new Date()),
-    //     // color: colors.red,
-    //     draggable: true,
-    //     resizable: {
-    //       beforeStart: true,
-    //       afterEnd: true
-    //     }
-    //   },
-    //   {
-    //     title: 'Event2',
-    //     start: startOfDay(new Date()),
-    //     end: endOfDay(new Date()),
-    //     // color: colors.red,
-    //     draggable: true,
-    //     resizable: {
-    //       beforeStart: true,
-    //       afterEnd: true
-    //     }
-    //   }
-    // ];
-    // this.DataEvents = [
-    //   {
-    //     title: 'Event1',
-    //     startTime: startOfDay(new Date()),
-    //     endTime: endOfDay(new Date()),
-    //     description: 'We are holding a new event to share....',
-    //     price: 250,
-    //     location: {
-    //       city: 'Melbourne',
-    //       postCode: '6000',
-    //       street: 'Alexandra '
-    //     }
-    //   },
-    //   {
-    //     title: 'Event2',
-    //     startTime: startOfDay(new Date()),
-    //     endTime: endOfDay(new Date()),
-    //     description: 'In order to help more people who are suffered from....',
-    //     price: 500,
-    //     location: {
-    //       city: 'Sydney',
-    //       postCode: '7000',
-    //       street: 'Macarthur'
-    //     }
-    //   }
-    // ];
   }
 
   getAllBookings() {
@@ -189,6 +137,16 @@ export class CalenderComponent implements OnInit {
 
   // 月中点击天
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+    this.DataEvents = this.restoreDataEvents;
+    this.DataEvents = this.DataEvents.filter(e => {
+      const day = new Date(e.startTime);
+      return (
+        day.getDate() === date.getDate() &&
+        day.getFullYear() === date.getFullYear() &&
+        day.getMonth() === date.getMonth()
+      );
+    });
+
     if (isSameMonth(date, this.viewDate)) {
       if (
         (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
@@ -229,7 +187,11 @@ export class CalenderComponent implements OnInit {
 
   // add
   addEvent(props): void {
-    // this.eventsService.addNewEvent().subscribe(res => console.log(res));
+    this.eventsService.addNewEvent(props).subscribe(res => {
+      console.log(res);
+      this.DataEvents;
+    });
+
     // this.DataEvents = [
     //   ...this.DataEvents,
     //   {
@@ -285,5 +247,9 @@ export class CalenderComponent implements OnInit {
 
   closeModel(): void {
     this.event = null;
+  }
+
+  restoreData() {
+    this.DataEvents = this.restoreDataEvents;
   }
 }
