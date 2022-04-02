@@ -68,7 +68,7 @@
       [events]="events"
       [refresh]="refresh"
       [activeDayIsOpen]="activeDayIsOpen"
-      (dayClicked)="dayClicked($event.day)"
+      (dayClicked)="dayClicked($event.day); clickedDate = $event.day.date"
       (eventClicked)="handleEvent('Clicked', $event.event)"
       (eventTimesChanged)="eventTimesChanged($event)"
     >
@@ -103,13 +103,17 @@
       <ng-template ngbNavContent>
         <div class="d-flex justify-content-between mb-2 mt-3">
           <!-- <h3>All Events</h3> -->
-          <button
-            *ngIf="DataEvents.length !== restoreDataEvents.length"
-            class="btn btn-outline-info btn-sm"
-            (click)="restoreData()"
+          <strong *ngIf="clickedDate"
+            >Events on: {{ clickedDate | date: 'dd/MM/yyyy' }} or
+            <button
+              *ngIf="DataEvents.length !== restoreDataEvents.length"
+              class="btn btn-link"
+              (click)="restoreData(); clickedDate = null"
+            >
+              Show All
+            </button></strong
           >
-            Show All
-          </button>
+
           <div class="ml-auto">
             <button class="btn btn-primary" (click)="open(adminContent)">
               New Event

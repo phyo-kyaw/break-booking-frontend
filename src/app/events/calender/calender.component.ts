@@ -1,4 +1,10 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  TemplateRef,
+  ViewEncapsulation
+} from '@angular/core';
 import { isSameDay, isSameMonth } from 'date-fns';
 import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -16,6 +22,7 @@ import { KeycloakService } from 'keycloak-angular';
 @Component({
   selector: 'app-calender',
   templateUrl: './calender.component.html',
+  encapsulation: ViewEncapsulation.None, // hack to get the styles to apply locally
   styleUrls: ['./calender.component.css']
 })
 export class CalenderComponent implements OnInit {
@@ -31,6 +38,8 @@ export class CalenderComponent implements OnInit {
     action: string;
     event: CalendarEvent;
   };
+
+  clickedDate: Date;
 
   detail = true;
 
@@ -61,9 +70,8 @@ export class CalenderComponent implements OnInit {
   DataEvents: Event[] = [];
   restoreDataEvents: Event[] = [];
 
-  // lenEvent = false;
-
-  activeDayIsOpen: boolean = true;
+  //false: disable Kitchen sink
+  activeDayIsOpen: boolean = false;
 
   isLoggedIn: boolean = false;
 
@@ -147,17 +155,17 @@ export class CalenderComponent implements OnInit {
       );
     });
 
-    if (isSameMonth(date, this.viewDate)) {
-      if (
-        (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
-        events.length === 0
-      ) {
-        this.activeDayIsOpen = false;
-      } else {
-        this.activeDayIsOpen = true;
-      }
-      this.viewDate = date;
-    }
+    // if (isSameMonth(date, this.viewDate)) {
+    //   if (
+    //     (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
+    //     events.length === 0
+    //   ) {
+    //     this.activeDayIsOpen = false;
+    //   } else {
+    //     this.activeDayIsOpen = true;
+    //   }
+    //   this.viewDate = date;
+    // }
   }
 
   //显示日历的部分
