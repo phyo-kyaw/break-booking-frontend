@@ -50,6 +50,7 @@ import { EventFormComponent } from './events/admin/event-form/event-form.compone
 import { EventDetailComponent } from './events/event-detail/event-detail.component';
 import { BookEventFormComponent } from './events/book-event/book-event-form/book-event-form.component';
 import { FlatpickrModule } from 'angularx-flatpickr';
+import { PaymentComponent } from './events/payment/payment.component';
 
 @NgModule({
   declarations: [
@@ -79,7 +80,8 @@ import { FlatpickrModule } from 'angularx-flatpickr';
     CalenderComponent,
     EventFormComponent,
     EventDetailComponent,
-    BookEventFormComponent
+    BookEventFormComponent,
+    PaymentComponent
   ],
   imports: [
     CommonModule,

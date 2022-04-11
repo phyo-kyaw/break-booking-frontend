@@ -67,7 +67,12 @@ export class CalenderComponent implements OnInit {
 
   bookings: Booking[] = [];
 
+  restoreBookings: Booking[] = [];
+
   DataEvents: Event[] = [];
+
+  eidList: string[] = [];
+
   restoreDataEvents: Event[] = [];
 
   //false: disable Kitchen sink
@@ -81,11 +86,10 @@ export class CalenderComponent implements OnInit {
 
   event: Event;
 
-  searchByEvent: '';
+  searchBooking: string = '';
 
   constructor(
     private modal: NgbModal,
-
     private eventsService: EventBookingService,
     private modalService: NgbModal,
     protected readonly keycloakService: KeycloakService
@@ -105,6 +109,7 @@ export class CalenderComponent implements OnInit {
     this.eventsService.getAllevents().subscribe((res: Event[]) => {
       this.DataEvents = [...res];
       this.restoreDataEvents = [...res];
+      this.eidList = [...new Set(res.map(event => event.eid))];
 
       //server response startTime,  endTime while calendar only accepts keyd start, end
       this.events = res.map(event => {
@@ -127,6 +132,7 @@ export class CalenderComponent implements OnInit {
   getAllBookings() {
     this.eventsService.getAllBookings().subscribe((res: Booking[]) => {
       this.bookings = res;
+      this.restoreBookings = res;
       console.log(res);
     });
   }
@@ -259,5 +265,14 @@ export class CalenderComponent implements OnInit {
 
   restoreData() {
     this.DataEvents = this.restoreDataEvents;
+  }
+
+  searchBookingByEid() {
+    this.bookings = this.restoreBookings;
+    if (this.searchBooking !== 'All') {
+      this.bookings = this.bookings.filter(
+        book => book.eventEid === this.searchBooking
+      );
+    }
   }
 }

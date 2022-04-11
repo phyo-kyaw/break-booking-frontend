@@ -104,10 +104,10 @@
         <div class="d-flex justify-content-between mb-2 mt-3">
           <!-- <h3>All Events</h3> -->
           <strong *ngIf="clickedDate"
-            >Events on: {{ clickedDate | date: 'dd/MM/yyyy' }} or
+            >Events on: {{ clickedDate | date: 'dd/MM/yyyy' }}
             <button
               *ngIf="DataEvents.length !== restoreDataEvents.length"
-              class="btn btn-link"
+              class="btn btn-link btn-sm"
               (click)="restoreData(); clickedDate = null"
             >
               Show All
@@ -153,19 +153,19 @@
 
                 <td>
                   <button
-                    class="btn btn-primary btn-sm"
+                    class="btn btn-outline-primary btn-sm"
                     (click)="open(userContent, i)"
                   >
                     Detail
                   </button>
                   <button
-                    class="btn btn-primary btn-sm ml-2"
+                    class="btn btn-outline-primary btn-sm ml-2"
                     (click)="open(adminContent, i)"
                   >
                     Edit
                   </button>
                   <button
-                    class="btn btn-danger btn-sm ml-2"
+                    class="btn btn-outline-danger btn-sm ml-2"
                     (click)="deleteEvent(i)"
                   >
                     Delete
@@ -183,6 +183,19 @@
       <a ngbNavLink>Bookings</a>
       <ng-template ngbNavContent>
         <div class="d-flex justify-content-end mb-2 mt-3">
+          <select
+            (change)="searchBookingByEid($event.target.value)"
+            [(ngModel)]="searchBooking"
+            id="searchBooking"
+            name="searchBooking"
+            class="mr-auto"
+          >
+            <option selected value="All">All Events</option>
+            <ng-container *ngFor="let eid of eidList">
+              <option [value]="eid">{{ eid }}</option>
+            </ng-container>
+          </select>
+
           <button class="btn btn-danger ml-1" (click)="deleteAllBookings()">
             Delete All
           </button>
@@ -218,7 +231,7 @@
 
                 <td>
                   <button
-                    class="btn btn-danger btn-sm ml-2"
+                    class="btn btn-outline-danger btn-sm ml-2"
                     (click)="deleteBooking(booking.id)"
                   >
                     Delete
@@ -293,7 +306,7 @@
     <div class="modal-footer">
       <!-- <button type="submit" class="btn btn-primary">Book</button> -->
       <a
-        [routerLink]="['/event/payment/', event?.eid]"
+        [routerLink]="['/event/booking/', event?.eid]"
         class="btn btn-outline-primary mr-2"
         (click)="modal.dismiss('Cross click'); closeModel()"
         >Book</a

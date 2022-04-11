@@ -9,6 +9,7 @@ export interface Event {
   //   id: string,
   //   // userId: string
   // },
+  eid?: string;
   description: string;
   // eid: string,
   endTime: string;

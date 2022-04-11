@@ -92,7 +92,18 @@ export class EventBookingService {
   }
 
   addNewBooking(data) {
-    return this._http.post(`${this.addr}bookings/new`, data);
+    return this._http.post<{
+      success: boolean;
+      booking: {
+        id: string;
+        bookerEmail: string;
+        bookerName: string;
+        bookerPhone: string;
+        userId: string;
+      };
+      message: string;
+      paidAmount: 0;
+    }>(`${this.addr}bookings/new`, data);
   }
 
   getAllBookings() {

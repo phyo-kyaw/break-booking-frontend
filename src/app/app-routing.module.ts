@@ -19,6 +19,7 @@ import { BookingPaymentComponent } from './booking-payment/booking-payment.compo
 import { CalenderComponent } from './events/calender/calender.component';
 import { BookEventFormComponent } from './events/book-event/book-event-form/book-event-form.component';
 import { EventFormComponent } from './events/admin/event-form/event-form.component';
+import { PaymentComponent } from './events/payment/payment.component';
 
 const routes: Routes = [
   //{ path: 'select', component: CalendarSelComponent },
@@ -67,9 +68,14 @@ const routes: Routes = [
       CalenderComponent /*, canActivate: [AuthGuard] , data: { roles: ['room-provider'] } */
   },
   {
-    path: 'event/payment/:id',
+    path: 'event/booking/:id',
     component:
       BookEventFormComponent /*, canActivate: [AuthGuard] , data: { roles: ['room-provider'] } */
+  },
+  {
+    path: 'event/payment/:id',
+    component:
+      PaymentComponent /*, canActivate: [AuthGuard] , data: { roles: ['room-provider'] } */
   },
 
   {
