@@ -86,7 +86,7 @@ export class CalenderComponent implements OnInit {
 
   event: Event;
 
-  searchBooking: string = '';
+  searchBooking: string = 'All';
 
   constructor(
     private modal: NgbModal,

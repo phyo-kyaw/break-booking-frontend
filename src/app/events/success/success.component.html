@@ -1,0 +1,50 @@
+<div class="container">
+  <div *ngIf="bookingDetail; else noBookingFound">
+    <div class="alert alert-success" role="alert">
+      <h2 class="text-center">Your Booking is successful!!</h2>
+    </div>
+
+    <h2 class="h3 mb-3"><u>Booking Details:</u></h2>
+
+    <dl class="row">
+      <dt class="col-sm-3">Event Title</dt>
+      <dd class="col-sm-9">{{ eventDetail.title }}</dd>
+
+      <dt class="col-sm-3">Description</dt>
+      <dd class="col-sm-9">{{ eventDetail.description }}</dd>
+
+      <dt class="col-sm-3">StartTime</dt>
+      <dd class="col-sm-9">{{ eventDetail.startTime }}</dd>
+
+      <dt class="col-sm-3">EndTime</dt>
+      <dd class="col-sm-9">{{ eventDetail.endTime }}</dd>
+
+      <dt class="col-sm-3">Location</dt>
+      <dd class="col-sm-9">
+        <p>
+          {{ eventDetail.location?.street }},
+          {{ eventDetail.location?.city }},{{ eventDetail.location?.postCode }}
+        </p>
+      </dd>
+
+      <dt class="col-sm-3">Booker Name</dt>
+      <dd class="col-sm-9">{{ bookingDetail.bookerName }}</dd>
+
+      <dt class="col-sm-3">Booker Name</dt>
+      <dd class="col-sm-9">{{ bookingDetail.bookerPhone }}</dd>
+
+      <dt class="col-sm-3">Booker Name</dt>
+      <dd class="col-sm-9">{{ bookingDetail.bookerEmail }}</dd>
+    </dl>
+  </div>
+
+  <a [routerLink]="['/event/all/']" class="btn btn-primary">Back</a>
+  <ng-template #noBookingFound>
+    <p>Booking Fail, Please try again later</p>
+  </ng-template>
+
+  <app-loading-screen
+    [isLoading]="isLoading"
+    [text]="loadingText"
+  ></app-loading-screen>
+</div>

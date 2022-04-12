@@ -88,7 +88,7 @@ export class BookEventFormComponent implements OnInit {
     this.eventBookingService.addNewBooking(data).subscribe(res => {
       if (res.success) {
         if (this.eventDetail.price === 0) {
-          this.route.navigate(['/event/all']);
+          this.route.navigate(['/event/booking/success', res.booking.id]);
         } else {
           this.route.navigate(['/event/payment', res.booking.id]);
         }

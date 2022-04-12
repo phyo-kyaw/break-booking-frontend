@@ -101,6 +101,9 @@ export class EventBookingService {
         bookerPhone: string;
         userId: string;
       };
+      event: {
+        eid: string;
+      };
       message: string;
       paidAmount: 0;
     }>(`${this.addr}bookings/new`, data);
@@ -111,7 +114,14 @@ export class EventBookingService {
   }
 
   getBookingByID(id) {
-    return this._http.get(`${this.addr}bookings/find/${id}`);
+    return this._http.get<{
+      bookerEmail: string;
+      bookerName: string;
+      bookerPhone: string;
+      eventEid: string;
+      id: string;
+      userId: string;
+    }>(`${this.addr}bookings/find/${id}`);
   }
 
   getBookingByEvent(eid) {

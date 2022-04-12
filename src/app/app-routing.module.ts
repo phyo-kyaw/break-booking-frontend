@@ -20,6 +20,7 @@ import { CalenderComponent } from './events/calender/calender.component';
 import { BookEventFormComponent } from './events/book-event/book-event-form/book-event-form.component';
 import { EventFormComponent } from './events/admin/event-form/event-form.component';
 import { PaymentComponent } from './events/payment/payment.component';
+import { SuccessComponent } from './events/success/success.component';
 
 const routes: Routes = [
   //{ path: 'select', component: CalendarSelComponent },
@@ -77,7 +78,11 @@ const routes: Routes = [
     component:
       PaymentComponent /*, canActivate: [AuthGuard] , data: { roles: ['room-provider'] } */
   },
-
+  {
+    path: 'event/booking/success/:id',
+    component:
+      SuccessComponent /*, canActivate: [AuthGuard] , data: { roles: ['room-provider'] } */
+  },
   {
     path: 'dictionaries',
     component:

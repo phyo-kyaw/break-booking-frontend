@@ -129,8 +129,11 @@
             <thead>
               <tr>
                 <th>Title</th>
+
                 <th>Start</th>
                 <th>End</th>
+                <th>Price</th>
+                <th>Capcity</th>
                 <!-- <th>Description</th> -->
                 <th>Action</th>
               </tr>
@@ -141,12 +144,17 @@
                 <td>
                   {{ event.title }}
                 </td>
+
                 <td>
                   {{ event.startTime }}
                 </td>
                 <td>
                   {{ event.endTime }}
                 </td>
+                <td>
+                  {{ event.price }}
+                </td>
+                <td>10/100 (fake)</td>
                 <!-- <td>
                   {{ event.description }}
                 </td> -->
@@ -190,7 +198,7 @@
             name="searchBooking"
             class="mr-auto"
           >
-            <option selected value="All">All Events</option>
+            <option value="All">All Events</option>
             <ng-container *ngFor="let eid of eidList">
               <option [value]="eid">{{ eid }}</option>
             </ng-container>
