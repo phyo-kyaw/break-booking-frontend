@@ -5,7 +5,7 @@ import {
   TemplateRef,
   ViewEncapsulation
 } from '@angular/core';
-import { isSameDay, isSameMonth } from 'date-fns';
+
 import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
@@ -14,7 +14,7 @@ import {
   CalendarEventTimesChangedEvent,
   CalendarView
 } from 'angular-calendar';
-// import { HttpClient } from '@angular/common/http';
+
 import { Event, Booking } from '../Types/event';
 import { EventBookingService } from '../../service/event-booking/event-booking.service';
 import { KeycloakService } from 'keycloak-angular';
@@ -23,6 +23,7 @@ import { KeycloakService } from 'keycloak-angular';
   selector: 'app-calender',
   templateUrl: './calender.component.html',
   encapsulation: ViewEncapsulation.None, // hack to get the styles to apply locally
+
   styleUrls: ['./calender.component.css']
 })
 export class CalenderComponent implements OnInit {
@@ -137,15 +138,19 @@ export class CalenderComponent implements OnInit {
     });
   }
 
+  deleteEvent(eid) {
+    this.eventsService.deleteEvent(eid).subscribe(() => this.getAllEvents());
+  }
+
   deleteAllBookings() {
-    this.eventsService.deleteAllBookings().subscribe(res => {
-      console.log(res);
+    this.eventsService.deleteAllBookings().subscribe(() => {
+      this.getAllBookings();
     });
   }
 
   deleteBooking(id) {
-    this.eventsService.deleteBooking(id).subscribe(res => {
-      console.log(res);
+    this.eventsService.deleteBooking(id).subscribe(() => {
+      this.getAllBookings();
     });
   }
 
@@ -160,18 +165,6 @@ export class CalenderComponent implements OnInit {
         day.getMonth() === date.getMonth()
       );
     });
-
-    // if (isSameMonth(date, this.viewDate)) {
-    //   if (
-    //     (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
-    //     events.length === 0
-    //   ) {
-    //     this.activeDayIsOpen = false;
-    //   } else {
-    //     this.activeDayIsOpen = true;
-    //   }
-    //   this.viewDate = date;
-    // }
   }
 
   //显示日历的部分
@@ -199,37 +192,10 @@ export class CalenderComponent implements OnInit {
     this.modal.open(this.modalContent, { size: 'lg' });
   }
 
-  // add
-  addEvent(props): void {
-    this.eventsService.addNewEvent(props).subscribe(res => {
-      console.log(res);
-      this.DataEvents;
-    });
-
-    // this.DataEvents = [
-    //   ...this.DataEvents,
-    //   {
-    //     description: 'Description',
-    //     endTime: 'No',
-    //     location: {
-    //       city: 'City',
-    //       postCode: 1234,
-    //       street: 'Street'
-    //     },
-    //     price: 0,
-    //     startTime: 'No',
-    //     title: 'New Event',
-    //     add: true
-    //   }
-    // ];
-    // this.lenEvent = false;
-  }
-
   deleteAllEvents() {
     this.eventsService.deleteAll().subscribe(() => {
       this.getAllEvents();
     });
-    alert('Delete Successfully');
   }
 
   // 看是month/day/year

@@ -11,6 +11,8 @@ export class SuccessComponent implements OnInit {
   bookingID: string;
   bookingDetail;
   eventDetail;
+  isLoading;
+  loadingText;
 
   constructor(
     private eventBookingService: EventBookingService,

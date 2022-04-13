@@ -33,18 +33,9 @@ export class EventFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.event = { ...this._defaultEvent, ...(this.event ?? {}) };
-    // console.log(this.event);
   }
 
   onSubmit(event) {
-    // console.log('valid?', event.valid);
-    // console.log('event?', event.form.value);
-    // if (event.valid) {
-    //   console.log('valid');
-    // } else {
-    //   console.log('invalid');
-    // }
-
     this.eventsService
       .addNewEvent(event.form.value)
       .subscribe(res => console.log(res));

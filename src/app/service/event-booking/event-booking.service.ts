@@ -44,24 +44,21 @@ export class EventBookingService {
   addNewEvent(props: NewEventProps) {
     const data: Event = {
       description: props.description,
-      endTime: props.endTime,
+      endTime: new Date(props.endTime).toISOString(),
       location: {
         city: props.city,
         postCode: props.postCode,
         street: props.street
       },
       price: 12,
-      startTime: props.startTime,
+      startTime: new Date(props.startTime).toISOString(),
       title: props.title
     };
     return this._http.post(`${this.addr}events/new`, data);
   }
 
   deleteEvent(eid: string) {
-    return this._http.delete(`${this.addr}events/delete/${eid}`, {
-      observe: 'events',
-      responseType: 'text'
-    });
+    return this._http.delete(`${this.addr}events/delete/${eid}`);
   }
 
   modifyEvent(

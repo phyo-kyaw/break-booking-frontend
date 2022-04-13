@@ -1,3 +1,4 @@
+import 'flatpickr/dist/flatpickr.css';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import FormControl from '@material-ui/core/FormControl';
@@ -88,18 +89,20 @@ import { SuccessComponent } from './events/success/success.component';
   imports: [
     CommonModule,
     BrowserModule,
-    FlatpickrModule.forRoot(),
+    FormsModule,
+
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory
     }),
+    FlatpickrModule.forRoot(),
     ApptBookingUtilsModule,
     //SchedulerModule.forRoot({ locale: 'en', headerDateFormat: 'daysRange' }),
     // OwlDateTimeModule,
     // OwlNativeDateTimeModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule,
+
     ReactiveFormsModule,
     KeycloakAngularModule,
     BrowserAnimationsModule,

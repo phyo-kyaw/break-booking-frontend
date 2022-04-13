@@ -1,45 +1,15 @@
 <div class="container">
   <h3 class="pb-2">
-    Booking - Event1
-    <span>(01/03/2022 - 01/04/2022)</span>
+    Booking - {{ eventDetail?.title }}
+    <span
+      >({{ eventDetail?.startTime | date: 'yyyy-MM-dd hh:mm' }} -
+      {{ eventDetail?.endTime | date: 'yyyy-MM-dd hh:mm' }})</span
+    >
+    <!-- <span>price: {{ eventDetail?.price }}</span> -->
   </h3>
 
   <!-- Time : {{prettyDate()}} -->
   <form #form="ngForm" (ngSubmit)="onSubmit(form)">
-    <!-- <div class="form-group required">
-      <label for="mobile">Event</label>
-      <input
-        class="form-control"
-        [class.is-invalid]="
-          (mobile.invalid && mobile.touched) ||
-          (form.submitted && mobile.invalid)
-        "
-        type="string"
-        name="mobile"
-        id="mobile"
-        ngModel
-        required
-        #mobile="ngModel"
-      />
-    </div> -->
-
-    <!-- <div class="form-group required">
-      <label for="mobile">Time</label>
-      <input
-        class="form-control"
-        [class.is-invalid]="
-          (mobile.invalid && mobile.touched) ||
-          (form.submitted && mobile.invalid)
-        "
-        type="string"
-        name="mobile"
-        id="mobile"
-        ngModel
-        required
-        #mobile="ngModel"
-      />
-    </div> -->
-
     <div class="form-group required">
       <label for="name">Name</label>
       <input
