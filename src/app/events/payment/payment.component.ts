@@ -23,6 +23,7 @@ export class PaymentComponent implements OnInit {
   ngOnInit(): void {}
 
   getToken() {
+    // this.isLoading = true;
     this.eventBookingService.getToken().subscribe(
       (response: any) => {
         if (response.success) {

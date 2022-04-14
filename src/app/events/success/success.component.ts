@@ -30,12 +30,13 @@ export class SuccessComponent implements OnInit {
   }
 
   getBookingDetail() {
+    this.isLoading = true;
     this.eventBookingService.getBookingByID(this.bookingID).subscribe(res => {
-      console.log('booking', res);
       this.bookingDetail = res;
       this.eventBookingService.getEventbyID(res.eventEid).subscribe(res => {
-        console.log('event', res);
         this.eventDetail = res;
+
+        this.isLoading = false;
       });
     });
   }

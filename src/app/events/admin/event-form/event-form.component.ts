@@ -4,7 +4,7 @@ import { Event } from '../../Types/event';
 import { ViewportScroller } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EventBookingService } from '../../../service/event-booking/event-booking.service';
-
+import { ToastService } from 'app/service/toast/toast-service.service';
 @Component({
   selector: 'app-event-form',
   templateUrl: './event-form.component.html',
@@ -28,7 +28,8 @@ export class EventFormComponent implements OnInit {
 
   constructor(
     private modalService: NgbModal,
-    private eventsService: EventBookingService
+    private eventsService: EventBookingService,
+    private toastService: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -36,9 +37,24 @@ export class EventFormComponent implements OnInit {
   }
 
   onSubmit(event) {
-    this.eventsService
-      .addNewEvent(event.form.value)
-      .subscribe(res => console.log(res));
+    this.eventsService.addNewEvent(event.form.value).subscribe(
+      () => this.showSuccess('Successfully create an new event'),
+      () => this.showDanger('Failed to create a new event')
+    );
     this.modalService.dismissAll();
+  }
+
+  showSuccess(content) {
+    this.toastService.show(content, {
+      classname: 'bg-success text-light',
+      delay: 5000
+    });
+  }
+
+  showDanger(content) {
+    this.toastService.show(content, {
+      classname: 'bg-danger text-light',
+      delay: 5000
+    });
   }
 }

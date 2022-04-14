@@ -49,8 +49,10 @@ export class BookEventFormComponent implements OnInit {
   }
 
   getEvent() {
+    this.isLoading = true;
     this.eventBookingService.getEventbyID(this.eid).subscribe(
       (response: any) => {
+        this.isLoading = false;
         // Booking detail fetching was good, bind it to component
         this.eventDetail = response;
 
@@ -65,6 +67,7 @@ export class BookEventFormComponent implements OnInit {
         // }
       },
       error => {
+        this.isLoading = false;
         // Something went wrong when connecting to the API
         this.paymentStatus =
           'An error occurred on our end. Please try again later.';
@@ -77,6 +80,7 @@ export class BookEventFormComponent implements OnInit {
   }
 
   onSubmit(form) {
+    this.isLoading = true;
     const values = form.form.value;
     const data = {
       bookerEmail: values.email,
@@ -85,15 +89,19 @@ export class BookEventFormComponent implements OnInit {
       eventEid: this.eid,
       userId: this.userProfile
     };
-    this.eventBookingService.addNewBooking(data).subscribe(res => {
-      if (res.success) {
-        if (this.eventDetail.price === 0) {
-          this.route.navigate(['/event/booking/success', res.booking.id]);
-        } else {
-          this.route.navigate(['/event/payment', res.booking.id]);
+    this.eventBookingService.addNewBooking(data).subscribe(
+      res => {
+        this.isLoading = false;
+        if (res.success) {
+          if (this.eventDetail.price === 0) {
+            this.route.navigate(['/event/booking/success', res.booking.id]);
+          } else {
+            this.route.navigate(['/event/payment', res.booking.id]);
+          }
         }
-      }
-    });
+      },
+      () => (this.isLoading = false)
+    );
   }
 
   onCancel() {}

@@ -53,6 +53,7 @@ import { BookEventFormComponent } from './events/book-event/book-event-form/book
 import { FlatpickrModule } from 'angularx-flatpickr';
 import { PaymentComponent } from './events/payment/payment.component';
 import { SuccessComponent } from './events/success/success.component';
+import { ToastGlobalComponent } from './misc/toast-global/toast-global.component';
 
 @NgModule({
   declarations: [
@@ -84,7 +85,8 @@ import { SuccessComponent } from './events/success/success.component';
     EventDetailComponent,
     BookEventFormComponent,
     PaymentComponent,
-    SuccessComponent
+    SuccessComponent,
+    ToastGlobalComponent
   ],
   imports: [
     CommonModule,

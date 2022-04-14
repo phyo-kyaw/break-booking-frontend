@@ -18,16 +18,18 @@ import {
 import { Event, Booking } from '../Types/event';
 import { EventBookingService } from '../../service/event-booking/event-booking.service';
 import { KeycloakService } from 'keycloak-angular';
+import { ToastService } from 'app/service/toast/toast-service.service';
 
 @Component({
   selector: 'app-calender',
   templateUrl: './calender.component.html',
   encapsulation: ViewEncapsulation.None, // hack to get the styles to apply locally
-
   styleUrls: ['./calender.component.css']
 })
 export class CalenderComponent implements OnInit {
   @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
+
+  // isLoading:boolean= false
 
   view: CalendarView = CalendarView.Month;
 
@@ -93,7 +95,8 @@ export class CalenderComponent implements OnInit {
     private modal: NgbModal,
     private eventsService: EventBookingService,
     private modalService: NgbModal,
-    protected readonly keycloakService: KeycloakService
+    protected readonly keycloakService: KeycloakService,
+    public toastService: ToastService
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -104,6 +107,10 @@ export class CalenderComponent implements OnInit {
       this.userProfile = await this.keycloakService.loadUserProfile();
       this.userRoles = await this.keycloakService.getUserRoles();
     }
+  }
+
+  ngOnDestroy(): void {
+    this.toastService.clear();
   }
 
   getAllEvents() {
@@ -139,17 +146,25 @@ export class CalenderComponent implements OnInit {
   }
 
   deleteEvent(eid) {
-    this.eventsService.deleteEvent(eid).subscribe(() => this.getAllEvents());
+    this.eventsService.deleteEvent(eid).subscribe(
+      () => {
+        this.showSuccess('Successfully delete an event');
+        this.getAllEvents();
+      }
+      // () => this.showDanger('Failed to delete the event')
+    );
   }
 
   deleteAllBookings() {
     this.eventsService.deleteAllBookings().subscribe(() => {
+      this.showSuccess('Successfully delete all booking');
       this.getAllBookings();
     });
   }
 
   deleteBooking(id) {
     this.eventsService.deleteBooking(id).subscribe(() => {
+      this.showSuccess('Successfully delete a booking');
       this.getAllBookings();
     });
   }
@@ -241,4 +256,18 @@ export class CalenderComponent implements OnInit {
       );
     }
   }
+
+  showSuccess(content) {
+    this.toastService.show(content, {
+      classname: 'bg-success text-light',
+      delay: 5000
+    });
+  }
+
+  // showDanger(content) {
+  //   this.toastService.show(content, {
+  //     classname: 'bg-danger text-light',
+  //     delay: 15000
+  //   });
+  // }
 }
