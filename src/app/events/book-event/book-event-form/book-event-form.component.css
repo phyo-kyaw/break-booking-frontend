@@ -1,14 +1,8 @@
-
-
 .required label::after {
   content: ' *';
   color: red;
 }
 
-#alert {
-  display: none;
-}
-
-small {
+.user-input-notification {
   display: none;
 }

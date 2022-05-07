@@ -1,3 +1,4 @@
+import 'flatpickr/dist/flatpickr.css';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import FormControl from '@material-ui/core/FormControl';
@@ -5,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+// import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
@@ -46,6 +48,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { BookingPaymentComponent } from './booking-payment/booking-payment.component';
 import { CalenderComponent } from './events/calender/calender.component';
 import { EventFormComponent } from './events/admin/event-form/event-form.component';
+import { EventDetailComponent } from './events/event-detail/event-detail.component';
+import { BookEventFormComponent } from './events/book-event/book-event-form/book-event-form.component';
+import { FlatpickrModule } from 'angularx-flatpickr';
+import { PaymentComponent } from './events/payment/payment.component';
+import { SuccessComponent } from './events/success/success.component';
+import { ToastGlobalComponent } from './misc/toast-global/toast-global.component';
 
 @NgModule({
   declarations: [
@@ -73,20 +81,30 @@ import { EventFormComponent } from './events/admin/event-form/event-form.compone
     BookRoomFormComponent,
     BookingPaymentComponent,
     CalenderComponent,
-    EventFormComponent
+    EventFormComponent,
+    EventDetailComponent,
+    BookEventFormComponent,
+    PaymentComponent,
+    SuccessComponent,
+    ToastGlobalComponent
   ],
   imports: [
     CommonModule,
     BrowserModule,
+    FormsModule,
+
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory
     }),
+    FlatpickrModule.forRoot(),
     ApptBookingUtilsModule,
     //SchedulerModule.forRoot({ locale: 'en', headerDateFormat: 'daysRange' }),
+    // OwlDateTimeModule,
+    // OwlNativeDateTimeModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule,
+
     ReactiveFormsModule,
     KeycloakAngularModule,
     BrowserAnimationsModule,
