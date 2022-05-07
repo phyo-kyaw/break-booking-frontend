@@ -45,6 +45,7 @@ export class RoomFormComponent implements OnInit {
   cityStatus = 'Getting cities...';
   showCityLink = false;
   images: File[] = null;
+  imagesToBeDeleted: string[] = [];
   previews = [];
 
   constructor(
@@ -185,6 +186,12 @@ export class RoomFormComponent implements OnInit {
       })
       .catch(error => this.notifyOfError(error, 'update'));
 
+    if (this.imagesToBeDeleted.length) {
+      this.deleteImages()
+        .then(() => console.log('All images deleted'))
+        .catch(() => console.log("Some images didn't delete successfully"));
+    }
+
     // this._roomService.updateRoom(f).subscribe(
     //   (response: any) => {
     //     if (response.success) {
@@ -286,18 +293,18 @@ export class RoomFormComponent implements OnInit {
 
   /**
    * Delete uploaded file
-   *
    * @param i - index of a file to be deleted
    */
+
   deleteImage(i) {
-    console.log(this.images);
-    //if file not saved yet
+    //if file not yet saved in DB, then just remove it from this.images
     if (this.images) {
       let newIMGList = [...this.images];
       this.previews.splice(i, 1);
       newIMGList.splice(i, 1);
       this.images = newIMGList;
     } else {
+      this.imagesToBeDeleted = [...this.imagesToBeDeleted, this.room.images[i]];
       this.room.images.splice(i, 1);
     }
   }
@@ -332,6 +339,16 @@ export class RoomFormComponent implements OnInit {
   //     );
   //   });
   // }
+
+  /**
+   * Delete images from S3 when an edited form is submitted
+   *
+   * @param i - index of a file to be deleted
+   */
+  deleteImages(): Promise<uploadResponse[]> {
+    // this.fetchStatusForUser = 'Deleting image...';
+    return this._imagesService.deleteImages(this.imagesToBeDeleted).toPromise();
+  }
 
   /**
    * Opens a modal
