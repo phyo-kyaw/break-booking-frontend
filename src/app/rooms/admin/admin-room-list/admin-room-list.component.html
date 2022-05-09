@@ -2,7 +2,12 @@
   <div class="d-flex align-items-center mb-2">
     <h1>Rooms</h1>
 
-    <a routerLink="/rooms/create" class="btn btn-primary ml-auto">Add room</a>
+    <a
+      *ngIf="reducer$?.role === 'admin'"
+      routerLink="/rooms/create"
+      class="btn btn-primary ml-auto"
+      >Add room</a
+    >
   </div>
 
   <table *ngIf="rooms.length > 0; else noDataTemplate" class="table">
@@ -27,9 +32,11 @@
           <a
             [routerLink]="['/rooms/edit/', room.id]"
             class="btn btn-outline-primary mr-2"
+            *ngIf="reducer$?.role === 'admin'"
             >Edit</a
           >
           <app-delete-room
+            *ngIf="reducer$?.role === 'admin'"
             [roomId]="room.id"
             [roomName]="room.title"
             (deleteRoomSuccess)="roomDeleted(room.id)"

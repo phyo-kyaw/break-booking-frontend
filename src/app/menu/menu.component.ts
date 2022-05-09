@@ -2,31 +2,38 @@ import { Component, OnInit } from '@angular/core';
 import { KeycloakService } from 'keycloak-angular';
 import { Store } from '@ngrx/store';
 import { login, role } from 'app/store/action';
-
+import { Status } from 'app/store/reducer';
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.css']
 })
 export class MenuComponent implements OnInit {
-  isLoggedIn: boolean = false;
-  role: boolean;
+  reducer$: Status;
   constructor(
     protected readonly keycloakService: KeycloakService,
-    private store: Store
-  ) {}
+    private store: Store<{ reducer: Status }>
+  ) {
+    this.store.select('reducer').subscribe(res => (this.reducer$ = res));
+  }
 
   async ngOnInit(): Promise<any> {
-    // return (this.isLoggedIn = await this.keycloakService.isLoggedIn());
-    this.isLoggedIn = await this.keycloakService.isLoggedIn();
+    console.log(this.reducer$);
 
-    this.role = await this.keycloakService.isUserInRole('booking-admin');
+    const isLogin = await this.keycloakService.isLoggedIn();
+    const isAdmin = await this.keycloakService.isUserInRole('booking-admin');
 
-    if (this.isLoggedIn) {
+    if (isLogin) {
       this.store.dispatch(login({ isLogin: true }));
-      // this.store.dispatch(staff({ isStaff: res.isStaff }));
+      localStorage.setItem('isLogin', 'true');
+      localStorage.setItem('role', isAdmin ? 'admin' : 'default');
+      if (isAdmin) {
+        this.store.dispatch(role({ role: 'admin' }));
+      } else {
+        this.store.dispatch(role({ role: 'default' }));
+      }
     }
-    //this.keycloakService.
+    // this.keycloakService.
   }
 
   doLogin(): void {
@@ -35,5 +42,8 @@ export class MenuComponent implements OnInit {
 
   doLogout(): void {
     this.keycloakService.logout();
+    this.store.dispatch(login({ isLogin: false }));
+    localStorage.setItem('isLogin', 'false');
+    localStorage.setItem('role', '');
   }
 }

@@ -19,6 +19,9 @@ import { Event, Booking } from '../Types/event';
 import { EventBookingService } from '../../service/event-booking/event-booking.service';
 import { KeycloakService } from 'keycloak-angular';
 import { ToastService } from 'app/service/toast/toast-service.service';
+import { Store } from '@ngrx/store';
+
+import { Status } from 'app/store/reducer';
 
 @Component({
   selector: 'app-calender',
@@ -91,13 +94,18 @@ export class CalenderComponent implements OnInit {
 
   searchBooking: string = 'All';
 
+  reducer$: Status;
+
   constructor(
     private modal: NgbModal,
     private eventsService: EventBookingService,
     private modalService: NgbModal,
     protected readonly keycloakService: KeycloakService,
-    public toastService: ToastService
-  ) {}
+    public toastService: ToastService,
+    private store: Store<{ reducer: Status }>
+  ) {
+    this.store.select('reducer').subscribe(res => (this.reducer$ = res));
+  }
 
   async ngOnInit(): Promise<void> {
     this.getAllEvents();

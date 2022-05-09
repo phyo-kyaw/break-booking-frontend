@@ -3,12 +3,12 @@ import { login, role } from './action';
 
 export interface Status {
   isLogin: boolean;
-  role: string | undefined;
+  role: string;
 }
 
 export const initialState: Status = {
-  isLogin: Boolean(localStorage.getItem('token')) || false,
-  role: localStorage.getItem('role') || undefined
+  isLogin: JSON.parse(localStorage.getItem('isLogin') || 'false'),
+  role: localStorage.getItem('role') || ''
 };
 
 export const Reducer = createReducer(

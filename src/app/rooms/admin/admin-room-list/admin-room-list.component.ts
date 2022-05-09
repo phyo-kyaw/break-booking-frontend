@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChildren } from '@angular/core';
 import { Room } from '../../model/room';
 import { RoomService } from 'app/service/rooms/room.service';
-
+import { Store } from '@ngrx/store';
+import { Status } from 'app/store/reducer';
 @Component({
   selector: 'app-admin-room-list',
   templateUrl: './admin-room-list.component.html',
@@ -9,9 +10,15 @@ import { RoomService } from 'app/service/rooms/room.service';
 })
 export class AdminRoomListComponent implements OnInit {
   @ViewChildren('roomRow') roomRows;
+  reducer$: Status;
   rooms: Room[] = [];
   roomStatusMessage: string = 'Loading room information...';
-  constructor(private _roomService: RoomService) {}
+  constructor(
+    private _roomService: RoomService,
+    private store: Store<{ reducer: Status }>
+  ) {
+    this.store.select('reducer').subscribe(res => (this.reducer$ = res));
+  }
 
   /**
    * Loads room from API
