@@ -21,10 +21,10 @@
         <li class="nav-item">
           <a routerLink="/event/all" class="nav-link">Event</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="reducer$?.isLogin">
           <a routerLink="/dictionaries" class="nav-link">Dictionaries</a>
         </li>
-        <li class="nav-item" *ngIf="reducer$?.role === 'admin'">
+        <li class="nav-item" *ngIf="reducer$?.role === 'booking-admin'">
           <a routerLink="/admin/appt" class="nav-link">Admin</a>
         </li>
       </ul>

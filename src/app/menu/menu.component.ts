@@ -18,19 +18,21 @@ export class MenuComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<any> {
-    console.log(this.reducer$);
-
     const isLogin = await this.keycloakService.isLoggedIn();
     const isAdmin = await this.keycloakService.isUserInRole('booking-admin');
 
     if (isLogin) {
       this.store.dispatch(login({ isLogin: true }));
+      console.log(this.keycloakService.getUserRoles());
       localStorage.setItem('isLogin', 'true');
-      localStorage.setItem('role', isAdmin ? 'admin' : 'default');
+      localStorage.setItem(
+        'role',
+        isAdmin ? 'booking-admin' : 'default-roles-break-booking'
+      );
       if (isAdmin) {
-        this.store.dispatch(role({ role: 'admin' }));
+        this.store.dispatch(role({ role: 'booking-admin' }));
       } else {
-        this.store.dispatch(role({ role: 'default' }));
+        this.store.dispatch(role({ role: 'default-roles-break-booking' }));
       }
     }
     // this.keycloakService.

@@ -114,7 +114,7 @@
             </button></strong
           >
 
-          <div class="ml-auto" *ngIf="reducer$.role === 'admin'">
+          <div class="ml-auto" *ngIf="reducer$?.role === 'booking-admin'">
             <button class="btn btn-primary" (click)="open(adminContent)">
               New Event
             </button>
@@ -167,14 +167,14 @@
                     Detail
                   </button>
                   <button
-                    *ngIf="reducer$.role === 'admin'"
+                    *ngIf="reducer$?.role === 'booking-admin'"
                     class="btn btn-outline-primary btn-sm ml-2"
                     (click)="open(adminContent, i)"
                   >
                     Edit
                   </button>
                   <button
-                    *ngIf="reducer$.role === 'admin'"
+                    *ngIf="reducer$?.role === 'booking-admin'"
                     class="btn btn-outline-danger btn-sm ml-2"
                     (click)="deleteEvent(event.eid)"
                   >
@@ -207,7 +207,7 @@
           </select>
 
           <button
-            *ngIf="reducer$.role === 'admin'"
+            *ngIf="reducer$?.role === 'booking-admin'"
             class="btn btn-danger ml-1"
             (click)="deleteAllBookings()"
           >
@@ -224,7 +224,7 @@
                 <th>Name</th>
                 <th>Phone</th>
                 <!-- <th>Description</th> -->
-                <th *ngIf="reducer$.role === 'admin'">Action</th>
+                <th *ngIf="reducer$?.role === 'booking-admin'">Action</th>
               </tr>
             </thead>
 
@@ -243,7 +243,7 @@
                   {{ booking.bookerPhone }}
                 </td>
 
-                <td *ngIf="reducer$.role === 'admin'">
+                <td *ngIf="reducer$?.role === 'booking-admin'">
                   <button
                     class="btn btn-outline-danger btn-sm ml-2"
                     (click)="deleteBooking(booking.id)"

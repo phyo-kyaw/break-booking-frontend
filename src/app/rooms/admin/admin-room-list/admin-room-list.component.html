@@ -3,7 +3,7 @@
     <h1>Rooms</h1>
 
     <a
-      *ngIf="reducer$?.role === 'admin'"
+      *ngIf="reducer$?.role === 'booking-admin'"
       routerLink="/rooms/create"
       class="btn btn-primary ml-auto"
       >Add room</a
@@ -32,11 +32,11 @@
           <a
             [routerLink]="['/rooms/edit/', room.id]"
             class="btn btn-outline-primary mr-2"
-            *ngIf="reducer$?.role === 'admin'"
+            *ngIf="reducer$?.role === 'booking-admin'"
             >Edit</a
           >
           <app-delete-room
-            *ngIf="reducer$?.role === 'admin'"
+            *ngIf="reducer$?.role === 'booking-admin'"
             [roomId]="room.id"
             [roomName]="room.title"
             (deleteRoomSuccess)="roomDeleted(room.id)"
