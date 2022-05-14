@@ -48,6 +48,7 @@ import { SuccessComponent } from './events/success/success.component';
 import { ToastGlobalComponent } from './misc/toast-global/toast-global.component';
 import { StoreModule } from '@ngrx/store';
 import { Reducer } from 'app/store/reducer';
+import { HomePageComponent } from './home-page/home-page.component';
 
 @NgModule({
   declarations: [
@@ -80,7 +81,8 @@ import { Reducer } from 'app/store/reducer';
     BookEventFormComponent,
     PaymentComponent,
     SuccessComponent,
-    ToastGlobalComponent
+    ToastGlobalComponent,
+    HomePageComponent
   ],
   imports: [
     CommonModule,
