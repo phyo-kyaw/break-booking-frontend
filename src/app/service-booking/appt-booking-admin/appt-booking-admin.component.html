@@ -1,35 +1,65 @@
 <!-- <h4 style="text-align:center">List of Booking Entities</h4> -->
 <div class="container">
-   <!-- <div class="alert alert-warning" *ngIf='invalidCancel'>{{errorCancelMessage}}</div> -->
-   <table class="table">
-     <thead>
-       <tr>
-         <th>Break Appointment Booking System</th>
-         <th> </th>
-         <th colspan="3" style="text-align:center"> </th>
-       </tr>
-     </thead>
-     <tbody>
-       <tr *ngFor="let apptBookingEntity of apptBookingEntityList">
-         <!-- <td>{{bookingEntity.gid}}</td> -->
-         <td >{{apptBookingEntity.title_1}}</td>
-         <!--<td>{{_formatDate(new Date(waterOrder.startDateTime))}}</td>-->
-         <td >{{apptBookingEntity.title_2}}</td>
-         <!--<td>{{new Date() | date:'yyyy-MM-ddTHH:mm:ss' }}</td>-->
-         <!-- <a [routerLink]="['/user/bob']" [queryParams]="{gid: bookingEntity.gid}" >Book</a> -->
-         <td><button (click)="update(apptBookingEntity.gid)" class="btn btn-warning">Edit</button></td>
-         <td><button (click)="delete(apptBookingEntity.gid)" class="btn btn-danger">Delete</button></td>
-         <!-- <td><button (click)="book(bookingEntity.gid)" class="btn btn-success">Book</button></td> -->
-         <!-- <td><button (click)="cancelWaterOrder(waterOrder)" class="btn btn-warning">Cancel</button></td>
+  <!-- <div class="alert alert-warning" *ngIf='invalidCancel'>{{errorCancelMessage}}</div> -->
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Break Appointment Booking System</th>
+        <th></th>
+        <th colspan="3" style="text-align: center"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let apptBookingEntity of apptBookingEntityList">
+        <!-- <td>{{bookingEntity.gid}}</td> -->
+        <td>{{ apptBookingEntity.title_1 }}</td>
+        <!--<td>{{_formatDate(new Date(waterOrder.startDateTime))}}</td>-->
+        <td>{{ apptBookingEntity.title_2 }}</td>
+        <!--<td>{{new Date() | date:'yyyy-MM-ddTHH:mm:ss' }}</td>-->
+        <!-- <a [routerLink]="['/user/bob']" [queryParams]="{gid: bookingEntity.gid}" >Book</a> -->
+        <td>
+          <button
+            (click)="book(apptBookingEntity.gid)"
+            class="mr-2 btn btn-success"
+          >
+            Book
+          </button>
+          <!-- </td>
+        <td> -->
+          <button
+            *ngIf="reducer$?.role === 'booking-admin'"
+            (click)="update(apptBookingEntity.gid)"
+            class="btn btn-warning mr-2"
+          >
+            Edit
+          </button>
+          <!-- </td>
+        <td> -->
+          <button
+            *ngIf="reducer$?.role === 'booking-admin'"
+            (click)="delete(apptBookingEntity.gid)"
+            class="btn btn-danger"
+          >
+            Delete
+          </button>
+        </td>
+        <!-- <td><button (click)="book(bookingEntity.gid)" class="btn btn-success">Book</button></td> -->
+        <!-- <td><button (click)="cancelWaterOrder(waterOrder)" class="btn btn-warning">Cancel</button></td>
          <td><button (click)="obtainWaterOrderLog(waterOrder)" class="btn btn-success">Details</button></td> -->
-       </tr>
-       <!-- <tr>
+      </tr>
+      <!-- <tr>
           <button (click)="addBookingEntity()" class="btn btn-success">Add Booking Entity</button>
        </tr> -->
-     </tbody>
-   </table>
-   <div class="dd">
-    <button (click)="addApptBookingEntity()" class="btn btn-success">Add Booking Entity</button>
+    </tbody>
+  </table>
+  <div class="dd">
+    <button
+      *ngIf="reducer$?.role === 'booking-admin'"
+      (click)="addApptBookingEntity()"
+      class="btn btn-success"
+    >
+      Add Booking Entity
+    </button>
     <!-- <button (click)="refreshDB()" class="btn btn-danger">Refresh DB</button> -->
-   </div>
- </div>
+  </div>
+</div>

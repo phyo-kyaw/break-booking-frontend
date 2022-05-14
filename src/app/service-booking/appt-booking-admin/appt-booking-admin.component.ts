@@ -1,8 +1,9 @@
-
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApptBookingEntity } from 'app/service-booking/appt-booking-entity/models';
 import { ApptBookingEntityDataService } from 'app/service/appt-booking-entity/appt-booking-entity-data.service';
+import { Store } from '@ngrx/store';
+import { Status } from 'app/store/reducer';
 
 @Component({
   selector: 'app-appt-booking-admin',
@@ -10,27 +11,32 @@ import { ApptBookingEntityDataService } from 'app/service/appt-booking-entity/ap
   styleUrls: ['./appt-booking-admin.component.css']
 })
 export class ApptBookingAdminComponent implements OnInit {
-
+  reducer$: Status;
   apptBookingEntity: ApptBookingEntity;
   apptBookingEntityList: ApptBookingEntity[];
 
   constructor(
     private apptBookingEntityDataService: ApptBookingEntityDataService,
-    private router: Router
-  ) { }
+    private router: Router,
+    private store: Store<{ reducer: Status }>
+  ) {
+    this.store.select('reducer').subscribe(res => (this.reducer$ = res));
+  }
 
   ngOnInit(): void {
-    //confirm("admin username: break.booking.561 password: P6ssw0rd")
-    console.log("In booking entity list init" );
-    this.apptBookingEntityDataService.retrieveAllBookingEntities().subscribe(
-      response => {
+    this.apptBookingEntityDataService
+      .retrieveAllBookingEntities()
+      .subscribe(response => {
         console.log(response);
         this.apptBookingEntityList = response;
         console.log(this.apptBookingEntityList);
-      }
-    )
+      });
   }
 
+  book(gid): void {
+    console.log(gid);
+    this.router.navigate(['select', gid]);
+  }
 
   addApptBookingEntity(): void {
     this.router.navigate(['entity']);
@@ -42,15 +48,13 @@ export class ApptBookingAdminComponent implements OnInit {
   }
 
   delete(gid): void {
-    if (confirm("Confirm delete?")) {
-      this.apptBookingEntityDataService.deleteBookingEntity(gid).subscribe(
-        response => {
+    if (confirm('Confirm delete?')) {
+      this.apptBookingEntityDataService
+        .deleteBookingEntity(gid)
+        .subscribe(response => {
           console.log('Entity deleted. ' + gid);
-        }
-      )
+        });
       this.router.navigate(['list']);
     }
   }
-
 }
-

@@ -37,14 +37,14 @@ const routes: Routes = [
     data: { roles: ['booking-admin', 'manage-account'] }
   },
   { path: 'book', component: ListApptBookingEntityComponent },
-  { path: 'list', component: ListApptBookingEntityComponent },
+  // { path: 'list', component: ListApptBookingEntityComponent },
   {
     path: 'select/:gid',
     component: ApptBookingComponent,
     canActivate: [AuthGuard],
     data: { roles: ['booking-admin'] }
   },
-  { path: 'admin/appt', component: ApptBookingAdminComponent },
+  { path: 'appt/all', component: ApptBookingAdminComponent },
   {
     path: 'booking/payment/:id',
     component: BookingPaymentComponent
