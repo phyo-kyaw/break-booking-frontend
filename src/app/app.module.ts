@@ -1,27 +1,19 @@
 import 'flatpickr/dist/flatpickr.css';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
-import FormControl from '@material-ui/core/FormControl';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-// import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
-
+import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
-//import { SchedulerModule } from 'angular-calendar-scheduler';
 import { ApptBookingUtilsModule } from './appt-booking-utils/module';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ApptBookingComponent } from './service-booking/appt-booking/appt-booking.component';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-
 import { initializeKeycloak } from './appt-booking-utils/app.init';
-
-//import { environment } from '../environments/environment.prod';
 import { environment } from '../environments/environment';
 import { MenuComponent } from './menu/menu.component';
 import { FooterComponent } from './footer/footer.component';
@@ -54,6 +46,8 @@ import { FlatpickrModule } from 'angularx-flatpickr';
 import { PaymentComponent } from './events/payment/payment.component';
 import { SuccessComponent } from './events/success/success.component';
 import { ToastGlobalComponent } from './misc/toast-global/toast-global.component';
+import { StoreModule } from '@ngrx/store';
+import { Reducer } from 'app/store/reducer';
 
 @NgModule({
   declarations: [
@@ -92,7 +86,7 @@ import { ToastGlobalComponent } from './misc/toast-global/toast-global.component
     CommonModule,
     BrowserModule,
     FormsModule,
-
+    StoreModule.forRoot({ reducer: Reducer }),
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory
