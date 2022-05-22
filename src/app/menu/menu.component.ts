@@ -10,6 +10,9 @@ import { Status } from 'app/store/reducer';
 })
 export class MenuComponent implements OnInit {
   reducer$: Status;
+
+  public isMenuCollapsed = true;
+
   constructor(
     protected readonly keycloakService: KeycloakService,
     private store: Store<{ reducer: Status }>
