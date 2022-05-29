@@ -3,7 +3,8 @@ import {
   OnInit,
   ViewChild,
   TemplateRef,
-  ViewEncapsulation
+  ViewEncapsulation,
+  ChangeDetectorRef
 } from '@angular/core';
 
 import { Subject } from 'rxjs';
@@ -14,19 +15,19 @@ import {
   CalendarEventTimesChangedEvent,
   CalendarView
 } from 'angular-calendar';
-
+import { takeUntil } from 'rxjs/operators';
 import { Event, Booking } from '../Types/event';
 import { EventBookingService } from '../../service/event-booking/event-booking.service';
 import { KeycloakService } from 'keycloak-angular';
 import { ToastService } from 'app/service/toast/toast-service.service';
 import { Store } from '@ngrx/store';
-
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Status } from 'app/store/reducer';
 
 @Component({
   selector: 'app-calender',
   templateUrl: './calender.component.html',
-  encapsulation: ViewEncapsulation.None, // hack to get the styles to apply locally
+  // encapsulation: ViewEncapsulation.None, // hack to get the styles to apply locally
   styleUrls: ['./calender.component.css']
 })
 export class CalenderComponent implements OnInit {
@@ -96,13 +97,21 @@ export class CalenderComponent implements OnInit {
 
   reducer$: Status;
 
+  daysInWeek = 7;
+
+  viewDateDec: number;
+
+  private destroy$ = new Subject();
+
   constructor(
     private modal: NgbModal,
+    private cd: ChangeDetectorRef,
     private eventsService: EventBookingService,
     private modalService: NgbModal,
     protected readonly keycloakService: KeycloakService,
     public toastService: ToastService,
-    private store: Store<{ reducer: Status }>
+    private store: Store<{ reducer: Status }>,
+    private breakpointObserver: BreakpointObserver
   ) {
     this.store.select('reducer').subscribe(res => (this.reducer$ = res));
   }
@@ -115,6 +124,43 @@ export class CalenderComponent implements OnInit {
       this.userProfile = await this.keycloakService.loadUserProfile();
       this.userRoles = await this.keycloakService.getUserRoles();
     }
+
+    const CALENDAR_RESPONSIVE = {
+      small: {
+        breakpoint: '(max-width: 576px)',
+        daysInWeek: 3,
+        viewDateDec: 1
+      },
+      medium: {
+        breakpoint: '(max-width: 768px)',
+        daysInWeek: 5,
+        viewDateDec: 2
+      },
+      large: {
+        breakpoint: '(max-width: 960px)',
+        daysInWeek: 7,
+        viewDateDec: 3
+      }
+    };
+
+    this.breakpointObserver
+      .observe(
+        Object.values(CALENDAR_RESPONSIVE).map(({ breakpoint }) => breakpoint)
+      )
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((state: BreakpointState) => {
+        const foundBreakpoint = Object.values(CALENDAR_RESPONSIVE).find(
+          ({ breakpoint }) => !!state.breakpoints[breakpoint]
+        );
+        if (foundBreakpoint) {
+          this.daysInWeek = foundBreakpoint.daysInWeek;
+          this.viewDateDec = foundBreakpoint.viewDateDec;
+        } else {
+          this.daysInWeek = 7;
+          this.viewDateDec = 3;
+        }
+        this.cd.markForCheck();
+      });
   }
 
   ngOnDestroy(): void {

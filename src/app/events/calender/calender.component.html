@@ -159,16 +159,16 @@
                   {{ event.description }}
                 </td> -->
 
-                <td>
+                <td class="align-middle">
                   <button
-                    class="btn btn-outline-primary btn-sm"
+                    class="btn btn-outline-primary btn-sm ml-2 my-1"
                     (click)="open(userContent, i)"
                   >
                     Detail
                   </button>
                   <button
                     *ngIf="reducer$?.role === 'booking-admin'"
-                    class="btn btn-outline-primary btn-sm ml-2"
+                    class="btn btn-outline-primary btn-sm ml-2 my-1"
                     (click)="open(adminContent, i)"
                   >
                     Edit
