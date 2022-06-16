@@ -1,6 +1,7 @@
 import 'flatpickr/dist/flatpickr.css';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
+import FormControl from '@material-ui/core/FormControl';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { CommonModule } from '@angular/common';
@@ -98,7 +99,7 @@ import { Reducer } from 'app/store/reducer';
     // OwlNativeDateTimeModule,
     AppRoutingModule,
     HttpClientModule,
-
+    FormsModule,
     ReactiveFormsModule,
     KeycloakAngularModule,
     BrowserAnimationsModule,
