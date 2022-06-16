@@ -7,6 +7,8 @@ RUN rm -rf node_modules package-lock.json
 RUN npm install --quiet
 COPY . .
 RUN npm run build
+RUN ls -l ./
+RUN pwd
 
 # stage 2
 FROM nginx:alpine
