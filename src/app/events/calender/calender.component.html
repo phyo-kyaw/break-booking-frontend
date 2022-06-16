@@ -1,218 +1,348 @@
 <div class="container">
-    <!-- <div class="alert alert-warning" *ngIf='invalidCancel'>{{errorCancelMessage}}</div> -->
-    <h1 class="h1"></h1>
-    <div class="row text-center">
-      <div class="col-md-4">
-        <div class="btn-group">
-          <div
-            class="btn btn-primary"
-            mwlCalendarPreviousView
-            [view]="view"
-            [(viewDate)]="viewDate"
-            (viewDateChange)="closeOpenMonthViewDay()"
-          >
-            Previous
-          </div>
-          <div
-            class="btn btn-outline-secondary"
-            mwlCalendarToday
-            [(viewDate)]="viewDate"
-          >
-            Today
-          </div>
-          <div
-            class="btn btn-primary"
-            mwlCalendarNextView
-            [view]="view"
-            [(viewDate)]="viewDate"
-            (viewDateChange)="closeOpenMonthViewDay()"
-          >
-            Next
-          </div>
+  <!-- <div class="alert alert-warning" *ngIf='invalidCancel'>{{errorCancelMessage}}</div> -->
+  <h1 class="h1"></h1>
+  <div class="row text-center">
+    <div class="col-md-4">
+      <div class="btn-group">
+        <div
+          class="btn btn-primary"
+          mwlCalendarPreviousView
+          [view]="view"
+          [(viewDate)]="viewDate"
+          (viewDateChange)="closeOpenMonthViewDay()"
+        >
+          Previous
         </div>
-      </div>
-      <div class="col-md-4">
-        <h3>{{ viewDate | calendarDate: view + 'ViewTitle':'en' }}</h3>
-      </div>
-      <div class="col-md-4">
-        <div class="btn-group">
-          <div
-            class="btn btn-primary"
-            (click)="setView(CalendarView.Month)"
-            [class.active]="view === CalendarView.Month"
-          >
-            Month
-          </div>
-          <div
-            class="btn btn-primary"
-            (click)="setView(CalendarView.Week)"
-            [class.active]="view === CalendarView.Week"
-          >
-            Week
-          </div>
-          <div
-            class="btn btn-primary"
-            (click)="setView(CalendarView.Day)"
-            [class.active]="view === CalendarView.Day"
-          >
-            Day
-          </div>
+        <div
+          class="btn btn-outline-secondary"
+          mwlCalendarToday
+          [(viewDate)]="viewDate"
+        >
+          Today
+        </div>
+        <div
+          class="btn btn-primary"
+          mwlCalendarNextView
+          [view]="view"
+          [(viewDate)]="viewDate"
+          (viewDateChange)="closeOpenMonthViewDay()"
+        >
+          Next
         </div>
       </div>
     </div>
-    <br />
-    <div [ngSwitch]="view">
-      <mwl-calendar-month-view
-        *ngSwitchCase="CalendarView.Month"
-        [viewDate]="viewDate"
-        [events]="events"
-        [refresh]="refresh"
-        [activeDayIsOpen]="activeDayIsOpen"
-        (dayClicked)="dayClicked($event.day)"
-        (eventClicked)="handleEvent('Clicked', $event.event)"
-        (eventTimesChanged)="eventTimesChanged($event)"
-      >
-      </mwl-calendar-month-view>
-      <mwl-calendar-week-view
-        *ngSwitchCase="CalendarView.Week"
-        [viewDate]="viewDate"
-        [events]="events"
-        [refresh]="refresh"
-        (eventClicked)="handleEvent('Clicked', $event.event)"
-        (eventTimesChanged)="eventTimesChanged($event)"
-      >
-      </mwl-calendar-week-view>
-      <mwl-calendar-day-view
-        *ngSwitchCase="CalendarView.Day"
-        [viewDate]="viewDate"
-        [events]="events"
-        [refresh]="refresh"
-        (eventClicked)="handleEvent('Clicked', $event.event)"
-        (eventTimesChanged)="eventTimesChanged($event)"
-      >
-      </mwl-calendar-day-view>
+    <div class="col-md-4">
+      <h3>{{ viewDate | calendarDate: view + 'ViewTitle':'en' }}</h3>
     </div>
-  
-    <!-- Everything you see below is just for the demo, you don't need to include it in your app -->
-  
-    <br /><br /><br />
-  
-    <div class="d-flex justify-content-between mb-2">
-      <h3>All Events</h3>
-  
-      <div>
-        <button class="btn btn-primary" (click)="open(content)">New Event</button>
-        <button class="btn btn-danger ml-1" (click)="deleteAllEvents()">
-          Delete All
-        </button>
-      </div>
-    </div>
-  
-    <!-- <h3>
-      All Events
-      <button class="btn btn-danger float-right" (click)="deleteAllEvents()">
-        Delete All
-      </button>
-      <button class="btn btn-primary float-right" (click)="addEvent()">
-        Edit A New Event
-      </button>
-      <div class="clearfix"></div>
-    </h3> -->
-  
-    <!-- <div class="table-responsive">
-      <app-appt-booking-a-event
-        *ngFor="let event of DataEvents; let i = index"
-        [event]="event"
-        [add]="event.add"
-        [id]="i"
-      ></app-appt-booking-a-event>
-      <b *ngIf="lenEvent">No events yet</b>
-    </div> -->
-  
-    <div class="table-responsive">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Start</th>
-            <th>End</th>
-            <th>Description</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-  
-        <tbody>
-          <tr *ngFor="let event of DataEvents; let i = index">
-            <td>
-              {{ event.title }}
-            </td>
-            <td>
-              {{ event.startTime }}
-            </td>
-            <td>
-              {{ event.endTime }}
-            </td>
-            <td>
-              {{ event.description }}
-            </td>
-  
-            <td>
-              <button class="btn btn-primary btn-sm" (click)="open(content, i)">
-                Edit
-              </button>
-              <button class="btn btn-danger btn-sm ml-2" (click)="deleteEvent(i)">
-                Delete
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-  
-      <b *ngIf="lenEvent">No events yet</b>
-    </div>
-  
-    <ng-template #modalContent let-close="close">
-      <div class="modal-header">
-        <h5 class="modal-title">Event action occurred</h5>
-        <button type="button" class="close" (click)="close()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div>
-          Action:
-          <pre>{{ modalData?.action }}</pre>
+    <div class="col-md-4">
+      <div class="btn-group">
+        <div
+          class="btn btn-primary"
+          (click)="setView(CalendarView.Month)"
+          [class.active]="view === CalendarView.Month"
+        >
+          Month
         </div>
-        <div>
-          Event:
-          <pre>{{ modalData?.event | json }}</pre>
+        <div
+          class="btn btn-primary"
+          (click)="setView(CalendarView.Week)"
+          [class.active]="view === CalendarView.Week"
+        >
+          Week
+        </div>
+        <div
+          class="btn btn-primary"
+          (click)="setView(CalendarView.Day)"
+          [class.active]="view === CalendarView.Day"
+        >
+          Day
         </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" (click)="close()">
-          OK
-        </button>
-      </div>
-    </ng-template>
-  
-    <ng-template #content let-modal>
-      <div class="modal-header">
-        <h4 class="modal-title" id="modal-basic-title">Event</h4>
-        <!-- <button
-          type="button"
-          class="btn-close"
-          aria-label="Close"
-          (click)="modal.dismiss('Cross click')"
-        ></button> -->
-        <button
-          type="button"
-          class="btn-close"
-          aria-label="Close"
-          (click)="modal.dismiss('Cross click'); closeModel()"
-        ></button>
-      </div>
-      <div class="modal-body">
-        <app-event-form [event]="event"></app-event-form>
-      </div>
-    </ng-template>
+    </div>
   </div>
+  <br />
+  <div [ngSwitch]="view">
+    <mwl-calendar-month-view
+      *ngSwitchCase="CalendarView.Month"
+      [viewDate]="viewDate"
+      [events]="events"
+      [refresh]="refresh"
+      [activeDayIsOpen]="activeDayIsOpen"
+      (dayClicked)="dayClicked($event.day); clickedDate = $event.day.date"
+      (eventClicked)="handleEvent('Clicked', $event.event)"
+      (eventTimesChanged)="eventTimesChanged($event)"
+    >
+    </mwl-calendar-month-view>
+    <mwl-calendar-week-view
+      *ngSwitchCase="CalendarView.Week"
+      [viewDate]="viewDate"
+      [events]="events"
+      [refresh]="refresh"
+      (eventClicked)="handleEvent('Clicked', $event.event)"
+      (eventTimesChanged)="eventTimesChanged($event)"
+    >
+    </mwl-calendar-week-view>
+    <mwl-calendar-day-view
+      *ngSwitchCase="CalendarView.Day"
+      [viewDate]="viewDate"
+      [events]="events"
+      [refresh]="refresh"
+      (eventClicked)="handleEvent('Clicked', $event.event)"
+      (eventTimesChanged)="eventTimesChanged($event)"
+    >
+    </mwl-calendar-day-view>
+  </div>
+
+  <!-- Everything you see below is just for the demo, you don't need to include it in your app -->
+
+  <br /><br /><br />
+
+  <ul ngbNav #nav="ngbNav" class="nav-tabs">
+    <li ngbNavItem>
+      <a ngbNavLink>Events</a>
+      <ng-template ngbNavContent>
+        <div class="d-flex justify-content-between mb-2 mt-3">
+          <!-- <h3>All Events</h3> -->
+          <strong *ngIf="clickedDate"
+            >Events on: {{ clickedDate | date: 'dd/MM/yyyy' }}
+            <button
+              *ngIf="DataEvents.length !== restoreDataEvents.length"
+              class="btn btn-link btn-sm"
+              (click)="restoreData(); clickedDate = null"
+            >
+              Show All
+            </button></strong
+          >
+
+          <div class="ml-auto" *ngIf="reducer$?.role === 'booking-admin'">
+            <button class="btn btn-primary" (click)="open(adminContent)">
+              New Event
+            </button>
+            <button class="btn btn-danger ml-1" (click)="deleteAllEvents()">
+              Delete All
+            </button>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Title</th>
+
+                <th>Start</th>
+                <th>End</th>
+                <th>Price</th>
+                <th>Capcity</th>
+                <!-- <th>Description</th> -->
+                <th>Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let event of DataEvents; let i = index">
+                <td>
+                  {{ event.title }}
+                </td>
+
+                <td>
+                  {{ event.startTime }}
+                </td>
+                <td>
+                  {{ event.endTime }}
+                </td>
+                <td>
+                  {{ event.price }}
+                </td>
+                <td>10/100 (fake)</td>
+                <!-- <td>
+                  {{ event.description }}
+                </td> -->
+
+                <td>
+                  <button
+                    class="btn btn-outline-primary btn-sm"
+                    (click)="open(userContent, i)"
+                  >
+                    Detail
+                  </button>
+                  <button
+                    *ngIf="reducer$?.role === 'booking-admin'"
+                    class="btn btn-outline-primary btn-sm ml-2"
+                    (click)="open(adminContent, i)"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    *ngIf="reducer$?.role === 'booking-admin'"
+                    class="btn btn-outline-danger btn-sm ml-2"
+                    (click)="deleteEvent(event.eid)"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <b *ngIf="!DataEvents.length">No events yet</b>
+        </div>
+      </ng-template>
+    </li>
+    <li ngbNavItem>
+      <a ngbNavLink>Bookings</a>
+      <ng-template ngbNavContent>
+        <div class="d-flex justify-content-end mb-2 mt-3">
+          <select
+            (change)="searchBookingByEid($event.target.value)"
+            [(ngModel)]="searchBooking"
+            id="searchBooking"
+            name="searchBooking"
+            class="mr-auto"
+          >
+            <option value="All">All Events</option>
+            <ng-container *ngFor="let eid of eidList">
+              <option [value]="eid">{{ eid }}</option>
+            </ng-container>
+          </select>
+
+          <button
+            *ngIf="reducer$?.role === 'booking-admin'"
+            class="btn btn-danger ml-1"
+            (click)="deleteAllBookings()"
+          >
+            Delete All
+          </button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Email</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <!-- <th>Description</th> -->
+                <th *ngIf="reducer$?.role === 'booking-admin'">Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let booking of bookings; let i = index">
+                <td>
+                  {{ booking.eventEid }}
+                </td>
+                <td>
+                  {{ booking.bookerEmail }}
+                </td>
+                <td>
+                  {{ booking.bookerName }}
+                </td>
+                <td>
+                  {{ booking.bookerPhone }}
+                </td>
+
+                <td *ngIf="reducer$?.role === 'booking-admin'">
+                  <button
+                    class="btn btn-outline-danger btn-sm ml-2"
+                    (click)="deleteBooking(booking.id)"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <b *ngIf="!DataEvents.length">No events yet</b>
+        </div>
+      </ng-template>
+    </li>
+  </ul>
+  <div [ngbNavOutlet]="nav"></div>
+
+  <ng-template #modalContent let-close="close">
+    <div class="modal-header">
+      <h5 class="modal-title">Event action occurred</h5>
+      <button type="button" class="close" (click)="close()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div>
+        Action:
+        <pre>{{ modalData?.action }}</pre>
+      </div>
+      <div>
+        Event:
+        <pre>{{ modalData?.event | json }}</pre>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="close()">
+        OK
+      </button>
+    </div>
+  </ng-template>
+
+  <ng-template #adminContent let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">{{ event?.title || 'New Event' }}</h4>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click'); closeModel()"
+      ></button>
+    </div>
+
+    <div class="modal-body">
+      <app-event-form [event]="event"></app-event-form>
+    </div>
+  </ng-template>
+
+  <ng-template #userContent let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Booking - {{ event?.title }}</h4>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click'); closeModel()"
+      ></button>
+    </div>
+
+    <div class="modal-body">
+      <app-event-detail [event]="event"></app-event-detail>
+    </div>
+
+    <div class="modal-footer">
+      <a
+        [routerLink]="['/event/booking/', event?.eid]"
+        class="btn btn-outline-primary mr-2"
+        (click)="modal.dismiss('Cross click'); closeModel()"
+        >Book</a
+      >
+    </div>
+  </ng-template>
+  <!-- loading -->
+  <!-- <app-loading-screen [isLoading]="isLoading"></app-loading-screen> -->
+  <!-- toast -->
+
+  <ng-template #dangerTpl>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="#fff"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+    >
+      <path
+        d="M10.872 6.831l1.695 3.904 3.654-1.561-1.79 3.426 3.333.954-3.417 1.338 2.231 4.196-4.773-2.582-2.869 2.287.413-3.004-3.792-.726 2.93-1.74-1.885-2.512 3.427.646.843-4.626zm-.786-6.831l-1.665 9.119-6.512-1.228 3.639 4.851-5.548 3.294 7.108 1.361-.834 6.076 5.742-4.577 9.438 5.104-4.288-8.064 6.834-2.677-6.661-1.907 3.25-6.22-6.98 2.982-3.523-8.114z"
+      />
+    </svg>
+    Danger Danger !
+  </ng-template>
+  <app-toast-global aria-live="polite" aria-atomic="true"></app-toast-global>
+</div>

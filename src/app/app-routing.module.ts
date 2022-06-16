@@ -16,8 +16,11 @@ import { RoomPaymentComponent } from './rooms/book-room/room-payment/room-paymen
 import { PaymentSuccessComponent } from './rooms/book-room/payment-success/payment-success.component';
 import { BookRoomFormComponent } from './rooms/book-room/book-room-form/book-room-form.component';
 import { BookingPaymentComponent } from './booking-payment/booking-payment.component';
-import { CalenderComponent } from './events/calender/calender.component'
+import { CalenderComponent } from './events/calender/calender.component';
+import { BookEventFormComponent } from './events/book-event/book-event-form/book-event-form.component';
 import { EventFormComponent } from './events/admin/event-form/event-form.component';
+import { PaymentComponent } from './events/payment/payment.component';
+import { SuccessComponent } from './events/success/success.component';
 
 const routes: Routes = [
   //{ path: 'select', component: CalendarSelComponent },
@@ -35,7 +38,12 @@ const routes: Routes = [
   },
   { path: 'book', component: ListApptBookingEntityComponent },
   { path: 'list', component: ListApptBookingEntityComponent },
-  { path: 'select/:gid', component: ApptBookingComponent },
+  {
+    path: 'select/:gid',
+    component: ApptBookingComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['booking-admin'] }
+  },
   { path: 'admin/appt', component: ApptBookingAdminComponent },
   {
     path: 'booking/payment/:id',
@@ -46,38 +54,61 @@ const routes: Routes = [
   {
     path: 'rooms/all',
     component:
-      AdminRoomListComponent /*, canActivate: [AuthGuard] , data: { roles: ['room-provider'] } */
+      AdminRoomListComponent /*, canActivate: [AuthGuard] , data: { roles: ['booking-admin'] } */
   },
   {
     path: 'rooms/create',
     component:
-      AddRoomComponent /*, canActivate: [AuthGuard] , data: { roles: ['room-provider'] } */
+      AddRoomComponent /*, canActivate: [AuthGuard] , data: { roles: ['booking-admin'] } */
   },
   {
     path: 'rooms/edit/:id',
     component:
-      EditRoomComponent /*,canActivate: [AuthGuard] , data: { roles: ['room-provider'] }  */
+      EditRoomComponent /*,canActivate: [AuthGuard] , data: { roles: ['booking-admin'] }  */
   },
-  { path: 'rooms/view/:id', component: ViewRoomComponent },
+  {
+    path: 'rooms/view/:id',
+    component: ViewRoomComponent
+    // canActivate: [AuthGuard],
+    // data: { roles: ['booking-admin'] }
+  },
   { path: 'rooms', component: RoomListComponent },
   {
     path: 'event/all',
     component:
-    CalenderComponent /*, canActivate: [AuthGuard] , data: { roles: ['room-provider'] } */
+      CalenderComponent /*, canActivate: [AuthGuard] , data: { roles: ['booking-admin'] } */
+  },
+  {
+    path: 'event/booking/:id',
+    component: BookEventFormComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['booking-admin'] }
+  },
+  {
+    path: 'event/payment/:id',
+    component:
+      PaymentComponent /*, canActivate: [AuthGuard] , data: { roles: ['booking-admin'] } */
+  },
+  {
+    path: 'event/booking/success/:id',
+    component:
+      SuccessComponent /*, canActivate: [AuthGuard] , data: { roles: ['booking-admin'] } */
   },
   {
     path: 'dictionaries',
     component:
-      DictionaryListComponent /*,canActivate: [AuthGuard] , data: { roles: ['room-provider'] }  */
+      DictionaryListComponent /*,canActivate: [AuthGuard] , data: { roles: ['booking-admin'] }  */
   },
   {
     path: 'dictionaries/view/:id',
     component:
-      ViewDictionaryComponent /*,canActivate: [AuthGuard] , data: { roles: ['room-provider'] }  */
+      ViewDictionaryComponent /*,canActivate: [AuthGuard] , data: { roles: ['booking-admin'] }  */
   },
   {
     path: 'rooms/book/:id',
-    component: BookRoomFormComponent
+    component: BookRoomFormComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['booking-admin'] }
   },
   {
     path: 'rooms/payment/:id',

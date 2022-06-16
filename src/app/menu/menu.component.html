@@ -1,42 +1,43 @@
 <header>
   <!-- <nav class="navbar navbar-expand-md navbar-custom bg-grey"> -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="https://thebreak.org.au/">The Break</a>
-      <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="https://thebreak.org.au/">The Break</a>
+    <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button> -->
-      <div class="collapse navbar-collapse" id="navbarText">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a routerLink="/" class="nav-link" >Home <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a routerLink="/list" class="nav-link" >Appointment</a>
-          </li>
-          <li class="nav-item">
-            <a routerLink="/rooms/all"class="nav-link">Room</a>
-          </li>
-          <li class="nav-item">
-            <a routerLink="/event/all"class="nav-link">Event</a>
-          </li>
-          <li class="nav-item">
-            <a routerLink="/dictionaries" class="nav-link">Dictionaries</a>
-          </li>
-          <li class="nav-item">
-            <a routerLink="/admin/appt"class="nav-link">Admin</a>
-          </li>
-        </ul>
-        <ul class="navbar-nav navbar-collapse justify-content-end">
-          <li *ngIf="!isLoggedIn">
-            <a class='nav-link' (click)="doLogin()" class="nav-link">Login</a>
-          </li>
-          <li *ngIf="isLoggedIn">
-            <a rclass='nav-link' (click)="doLogout()" class="nav-link">Logout</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+    <div class="collapse navbar-collapse" id="navbarText">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a routerLink="/" class="nav-link"
+            >Home <span class="sr-only">(current)</span></a
+          >
+        </li>
+        <li class="nav-item">
+          <a routerLink="/list" class="nav-link">Appointment</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/rooms/all" class="nav-link">Room</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/event/all" class="nav-link">Event</a>
+        </li>
+        <li class="nav-item" *ngIf="reducer$?.isLogin">
+          <a routerLink="/dictionaries" class="nav-link">Dictionaries</a>
+        </li>
+        <li class="nav-item" *ngIf="reducer$?.role === 'booking-admin'">
+          <a routerLink="/admin/appt" class="nav-link">Admin</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav navbar-collapse justify-content-end">
+        <li *ngIf="!reducer$?.isLogin">
+          <a class="nav-link" (click)="doLogin()" class="nav-link">Login</a>
+        </li>
+        <li *ngIf="reducer$?.isLogin">
+          <a rclass="nav-link" (click)="doLogout()" class="nav-link">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
 
   <!-- </nav> -->
 </header>
-
