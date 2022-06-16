@@ -5,6 +5,7 @@ import {
   HttpParams,
   HttpEventType
 } from '@angular/common/http';
+import { environment as env } from 'environments/environment';
 import { map, catchError, tap } from 'rxjs/operators';
 import { Subject, throwError } from 'rxjs';
 
@@ -16,9 +17,11 @@ import { add } from 'date-fns';
 })
 export class EventBookingService {
 
+  _homeUrl = env.homeUrl;
+
   error = new Subject<string>();
 
-  addr='http://localhost:8080/api/v1/'
+  addr = this._homeUrl + 'api/v1/';
   constructor(private http: HttpClient) {}
 
   getAllevents(){
@@ -51,7 +54,7 @@ export class EventBookingService {
     city:string,postCode:string,street:string,
     description:string) {
     console.log('sss',startTime)
-    const postData: Event = 
+    const postData: Event =
     {
       // booking: {
       //   bookerEmail: bookerEmail,
@@ -93,7 +96,7 @@ export class EventBookingService {
     // bookerEmail:string,bookerName:string,bookerPhone:string,
     city:string,postCode:string,street:string,
     description:string){
-    const postData: Event = 
+    const postData: Event =
     {
       // booking: {
       //   bookerEmail: bookerEmail,

@@ -19,7 +19,7 @@ COPY --from=node /app/dist/agl-calendar /usr/share/nginx/html
 
 #RUN ls -laR /etc/nginx/ssl/*
 
-COPY ./nginx_local.conf /etc/nginx/conf.d/default.conf
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 
 COPY ./run.sh /run.sh
 
