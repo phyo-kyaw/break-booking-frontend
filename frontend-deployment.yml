@@ -14,13 +14,13 @@ spec:
     spec:
       containers:
         - name: break-booking-frontend
-          image: pkdocker3383/break-booking-frontend:v2
+          image: pkdocker3383/break-booking-frontend:v3
           imagePullPolicy: Always
           ports:
             - containerPort: 80
           env:
             - name: HOME_URL
-              value: "http://120.159.30.85"
+              value: "http://breakbookings.com"
 ---
 apiVersion: v1
 kind: Service
