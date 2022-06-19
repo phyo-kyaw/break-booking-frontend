@@ -1,5 +1,5 @@
 # stage 1
-FROM node:14-alpine as node
+FROM node:16-alpine as node
 WORKDIR /app
 
 COPY package.json .
@@ -7,6 +7,8 @@ RUN rm -rf node_modules package-lock.json
 RUN npm install --quiet
 COPY . .
 RUN npm run build
+RUN ls -l ./
+RUN pwd
 
 # stage 2
 FROM nginx:alpine
@@ -19,7 +21,7 @@ COPY --from=node /app/dist/agl-calendar /usr/share/nginx/html
 
 #RUN ls -laR /etc/nginx/ssl/*
 
-COPY ./nginx_local.conf /etc/nginx/conf.d/default.conf
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 
 COPY ./run.sh /run.sh
 

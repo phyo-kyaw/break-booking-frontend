@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
+import { environment as env } from 'environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+
 import { Event } from '../../events/Types/event';
 
 type NewEventProps = Record<keyof Event | 'city' | 'postCode' | 'street', any>;
@@ -9,11 +11,16 @@ type NewEventProps = Record<keyof Event | 'city' | 'postCode' | 'street', any>;
   providedIn: 'root'
 })
 export class EventBookingService {
+
+  _homeUrl = env.homeUrl;
+
   error = new Subject<string>();
 
-  addr = 'http://localhost:8087/api/v1/';
+  addr = this._homeUrl + 'api/v1/';
+  //addr = 'http://localhost:8087/api/v1/';
 
   constructor(private _http: HttpClient) {}
+
 
   getAllevents() {
     return this._http.get(`${this.addr}events/list`).pipe(
@@ -28,6 +35,7 @@ export class EventBookingService {
         return postsArray;
       })
     );
+
   }
 
   getEventbyID(id: string) {
@@ -41,10 +49,12 @@ export class EventBookingService {
     });
   }
 
+
   addNewEvent(props: NewEventProps) {
     const data: Event = {
       description: props.description,
       endTime: new Date(props.endTime).toISOString(),
+
       location: {
         city: props.city,
         postCode: props.postCode,
@@ -61,6 +71,7 @@ export class EventBookingService {
     return this._http.delete(`${this.addr}events/delete/${eid}`);
   }
 
+
   modifyEvent(
     eid: string,
     title: string,
@@ -73,6 +84,7 @@ export class EventBookingService {
     description: string
   ) {
     const postData: Event = {
+
       description: description,
       endTime: endTime,
       location: {

@@ -27,7 +27,7 @@
   </div>
 </ng-template>
 
-<div [ngSwitch]="view">
+<div class="col-lg-6 mx-auto" [ngSwitch]="view">
   <mwl-calendar-month-view
     *ngSwitchCase="'month'"
     [viewDate]="viewDate"
