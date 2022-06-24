@@ -9,7 +9,7 @@ export function initializeKeycloak(
         keycloak.init({
             config: {
                 //url: 'https://break-booking.online:8443/auth',
-                url: 'http://breakbookings.com/auth',
+                url: 'https://breakbookings.com/auth',
                 realm: 'break-booking',
                 clientId: 'break-booking-frontend-client',
             },
