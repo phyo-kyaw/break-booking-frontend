@@ -8,10 +8,16 @@ export const environment = {
   production: false,
   //homeUrl: '${HOME_URL}',
   homeUrl: 'http://localhost:8080',
-  roomsApi: `${baseApiUrl}:8081/api/v1/app/rooms`,
-  dictApi: `${baseApiUrl}:8086/api/v1/dicts`, // dictionaries
-  roomBooking: `${baseApiUrl}:8081/api/v1/app/bookings`, // room booking controller
-  roomPayment: `${baseApiUrl}:8084/api/v1/payment`,
+  // roomsApi: `${baseApiUrl}:8081/api/v1/app/rooms`,
+  // dictApi: `${baseApiUrl}:8086/api/v1/dicts`, // dictionaries
+  // roomBooking: `${baseApiUrl}:8081/api/v1/app/bookings`, // room booking controller
+  // roomPayment: `${baseApiUrl}:8084/api/v1/payment`,
+
+  roomsApi: `${baseApiUrl}/api/v1/app/rooms`,
+  dictApi: `${baseApiUrl}/api/v1/dicts`, // dictionaries
+  roomBooking: `${baseApiUrl}/api/v1/app/bookings`, // room booking controller
+  roomPayment: `${baseApiUrl}/api/v1/payment`,
+
   images: 'http://booking.nobrainer.link:8087/api/v1/file', // direct link because its not exposed on the gateway
   bookingPayment: `http://120.159.30.85:8084/api/v1/payment`,
 
