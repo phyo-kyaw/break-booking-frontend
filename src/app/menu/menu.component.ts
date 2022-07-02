@@ -10,6 +10,10 @@ import { Status } from 'app/store/reducer';
 })
 export class MenuComponent implements OnInit {
   reducer$: Status;
+  username: string;
+  level: string;
+  public isMenuCollapsed = true;
+
   constructor(
     protected readonly keycloakService: KeycloakService,
     private store: Store<{ reducer: Status }>
@@ -20,7 +24,8 @@ export class MenuComponent implements OnInit {
   async ngOnInit(): Promise<any> {
     const isLogin = await this.keycloakService.isLoggedIn();
     const isAdmin = await this.keycloakService.isUserInRole('booking-admin');
-
+    const userName = await this.keycloakService.loadUserProfile();
+    console.log(userName);
     if (isLogin) {
       this.store.dispatch(login({ isLogin: true }));
       console.log(this.keycloakService.getUserRoles());
@@ -34,6 +39,9 @@ export class MenuComponent implements OnInit {
       } else {
         this.store.dispatch(role({ role: 'default-roles-break-booking' }));
       }
+
+      this.username = userName.username;
+      this.level = isAdmin ? 'Admin' : 'User';
     }
     // this.keycloakService.
   }

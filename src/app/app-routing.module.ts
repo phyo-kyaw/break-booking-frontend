@@ -21,9 +21,10 @@ import { BookEventFormComponent } from './events/book-event/book-event-form/book
 import { EventFormComponent } from './events/admin/event-form/event-form.component';
 import { PaymentComponent } from './events/payment/payment.component';
 import { SuccessComponent } from './events/success/success.component';
+import { HomePageComponent } from './home-page/home-page.component';
 
 const routes: Routes = [
-  //{ path: 'select', component: CalendarSelComponent },
+  { path: '', component: HomePageComponent },
   {
     path: 'entity',
     component: ApptBookingEntityComponent,
@@ -37,14 +38,14 @@ const routes: Routes = [
     data: { roles: ['booking-admin', 'manage-account'] }
   },
   { path: 'book', component: ListApptBookingEntityComponent },
-  { path: 'list', component: ListApptBookingEntityComponent },
+  // { path: 'list', component: ListApptBookingEntityComponent },
   {
     path: 'select/:gid',
     component: ApptBookingComponent,
     canActivate: [AuthGuard],
     data: { roles: ['booking-admin'] }
   },
-  { path: 'admin/appt', component: ApptBookingAdminComponent },
+  { path: 'appt/all', component: ApptBookingAdminComponent },
   {
     path: 'booking/payment/:id',
     component: BookingPaymentComponent
